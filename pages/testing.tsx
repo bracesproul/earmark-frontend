@@ -19,6 +19,7 @@ export default function Home({ }) {
         { name: 'November', food: randomNumber(200, 400), transportation: randomNumber(25, 125), utilities: randomNumber(75, 200), leasure: randomNumber(1, 500) },
         { name: 'December', food: randomNumber(200, 400), transportation: randomNumber(25, 125), utilities: randomNumber(75, 200), leasure: randomNumber(1, 500) },
     ];
+    
 
     return (
         <div>
