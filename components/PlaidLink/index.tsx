@@ -38,7 +38,7 @@ const PlaidLink = ({ user_id }) => {
         fetchToken();
     }, [fetchToken]);
 
-    const onSuccess = useCallback(async (publicToken:string, metadata:any) => {
+    const onSuccess = useCallback(async (publicToken, metadata) => {
         const config = {
             method: "post",
             params: {
@@ -53,15 +53,6 @@ const PlaidLink = ({ user_id }) => {
         } catch (error) {
             console.log("EXCHANGE LINK TOKEN UI END ERROR", error);
         }
-    }, []);
-
-    const onExit = useCallback<PlaidLinkOnExit>(
-        (error: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => {
-        console.log("FETCH LINK TOKEN UI ERROR", error);
-        if (error != null && error.error_code === 'INVALID_LINK_TOKEN') {
-            fetchToken();
-        }
-        // to handle other error codes, see https://plaid.com/docs/errors/
     }, []);
 
     const config = {

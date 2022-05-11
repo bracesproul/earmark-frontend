@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable */
+import React, { useEffect } from 'react';
 import { 
     BarChart, 
     Bar, 
@@ -30,12 +31,13 @@ const barReChartData = [
     { name: 'December', food: randomNumber(200, 400), transportation: randomNumber(25, 125), utilities: randomNumber(75, 200), leasure: randomNumber(1, 500) },
 ];
 
-const BarReChart = ({ data }) => {
+const ReBarChart = ({ data }) => {
 
-    return (
-        <>
-            <ResponsiveContainer width="100%" height={300}>
-            <BarChart
+  return (
+    <>
+      <div className="chart-container">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
             data={data}
             margin={{
               top: 20,
@@ -43,7 +45,7 @@ const BarReChart = ({ data }) => {
               left: 20,
               bottom: 5,
             }}
-          >
+            >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -54,10 +56,10 @@ const BarReChart = ({ data }) => {
             <Bar dataKey="utilities" stackId="a" fill="red" stroke="black" />
             <Bar dataKey="leasure" stackId="a" fill="green" stroke="black" />
           </BarChart>
-            </ResponsiveContainer>
-
-        </>
-      );
+        </ResponsiveContainer>
+      </div>
+    </>
+    );
 }
 
-export default BarReChart;
+export default ReBarChart;

@@ -12,11 +12,11 @@ const cors = initMiddleware(
     })
 );
 
-export default async function handler(req:any, res:any) {
+export default async function handler(req, res) {
     // Run cors
     await cors(req, res)
     // Rest of the API logic
-    return new Promise<void>( async (resolve, reject)=> {
+    return new Promise( async (resolve, reject)=> {
         try {
             const user_id = req.query.user_id
             const config = {
@@ -43,11 +43,15 @@ export default async function handler(req:any, res:any) {
                     method: "POST",
                 }
             }
-            res.status(200).send(response);
-            resolve();
+            res.status(200);
+            res.send(response);
+            res.end();
+            resolve(response);
         } catch (error) {
-            res.status(400).send(error);
-            reject();
+            res.status(400);
+            res.send(error);
+            res.end();
+            reject(error);
         }
     })
 }

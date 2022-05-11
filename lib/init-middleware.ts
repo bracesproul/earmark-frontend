@@ -1,8 +1,8 @@
 /* eslint-disable */
-export default function initMiddleware(middleware:any) {
-    return (req:any, res:any) =>
+export default function initMiddleware(middleware) {
+    return (req, res) =>
       new Promise((resolve, reject) => {
-        middleware(req, res, (result:any) => {
+        middleware(req, res, (result) => {
           if (result instanceof Error) {
             return reject(result)
           }

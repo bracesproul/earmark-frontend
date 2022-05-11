@@ -57,27 +57,6 @@ const PIE_CHART_DATA = [
   { name: "Leasure", value: 400, fill: "green" },
 ];
 
-
-export default function Home() {
-  return (
-    <div className="testing">
-      <div className="bar" >
-        <h1>Bar Chart</h1>
-      <BarReChart data={BAR_CHART_DATA} />
-      </div>
-      <div className="tree" >
-      <h1>Tree Map </h1>
-      <ReTreemap data={TREEMAP_DATA} /> 
-      </div>
-      <div className="pie" >
-      <h1>Pie Chart</h1>
-      <SimplePieChart data={PIE_CHART_DATA} />
-      </div>
-    </div>
-
-  )
-}
-
 const BarReChart = ({ data }) => {
 
     return (
@@ -121,3 +100,24 @@ const SimplePieChart = ({data}) => {
     </ResponsiveContainer>
   )
 }
+
+const VisualizeData = ({ bar_chart, tree_map, pie_chart }) => {
+    return (
+        <div className="testing">
+            <div className="bar" >
+                <h1>Bar Chart</h1>
+                <BarReChart data={bar_chart} />
+            </div>
+            <div className="tree" >
+                <h1>Tree Map </h1>
+                <ReTreemap data={tree_map} /> 
+            </div>
+            <div className="pie" >
+                <h1>Pie Chart</h1>
+                <SimplePieChart data={pie_chart} />
+            </div>
+      </div>
+    )
+}
+
+export default VisualizeData;

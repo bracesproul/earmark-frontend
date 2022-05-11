@@ -16,7 +16,9 @@ a {
 }
 
 .dashboard-container {
- display:flex;
+  width: 100%;
+  height: 100%;
+  display:flex;
 }
 
 .auth_container {
@@ -55,10 +57,8 @@ a {
 }
 
 .side_nav_container {
-  margin-right: auto;
   padding: 10px;
   max-width: fit-content;
-  min-width: 190px;
   height: 100vh;
   background-color: rgb(63, 63, 63);
 }
@@ -116,6 +116,18 @@ a {
   font-weight: 400;
 }
 
+.visualize_side_nav {
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.visualize_side_nav:hover {
+  text-decoration: underline;
+  font-weight: 400;
+}
+
 .account_dropdown_list {
   margin: 1rem;
   color: white;
@@ -145,4 +157,96 @@ a {
   width: 100%;
   height: 100%;
   margin-right: 50%;
+}
+
+.data-container {
+  margin-top: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.datagrid-container {
+  min-width: 50%;
+  min-height: 400px;
+  margin-right: auto;
+}
+
+.chart-container {
+  min-width: 50%;
+  min-height: 400px;
+  margin-left: auto;
+}
+
+.sideNav-container {
+  min-width: 15%;
+  min-height: 100%;
+}
+
+.pie-chart-container {
+  margin: 0;
+}
+
+.visual-data-button {
+  margin-top: 3rem;
+}
+
+.visualize-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.visualize {
+  margin-right: auto;
+  display: inline-block;
+  max-width: 900px;
+  height: 100vh;
+  margin: 5rem;
+}
+
+.pie {
+  padding: 30px;
+  width: 500px;
+  height: 50%;
+  margin: 5rem;
+}
+
+.tree {
+  padding: 30px;
+  width: 100%;
+  height: 300px;
+  margin: 5rem;
+}
+
+.bar {
+  padding: 30px;
+  width: 100%;
+  height: 300px;
+  margin: 5rem;
+}
+
+.institutions-container {
+  width: 100%;
+  height: 100%;
+  display:flex;
+}
+
+.institutions-datagrid {
+  margin-top: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.signIn-container{
+  display: flex;
+}
+
+.signUp-container{
+  display: flex;
 }

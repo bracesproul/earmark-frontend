@@ -12,15 +12,32 @@ const cors = initMiddleware(
     })
 );
 
-export default async function handler(req:any, res:any) {
+export default async function handler(req, res) {
     // Run cors
     await cors(req, res)
     // Rest of the API logic
-    return new Promise<void>( async (resolve, reject)=> {
+    return new Promise( async (resolve, reject)=> {
         try {
+            const success_message = {
+                message: "reached index api route",
+                status: 200,
+            };
 
+            res.status(200);
+            res.send(success_message)
+            res.end();
+            resolve(success_message)
         } catch (error) {
+            const error_message = {
+                message: "reached index api route",
+                status: 400,
+                error: error
+            }
 
+            res.status(400);
+            res.send(error_message);
+            res.end();
+            reject(error_message);
         }
     })
 }

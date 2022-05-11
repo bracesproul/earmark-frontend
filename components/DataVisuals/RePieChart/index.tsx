@@ -1,11 +1,14 @@
+/* eslint-disable */
 import React, {
     useState,
-    useCallback
+    useCallback,
+    useEffect,
 } from 'react';
 import { 
     PieChart, 
     Pie, 
-    Sector 
+    Sector,
+    ResponsiveContainer 
 } from 'recharts';
 
 // random number generator 1-50
@@ -22,7 +25,7 @@ const pieData = [
   
 
   
-const RePieChart = ({ pieData, title }) => {
+const RePieChart = ({ data }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const onPieEnter = useCallback(
         (_, index) => {
@@ -31,7 +34,7 @@ const RePieChart = ({ pieData, title }) => {
         [setActiveIndex]
     );
 
-    const renderActiveShape = (data: any) => {
+    const renderActiveShape = (data) => {
         const RADIAN = Math.PI / 180;
         const {
           cx,
@@ -106,24 +109,24 @@ const RePieChart = ({ pieData, title }) => {
     };
 
     return (
-        <div className="pie-chart">
-        <h1>{title}</h1>
+      <>
+        <ResponsiveContainer width="100%" height="100%">
         <PieChart width={600} height={800}>
-        <Pie
-            activeIndex={activeIndex}
-            activeShape={renderActiveShape}
-            data={pieData}
-            cx={300}
-            cy={300}
-            innerRadius={80}
-            outerRadius={100}
-            fill="#8884d8"
-            dataKey="value"
-            onMouseEnter={onPieEnter}
-        />
+          <Pie
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
+              data={data}
+              cx={300}
+              cy={300}
+              innerRadius={80}
+              outerRadius={130}
+              fill="#8884d8"
+              dataKey="value"
+              onMouseEnter={onPieEnter}
+          />
         </PieChart>
-        </div>
-
+        </ResponsiveContainer>
+      </>
     );
 }
 

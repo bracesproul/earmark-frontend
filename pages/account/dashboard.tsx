@@ -11,8 +11,8 @@ import { DataGrid,
     GridColDef,
  } from '@mui/x-data-grid';
 
-import SideNav from '../components/Sidenav';
-import DashboardBody from '../components/DashboardBody';
+import SideNav from '../../components/Sidenav';
+import DashboardBody from '../../components/DashboardBody';
 
 // DATA FOR STATIC SITE, REPLACE WITH DYNAMIC FETCHED DATA LATER
 const accounts = [
@@ -66,13 +66,60 @@ const accountData = [
     { id: "ejra43gMt9wKvjdow1fZDnvx4GwKi7wpx7E", col1: 'Plaid IRA', col2: "19,663.91", col3: "Investment" },
 ];
 
+const TREEMAP_DATA = [
+	{
+		name: 'axis',
+		children: [
+			{ name: 'January', size: 100000, fill: "black" },
+			{ name: 'Febuary', size: 100000, fill: "Red" },
+			{ name: 'March', size: 100000, fill: "Orange" },
+			{ name: 'April', size: 100000, fill: "Yellow" },
+			{ name: 'May', size: 100000, fill: "Green" },
+      { name: 'June', size: 100000, fill: "Blue" },
+			{ name: 'July', size: 100000, fill: "Indigo" },
+			{ name: 'August', size: 100000, fill: "Violet" },
+			{ name: 'September', size: 100000, fill: "grey" },
+			{ name: 'October', size: 100000, fill: "pink" },
+			{ name: 'November', size: 100000, fill: "purple" },
+			{ name: 'December', size: 100000, fill: "brown" },
+		],
+	},
+];
+
+const BAR_CHART_DATA = [
+  { name: 'January', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'February', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'March', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'April', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'May', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'June', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'July', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'August', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'September', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'October', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'November', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+  { name: 'December', food: 250, transportation: 300, utilities: 350, leasure: 400 },
+];
+
+const PIE_CHART_DATA = [
+  { name: "Food", value: 100, fill: "purple" },
+  { name: "Transportation", value: 200, fill: "blue" },
+  { name: "Utilities", value: 300, fill: "red" },
+  { name: "Leasure", value: 400, fill: "green" },
+];
+
 
 
 export default function Home() {
+
     return (
         <div className="dashboard-container">
+            <div className="sideNav-container">
             <SideNav accounts={accounts} />
-            <DashboardBody transactionData={transactionData} accountData={accountData} />
+            </div>
+            <div className="data-container">
+            <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} />
+            </div>
         </div>
     )
 }

@@ -30,7 +30,7 @@ const cors = initMiddleware(
     })
 );
 
-const updateFirestore = async (user_id: string, accessToken: string, itemId: string) => {
+const updateFirestore = async (user_id, accessToken, itemId) => {
     const docRef = doc(db, "users", user_id, "access_tokens", itemId);
     const docData = {
       access_token: accessToken,
@@ -41,11 +41,11 @@ const updateFirestore = async (user_id: string, accessToken: string, itemId: str
     console.log("updated firestore");
 }
 
-export default async function handler(req:any, res:any) {
+export default async function handler(req, res) {
     // Run cors
     await cors(req, res)
     // Rest of the API logic
-    return new Promise<void>( async (resolve, reject)=> {
+    return new Promise( async (resolve, reject)=> {
         try {
             const user_id = req.query.user_id;
             const publicToken = req.query.publicToken;
@@ -75,11 +75,15 @@ export default async function handler(req:any, res:any) {
                     method: "POST",
                 }
             }
-            res.status(200).send(response);
-            resolve();
+            res.status(200);
+            res.send(response);
+            res.end();
+            resolve(response);
         } catch (error) {
-            res.status(400).send(error);
-            reject();
+            res.status(400);
+            res.send(error);
+            res.end();
+            reject(error);
         }
     })
 }

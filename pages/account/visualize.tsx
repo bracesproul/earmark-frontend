@@ -1,19 +1,6 @@
 /* eslint-disable */
-import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  PieChart, 
-  Pie, 
-  Sector,
-  Treemap,
-	ResponsiveContainer,
-} from 'recharts';
+import VisualizeData from "../../components/DataVisuals/Charts"
+import SideNav from "../../components/Sidenav";
 
 const TREEMAP_DATA = [
 	{
@@ -57,67 +44,50 @@ const PIE_CHART_DATA = [
   { name: "Leasure", value: 400, fill: "green" },
 ];
 
+const accounts = [
+    {accounts: {
+        account_id: "acc_id_1",
+        name: "Bank of America",
+        official_name: "Bank of America",
+        pathname: "Bank_of_America",
+        type: "depository",
+        subtype: "checking",
+    }},
+    {accounts: {
+        account_id: "acc_id_2",
+        name: "Chase",
+        official_name: "JP Morgan Chase",
+        pathname: "Chase",
+        type: "depository",
+        subtype: "savings",
+    }},
+    {accounts: {
+        account_id: "acc_id_3",
+        name: "Fidelity",
+        official_name: "Fidelity Investments",
+        pathname: "Fidelity",
+        type: "investment",
+        subtype: "depository",
+    }},
+    {accounts: {
+        account_id: "acc_id_4",
+        name: "Plaid IRA",
+        official_name: "Plaid IRA",
+        pathname: "Plaid_IRA",
+        type: "investment",
+        subtype: "ira",
+    }},
+]
 
 export default function Home() {
-  return (
-    <div className="testing">
-      <div className="bar" >
-        <h1>Bar Chart</h1>
-      <BarReChart data={BAR_CHART_DATA} />
-      </div>
-      <div className="tree" >
-      <h1>Tree Map </h1>
-      <ReTreemap data={TREEMAP_DATA} /> 
-      </div>
-      <div className="pie" >
-      <h1>Pie Chart</h1>
-      <SimplePieChart data={PIE_CHART_DATA} />
-      </div>
-    </div>
-
-  )
-}
-
-const BarReChart = ({ data }) => {
-
     return (
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="food" stackId="a" fill="purple" stroke="black" />
-          <Bar dataKey="transportation" stackId="a" fill="blue" stroke="black" />
-          <Bar dataKey="utilities" stackId="a" fill="red" stroke="black" />
-          <Bar dataKey="leasure" stackId="a" fill="green" stroke="black" />
-        </BarChart>
-      </ResponsiveContainer>
-      );
-}
-
-const ReTreemap = ({ data }) => {
-  return (
-  <ResponsiveContainer width="100%" height="100%">
-    <Treemap
-      data={data}
-      dataKey="size"
-      stroke="#fff"
-      fill="#8884d8"
-    />
-  </ResponsiveContainer>
-  );
-}
-
-
-const SimplePieChart = ({data}) => {
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <PieChart>
-				<Pie dataKey="value" isAnimationActive={false} data={data} cx={200} cy={200} outerRadius={80} fill="#8884d8" label />
-				<Tooltip />
-			</PieChart>
-    </ResponsiveContainer>
-  )
-}
+        <div className="visualize-container">
+            <div className="sideNav-container">
+            <SideNav accounts={accounts} />
+            </div>
+            <div className="visualize">
+                <VisualizeData bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} />
+            </div>
+        </div>
+    )
+};
