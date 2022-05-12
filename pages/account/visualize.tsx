@@ -1,6 +1,7 @@
 /* eslint-disable */
 import VisualizeData from "../../components/DataVisuals/Charts"
 import SideNav from "../../components/Sidenav";
+import Head from "next/head";
 
 const TREEMAP_DATA = [
 	{
@@ -81,13 +82,23 @@ const accounts = [
 
 export default function Home() {
     return (
-        <div className="visualize-container">
-            <div className="sideNav-container">
-            <SideNav accounts={accounts} />
+        <div className="">
+        <Head>
+        <title>Visualize Data</title>
+        <meta name="description" content="Visualize data for Earmark" />
+        <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+            <div className="visualize-container">
+                <div className="sideNav-container">
+                <SideNav accounts={accounts} />
+                </div>
+                <div className="visualize">
+                    <VisualizeData bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} />
+                </div>
             </div>
-            <div className="visualize">
-                <VisualizeData bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} />
-            </div>
+        </main>
+        <footer></footer>
         </div>
     )
 };

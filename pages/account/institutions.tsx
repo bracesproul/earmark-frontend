@@ -1,6 +1,7 @@
 /* eslint-disable */
 import DatagridAccounts from '../../components/DatagridAccounts';
 import SideNav from '../../components/Sidenav';
+import Head from 'next/head';
 
 const accountData = [
     { id: "RLPVWZlv7wu7gEz5ArgbtDynKbxkzpiJ8aeWQ", col1: "Bank of America", col2: '588.12', col3: "Checking" },
@@ -46,13 +47,23 @@ const accounts = [
 
 export default function Home() {
     return (
-        <div className="institutions-container">
-            <div className="sideNav-container">
-            <SideNav accounts={accounts} />
+        <div className="">
+        <Head>
+        <title>Institutions</title>
+        <meta name="description" content="List of all linked institutions for Earmark" />
+        <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+            <div className="institutions-container">
+                <div className="sideNav-container">
+                <SideNav accounts={accounts} />
+                </div>
+                <div className="institutions-datagrid">
+                <DatagridAccounts data={accountData} />
+                </div>
             </div>
-            <div className="institutions-datagrid">
-            <DatagridAccounts data={accountData} />
-            </div>
+        </main>
+        <footer></footer>
         </div>
     )
 };

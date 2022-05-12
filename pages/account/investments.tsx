@@ -1,5 +1,6 @@
 /* eslint-disable */
 import SideNav from '../../components/Sidenav';
+import Head from 'next/head';
 
 const accounts = [
     {accounts: {
@@ -38,11 +39,21 @@ const accounts = [
 
 export default function Home() {
     return (
-        <div className="institutions-container">
-            <div className="sideNav-container">
-            <SideNav accounts={accounts} />
+        <div className="">
+        <Head>
+        <title>Investments</title>
+        <meta name="description" content="Data on investments for Earmark" />
+        <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+            <div className="institutions-container">
+                <div className="sideNav-container">
+                <SideNav accounts={accounts} />
+                </div>
+                <h1>Investments</h1>
             </div>
-            <h1>Investments</h1>
+        </main>
+        <footer></footer>
         </div>
     )
 };

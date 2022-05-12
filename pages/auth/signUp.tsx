@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Head from "next/head";
 
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -77,11 +78,21 @@ export default function Home() {
         });
     }, [auth])
     return (
-        <div className="signUp-container">
-            <div className="sideNav-container">
-            <SideNav accounts={accounts} />
+        <div className="">
+        <Head>
+        <title>Sign Up for Earmark</title>
+        <meta name="description" content="Sign up page for Earmark" />
+        <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+            <div className="signUp-container">
+                <div className="sideNav-container">
+                <SideNav accounts={accounts} />
+                </div>
+                { uid === "Unauthorized" ? <SignUp /> : <AccountExists /> }
             </div>
-            { uid === "Unauthorized" ? <SignUp /> : <AccountExists /> }
+        </main>
+        <footer></footer>
         </div>
     )
 };

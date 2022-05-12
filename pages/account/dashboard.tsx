@@ -3,6 +3,7 @@ import React, {
     useEffect,
     useState,
 } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import useCollapse from 'react-collapsed'
 
@@ -113,13 +114,23 @@ const PIE_CHART_DATA = [
 export default function Home() {
 
     return (
-        <div className="dashboard-container">
-            <div className="sideNav-container">
-            <SideNav accounts={accounts} />
+        <div className="">
+        <Head>
+            <title>Dashboard</title>
+            <meta name="description" content="Dashboard overview for Earmark" />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+            <div className="dashboard-container">
+                <div className="sideNav-container">
+                <SideNav accounts={accounts} />
+                </div>
+                <div className="data-container">
+                <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} />
+                </div>
             </div>
-            <div className="data-container">
-            <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} />
-            </div>
+        </main>
+        <footer></footer>
         </div>
     )
 }
