@@ -69,10 +69,8 @@ const SignUp = () => {
     const checkPasswords = (e) => {
         if (password === e.target.value) {
             setDisabled(false);
-            console.log('password', password, 'confirm', e.target.value);
         } else {
             setDisabled(true);
-            console.log('password', password, 'confirm', e.target.value);
         }
     }
 

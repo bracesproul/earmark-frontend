@@ -7,6 +7,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import useCollapse from 'react-collapsed'
 
+import { 
+    getAuth, 
+    onAuthStateChanged 
+} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
 import { DataGrid, 
     GridRowsProp,
     GridColDef,
@@ -14,42 +20,20 @@ import { DataGrid,
 
 import SideNav from '../../components/Sidenav';
 import DashboardBody from '../../components/DashboardBody';
+import NotSignedIn from '../../components/Auth/NotSignedIn';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
+    authDomain: "earmark-8d1d3.firebaseapp.com",
+    projectId: "earmark-8d1d3",
+    storageBucket: "earmark-8d1d3.appspot.com",
+    messagingSenderId: "46302537330",
+    appId: "1:46302537330:web:403eac7f28d2a4868944eb",
+    measurementId: "G-5474KY2MRV"
+};
+const app = initializeApp(firebaseConfig);
 
 // DATA FOR STATIC SITE, REPLACE WITH DYNAMIC FETCHED DATA LATER
-const accounts = [
-    {accounts: {
-        account_id: "acc_id_1",
-        name: "Bank of America",
-        official_name: "Bank of America",
-        pathname: "Bank_of_America",
-        type: "depository",
-        subtype: "checking",
-    }},
-    {accounts: {
-        account_id: "acc_id_2",
-        name: "Chase",
-        official_name: "JP Morgan Chase",
-        pathname: "Chase",
-        type: "depository",
-        subtype: "savings",
-    }},
-    {accounts: {
-        account_id: "acc_id_3",
-        name: "Fidelity",
-        official_name: "Fidelity Investments",
-        pathname: "Fidelity",
-        type: "investment",
-        subtype: "depository",
-    }},
-    {accounts: {
-        account_id: "acc_id_4",
-        name: "Plaid IRA",
-        official_name: "Plaid IRA",
-        pathname: "Plaid_IRA",
-        type: "investment",
-        subtype: "ira",
-    }},
-]
 
 const transactionData = [
     { id: "ejradyRl9Mt9wKvjdow1fZDnvx4GwKi7wpx7E", col1: "McDonald's", col2: '2021-05-07', col3: "12.01", col4: "Food and Drink" },
@@ -112,6 +96,22 @@ const PIE_CHART_DATA = [
 
 
 export default function Home() {
+    const [uid, setUid] = useState("Unauthorized");
+    const auth = getAuth();
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            setUid(auth.currentUser.uid);
+        } else {
+            // User is signed out
+            setUid("Unauthorized");
+            console.log('signed out');
+        }
+        });
+    }, [auth])
 
     return (
         <div className="">
@@ -122,11 +122,9 @@ export default function Home() {
         </Head>
         <main>
             <div className="dashboard-container">
-                <div className="sideNav-container">
-                <SideNav accounts={accounts} />
-                </div>
+                <SideNav />
                 <div className="data-container">
-                <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} />
+                    { uid === "Unauthorized" ? <NotSignedIn /> : <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} /> }
                 </div>
             </div>
         </main>
@@ -134,4 +132,3 @@ export default function Home() {
         </div>
     )
 }
-

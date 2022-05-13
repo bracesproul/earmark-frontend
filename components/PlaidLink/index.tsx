@@ -14,7 +14,11 @@ import {
 } from 'react-plaid-link';
 import axios from 'axios';
 
+import styles from '../../styles/SideNav/SideNav.module.css';
+
 const PlaidLink = ({ user_id }) => {
+    if (user_id === null || user_id === "Unauthorized") return <></>;
+
     const [linkToken, setLinkToken] = useState(null);
 
     const fetchToken = useCallback(async () => {
@@ -27,10 +31,9 @@ const PlaidLink = ({ user_id }) => {
                 url:'/api/createLinkToken',
             }
             const response = await axios(config);
-            console.log("FETCH LINK TOKEN UI END SUCCESS", response.data);
             setLinkToken(response.data.linkToken);
         } catch (error) {
-            console.log("FETCH LINK TOKEN UI END FAILURE", error);
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -49,9 +52,8 @@ const PlaidLink = ({ user_id }) => {
         };
         try {
             const response = await axios(config);
-            console.log("EXCHANGE LINK TOKEN UI END SUCCESS", response);
         } catch (error) {
-            console.log("EXCHANGE LINK TOKEN UI END ERROR", error);
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -64,7 +66,7 @@ const PlaidLink = ({ user_id }) => {
     return (
     <>
     <a onClick={() => open()} hidden={!ready}>
-    <h3 id="plaidLink" className="plaidLink_side_nav">Connect an Account</h3>
+    <h3 id="plaidLink" className={styles.sideNavOption}>Connect an Account</h3>
     </a>
     </>
     )

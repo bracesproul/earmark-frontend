@@ -1,43 +1,47 @@
 /* eslint-disable */
+import React, {
+    useEffect,
+    useState,
+} from 'react';
 import SideNav from '../../components/Sidenav';
 import Head from 'next/head';
 
-const accounts = [
-    {accounts: {
-        account_id: "acc_id_1",
-        name: "Bank of America",
-        official_name: "Bank of America",
-        pathname: "Bank_of_America",
-        type: "depository",
-        subtype: "checking",
-    }},
-    {accounts: {
-        account_id: "acc_id_2",
-        name: "Chase",
-        official_name: "JP Morgan Chase",
-        pathname: "Chase",
-        type: "depository",
-        subtype: "savings",
-    }},
-    {accounts: {
-        account_id: "acc_id_3",
-        name: "Fidelity",
-        official_name: "Fidelity Investments",
-        pathname: "Fidelity",
-        type: "investment",
-        subtype: "depository",
-    }},
-    {accounts: {
-        account_id: "acc_id_4",
-        name: "Plaid IRA",
-        official_name: "Plaid IRA",
-        pathname: "Plaid_IRA",
-        type: "investment",
-        subtype: "ira",
-    }},
-]
+import { initializeApp } from "firebase/app";
+import { getAuth, 
+    onAuthStateChanged 
+} from "firebase/auth";
+import NotSignedIn from '../../components/Auth/NotSignedIn';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
+    authDomain: "earmark-8d1d3.firebaseapp.com",
+    projectId: "earmark-8d1d3",
+    storageBucket: "earmark-8d1d3.appspot.com",
+    messagingSenderId: "46302537330",
+    appId: "1:46302537330:web:403eac7f28d2a4868944eb",
+    measurementId: "G-5474KY2MRV"
+};
+const app = initializeApp(firebaseConfig);
+
 
 export default function Home() {
+    const [uid, setUid] = useState("Unauthorized");
+    const auth = getAuth();
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            setUid(auth.currentUser.uid);
+        } else {
+            // User is signed out
+            setUid("Unauthorized");
+            console.log('signed out');
+        }
+        });
+    }, [auth])
+
     return (
         <div className="">
         <Head>
@@ -48,9 +52,9 @@ export default function Home() {
         <main>
             <div className="institutions-container">
                 <div className="sideNav-container">
-                <SideNav accounts={accounts} />
+                <SideNav />
                 </div>
-                <h1>Investments</h1>
+                { uid === "Unauthorized" ? <NotSignedIn /> : <h1>Investments</h1> }
             </div>
         </main>
         <footer></footer>

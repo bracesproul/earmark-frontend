@@ -30,17 +30,6 @@ const cors = initMiddleware(
     })
 );
 
-const updateFirestore = async (user_id, accessToken, itemId) => {
-    const docRef = doc(db, "users", user_id, "access_tokens", itemId);
-    const docData = {
-      access_token: accessToken,
-      item_id: itemId,
-      user_id: user_id,
-    }
-    await setDoc(docRef, docData);
-    console.log("updated firestore");
-}
-
 export default async function handler(req, res) {
     // Run cors
     await cors(req, res)
@@ -62,7 +51,6 @@ export default async function handler(req, res) {
                 },
             };
             const axiosResponse = await axios(config);
-            console.log('exchange token response', axiosResponse.data);
             // await updateFirestore(user_id, axiosResponse.data.access_token, axiosResponse.data.item_id);
             const response = {
                 statusCode: 200,

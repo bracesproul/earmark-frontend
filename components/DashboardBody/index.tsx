@@ -82,7 +82,6 @@ const DashboardBody = ({ transactionData, accountData, bar_chart, tree_map, pie_
     const [dashLocation, setDashLocation] = useState("transactions")
 
     useEffect(() => {
-        console.log(router.query);
         if (router.query.transactions) {
             setDashLocation("transactions")
             let pathBefore = router.query.transactions;

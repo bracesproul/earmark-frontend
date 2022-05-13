@@ -2,8 +2,9 @@
 import Head from "next/head";
 
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, 
+    onAuthStateChanged 
+} from "firebase/auth";
 
 import AccountExists from '../../components/Auth/AccountExists';
 import SignIn from '../../components/Auth/SignIn';
@@ -23,45 +24,9 @@ const firebaseConfig = {
     measurementId: "G-5474KY2MRV"
 };
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const accounts = [
-    {accounts: {
-        account_id: "acc_id_1",
-        name: "Bank of America",
-        official_name: "Bank of America",
-        pathname: "Bank_of_America",
-        type: "depository",
-        subtype: "checking",
-    }},
-    {accounts: {
-        account_id: "acc_id_2",
-        name: "Chase",
-        official_name: "JP Morgan Chase",
-        pathname: "Chase",
-        type: "depository",
-        subtype: "savings",
-    }},
-    {accounts: {
-        account_id: "acc_id_3",
-        name: "Fidelity",
-        official_name: "Fidelity Investments",
-        pathname: "Fidelity",
-        type: "investment",
-        subtype: "depository",
-    }},
-    {accounts: {
-        account_id: "acc_id_4",
-        name: "Plaid IRA",
-        official_name: "Plaid IRA",
-        pathname: "Plaid_IRA",
-        type: "investment",
-        subtype: "ira",
-    }},
-]
 
 export default function Home() {
-    const [uid, setUid] = useState(null);
+    const [uid, setUid] = useState("Unauthorized");
     const auth = getAuth();
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -69,7 +34,6 @@ export default function Home() {
             // User is signed in, see docs for a list of available properties
             // https://firebase.google.com/docs/reference/js/firebase.User
             setUid(auth.currentUser.uid);
-            console.log('signed in', uid);
         } else {
             // User is signed out
             setUid("Unauthorized");
@@ -87,7 +51,7 @@ export default function Home() {
         <main>
             <div className="signIn-container">
                 <div className="sideNav-container">
-                <SideNav accounts={accounts} />
+                <SideNav />
                 </div>
                 { uid === "Unauthorized" ? <SignIn /> : <AccountExists /> }
             </div>
