@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router'
-import { MAXIMUM_TEST_PHONE_NUMBERS } from "firebase-admin/lib/auth/auth-config";
 import uniqid from 'uniqid';
 
 const StyledLink = styled.a`
