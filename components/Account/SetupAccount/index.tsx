@@ -26,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-const updateFirestore = async (user_id, dob, street, city, state, zip) => {
+const updateFirestore = async (user_id, dob, street, city, state, zip, userId) => {
     const docRef = doc(db, "users", user_id);
     const docData = {
         date_of_birth: dob,
@@ -34,6 +34,7 @@ const updateFirestore = async (user_id, dob, street, city, state, zip) => {
         address_city: city,
         address_state: state,
         address_zip: zip,
+        userId: userId,
         setup: true,
     };
     await setDoc(docRef, docData, { merge: true });
@@ -45,20 +46,21 @@ const SetupAccount = ({ user_id }) => {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [zip, setZip] = useState("");
+    const [userId, setUserId] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await updateFirestore(user_id, dob, street, city, state, zip,);
-        await Router.push('/account');
+        await updateFirestore(user_id, dob, street, city, state, zip, userId);
+        Router.reload();
     }
 
     return (
         <div className={styles.accountInfoContainer}>
             <h1 className={styles.title}>Compleete account setup</h1>
             <h1 className={styles.title}>Personal</h1>
-            <div className={styles.accountDivContainer}>
+            <div className={styles.accountDivContainerSetup}>
                 <form onSubmit={handleSubmit} id="personal_info_form">
-                <span className={styles.rowContainer}>
+                <span className={styles.rowContainerInput}>
                     <h3 className={styles.rowInfo}>Date of birth:</h3>
                     <input
                     type="date"
@@ -69,7 +71,20 @@ const SetupAccount = ({ user_id }) => {
                     required
                     />
                 </span>
-                <span className={styles.columnContainer}>
+                <span className={styles.rowContainerInput}>
+                    <h3 className={styles.rowInfo}>User ID:</h3>
+                    <input
+                    type="text"
+                    id="userId"
+                    name="userId"
+                    placeholder= "JohnDoe99"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                    required
+                    />
+                </span>
+                
+                <span className={styles.columnContainerInput}>
                     <h3 className={styles.rowInfo}>Address:</h3>
                     <input
                     type="text"
@@ -93,8 +108,7 @@ const SetupAccount = ({ user_id }) => {
                     id="state" 
                     name="state" 
                     type="text" 
-                    pattern="[A-Za-z]{2}"
-                    placeholder='NY (two letter abbreviation)'
+                    placeholder='New York'
                     value={state} 
                     onChange={(e) => setState(e.target.value)}  
                     required
@@ -117,19 +131,19 @@ const SetupAccount = ({ user_id }) => {
             <hr />
             <div className={styles.accountDivContainer}>
                 <h1 className={styles.title}>Security</h1>
-                <span className={styles.rowContainer}>
+                <span className={styles.rowContainerSetup}>
                     <h3 className={styles.rowInfo}>User ID:</h3>
                     <h3 className={styles.rowInfo}>admin@earmark.com</h3>
                 </span>
-                <span className={styles.rowContainer}>
+                <span className={styles.rowContainerSetup}>
                     <h3 className={styles.rowInfo}>Email:</h3>
                     <h3 className={styles.rowInfo}>admin@earmark.com</h3>
                 </span>
-                <span className={styles.rowContainer}>
+                <span className={styles.rowContainerSetup}>
                     <h3 className={styles.rowInfo}>Password:</h3>
                     <h3 className={styles.rowInfo}>********</h3>
                 </span>
-                <span className={styles.rowContainer}>
+                <span className={styles.rowContainerSetup}>
                     <h3 className={styles.rowInfo}>Phone Number:</h3>
                     <h3 className={styles.rowInfo}>(012)-345-6789</h3>
                 </span>

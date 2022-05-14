@@ -35,37 +35,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const accountData = [
-    {account: {
-        account_id: "acc_id_1",
-        first_name: "John",
-        last_name: "Doe",
-        date_of_birth: "01/01/2000",
-        address_street: "123 Main St",
-        address_city: "Anytown",
-        address_state: "CA",
-        address_zip: "12345",
-        phone_number: "(123)456-7890",
-        email: "admin@earmark.com",
-        billing_info: {
-            billing_account_name: "Main Account",
-            billing_plan: "Basic $14/month",
-            billing_id: "billing_id_1",
-            first_name: "John",
-            last_name: "Doe",
-            card_last_four: "1234",
-            card_type: "Visa",
-            card_exp_date: "01/20",
-            billing_address: {
-                address_street: "123 Main St",
-                address_city: "Anytown",
-                address_state: "CA",
-                address_zip: "12345",
-            }
-        }
-    }}
-]
-
 export default function Home() {
     const [uid, setUid] = useState("Unauthorized");
     const auth = getAuth();

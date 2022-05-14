@@ -12,6 +12,7 @@ import {
     onAuthStateChanged 
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import styles from '../../styles/Institutions/Institutions.module.css';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
@@ -57,11 +58,10 @@ export default function Home() {
         <meta name="description" content="List of all linked institutions for Earmark" />
         <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main>
+        <main className={styles.main}>
+            <SideNav />
             <div className="institutions-container">
-                <div className="sideNav-container">
-                    <SideNav />
-                </div>
+                    
                 <div className="institutions-datagrid">
                     { uid === "Unauthorized" ? <NotSignedIn /> : <DatagridAccounts data={accountData} /> }
                 </div>

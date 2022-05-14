@@ -10,6 +10,8 @@ import { getAuth,
     onAuthStateChanged 
 } from "firebase/auth";
 import NotSignedIn from '../../components/Auth/NotSignedIn';
+import styles from '../../styles/Transfers/Transfers.module.css';
+
 const firebaseConfig = {
     apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
     authDomain: "earmark-8d1d3.firebaseapp.com",
@@ -47,11 +49,9 @@ export default function Home() {
         <meta name="description" content="Page for account transfers for Earmark" />
         <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main>
+        <main className={styles.main}>
+            <SideNav />
             <div className="institutions-container">
-                <div className="sideNav-container">
-                <SideNav />
-                </div>
                 { uid === "Unauthorized" ? <NotSignedIn /> : <h1>Transfers</h1> }
             </div>
         </main>

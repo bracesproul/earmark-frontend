@@ -11,6 +11,9 @@ import { getAuth,
     onAuthStateChanged 
 } from "firebase/auth";
 import NotSignedIn from '../../components/Auth/NotSignedIn';
+import styles from '../../styles/Visualize/Visualize.module.css';
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
     authDomain: "earmark-8d1d3.firebaseapp.com",
@@ -89,11 +92,9 @@ export default function Home() {
         <meta name="description" content="Visualize data for Earmark" />
         <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main>
+        <main className={styles.main}>
+            <SideNav />
             <div className="visualize-container">
-                <div className="sideNav-container">
-                <SideNav />
-                </div>
                 <div className="visualize">
                     { uid === "Unauthorized" ? <NotSignedIn /> : <VisualizeData bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} /> }
                 </div>

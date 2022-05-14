@@ -11,6 +11,7 @@ import { getAuth,
     onAuthStateChanged 
 } from "firebase/auth";
 import NotSignedIn from '../../components/Auth/NotSignedIn';
+import styles from '../../styles/Investments/Investments.module.css';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
@@ -49,11 +50,9 @@ export default function Home() {
         <meta name="description" content="Data on investments for Earmark" />
         <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main>
+        <main className={styles.main}>
+            <SideNav />
             <div className="institutions-container">
-                <div className="sideNav-container">
-                <SideNav />
-                </div>
                 { uid === "Unauthorized" ? <NotSignedIn /> : <h1>Investments</h1> }
             </div>
         </main>

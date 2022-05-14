@@ -6,6 +6,7 @@ import React, {
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import useCollapse from 'react-collapsed'
+import styles from '../../styles/Dashboard/Dashboard.module.css'
 
 import { 
     getAuth, 
@@ -120,9 +121,10 @@ export default function Home() {
             <meta name="description" content="Dashboard overview for Earmark" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main>
+        <main className={styles.main}>
+            <SideNav />
             <div className="dashboard-container">
-                <SideNav />
+                
                 <div className="data-container">
                     { uid === "Unauthorized" ? <NotSignedIn /> : <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} /> }
                 </div>

@@ -127,6 +127,7 @@ const SignUp = () => {
                     name="new-phone"
                     type="tel"
                     placeholder="Phone Number"
+                    pattern="[0-9]{10}" 
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     autoComplete="phone"
