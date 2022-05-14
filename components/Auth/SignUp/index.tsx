@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router'
-
+import { MAXIMUM_TEST_PHONE_NUMBERS } from "firebase-admin/lib/auth/auth-config";
+import uniqid from 'uniqid';
 
 const StyledLink = styled.a`
   color: blue;
@@ -26,12 +27,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const updateFirestore = async (user_id, email, first_name, last_name) => {
+const updateFirestore = async (user_id, phone_number, email, first_name, last_name) => {
     const docRef = doc(db, "users", user_id);
     const docData = {
+        phone_number: phone_number,
         email: email,
         first_name: first_name,
-        last_name: last_name
+        last_name: last_name,
+        account_id: uniqid(),
     }
     await setDoc(docRef, docData);
 }
@@ -42,6 +45,7 @@ const SignUp = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [disabled, setDisabled] = useState(true);
@@ -54,12 +58,15 @@ const SignUp = () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                updateFirestore(userCredential.user.uid, email, firstName, lastName);
+                updateFirestore(userCredential.user.uid, phoneNumber, email, firstName, lastName);
+                setFirstName("");
+                setLastName("");
                 setEmail("");
+                setPhoneNumber("");
                 setPassword("");
                 setFirstName("");
                 setLastName("");
-                router.push('/account/dashboard')
+                router.push('/account');
             })
         } catch (error) {
             console.log(error);
@@ -112,6 +119,18 @@ const SignUp = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
+                    required
+                />
+                <br />
+                <label>Phone Number</label>
+                <input
+                    id="new-phone"
+                    name="new-phone"
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    autoComplete="phone"
                     required
                 />
                 <br />

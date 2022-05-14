@@ -24,7 +24,8 @@
         "react-icons": "^4.3.1",
         "react-plaid-link": "^3.3.1",
         "recharts": "^2.1.9",
-        "styled-components": "^5.3.5"
+        "styled-components": "^5.3.5",
+        "uniqid": "^5.4.0"
     },
     "devDependencies": {
         "@types/styled-components": "^5.1.25",

@@ -1,3 +1,18 @@
+.main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 40px;
+    color: rgb(69, 68, 68);
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
 .accountInfoContainer {
     display: inline;
     padding: 0 2rem;
@@ -6,14 +21,157 @@
     height: 100%;
 }
 
-.personal {
-
+.accountDivContainer {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem;
 }
 
-.security {
-
+.rowInfo {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
 }
 
-.billing {
 
+.columnContainer {
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid grey;
+    border-radius: 3px;
+
+    padding: 10px;
+    min-width: 400px;
+    width: fit-content;
+    margin-bottom: 2rem;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.rowContainer {
+    display: flex;
+    flex-direction: row;
+
+    border: 1px solid grey;
+    border-radius: 3px;
+
+    padding: 10px;
+    min-width: 400px;
+    width: fit-content;
+    margin-bottom: 2rem;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.billingAccountContainer {
+    display: flex;
+    flex-direction: column;
+
+    padding: 10px;
+    min-width: 600px;
+    width: fit-content;
+    margin-bottom: 2rem;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.pInfo {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.accountInfo {
+    display: flex;
+    font-weight: 500;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    color:rgb(60, 60, 60)
+}
+
+.accountInfo:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 600;
+    color:rgb(75, 75, 75)
+}
+
+
+.billingAccountDropdown {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    max-width: fit-content;
+    margin: 5px;
+}
+
+.billingAccountDropdown:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 600;
+    color: rgb(75, 75, 75)
+}
+
+.iconContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    margin-bottom: auto;
+    margin-left: auto;
+    right: 0;
+}
+
+.billingOptionContainer {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+
+.billingOptionCard {
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid grey;
+    border-radius: 10px;
+    box-shadow: -10px 0 10px rgb(207, 117, 117);
+
+    padding: 20px;
+    min-width: 300px;
+    width: fit-content;
+    margin-bottom: 2rem;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 25px;
+}
+
+.billingOptionCard:hover {
+    border: 1px solid rgb(207, 117, 117);
+    box-shadow: -15px 0 15px rgb(207, 117, 117);
+    transition: .2s;
+    cursor: pointer;
 }

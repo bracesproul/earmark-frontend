@@ -51,7 +51,7 @@ export default async function handler(req, res) {
                 },
             };
             const axiosResponse = await axios(config);
-            // await updateFirestore(user_id, axiosResponse.data.access_token, axiosResponse.data.item_id);
+
             const response = {
                 statusCode: 200,
                 statusMessage: axiosResponse.data,

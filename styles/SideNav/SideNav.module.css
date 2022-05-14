@@ -1,7 +1,10 @@
 .sideNavContainer {
     padding: 10px;
+    position: fixed;
     max-width: fit-content;
-    height: 100vh;
+    min-width: 190px;
+    min-height: 100%;
+    max-height: 100%;
     background-color: rgb(63, 63, 63);
 }
 
@@ -31,7 +34,7 @@
 }
 
 .sideNavAuthContainer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 10px;
 }

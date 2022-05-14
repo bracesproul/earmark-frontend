@@ -119,8 +119,7 @@ const Sidenav = ({ }) => {
 
 
     return (
-        <>
-       <div className={styles.sideNavContainer}>
+        <div className={styles.sideNavContainer}>
             <a onClick={e => handleClick("transactions")}>
                 <h3 id="transactions" className={styles.sideNavOption} {...getToggleProps({ 
                     onClick: () => setExpanded((prevExpanded) => !prevExpanded) 
@@ -153,25 +152,23 @@ const Sidenav = ({ }) => {
             </Link>
 
             <Link href="/account/institutions">
-            <h3 id="accounts" className={styles.sideNavOption}>Institutions</h3>
+                <h3 id="accounts" className={styles.sideNavOption}>Institutions</h3>
             </Link>
-            
+
 
             <Link href="/account/investments">
-            <h3 id="investments" className={styles.sideNavOption}>Investments</h3>
+                <h3 id="investments" className={styles.sideNavOption}>Investments</h3>
             </Link>
 
             <Link href="/account/transfers">
-            <h3 id="transfers" className={styles.sideNavOption}>Transfers</h3>
+                <h3 id="transfers" className={styles.sideNavOption}>Transfers</h3>
             </Link>
 
             { uid === "Unauthorized" ? null : <DynamicPlaidLink user_id={uid} /> }
             <hr />
-        </div>
+
         <Auth />
-        </>
-
-
+        </div>
     )
 }
 
