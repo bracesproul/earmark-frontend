@@ -227,10 +227,7 @@
 .iconContainer {
     display: flex;
     flex-direction: row;
-    justify-content: left;
-    margin-bottom: auto;
-    margin-left: auto;
-    right: 0;
+    justify-content: center;
 }
 
 .billingOptionContainer {

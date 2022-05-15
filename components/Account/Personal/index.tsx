@@ -13,10 +13,17 @@ const Personal = ({ data, uid }) => {
         <div className={styles.accountDivContainer}>
         <h1 className={styles.title}>Personal</h1>
         <EditAccountSettingPopupRow 
-        element="name" 
+        element="full_name" 
         user_id={uid} 
         title="Full name:" 
-        content={`${data.first_name} ${data.last_name}`} 
+        content={data.full_name} 
+        />
+
+        <EditAccountSettingPopupRow 
+        element="userId" 
+        user_id={uid} 
+        title="Username:" 
+        content={data.userId} 
         />
         
         <EditAccountSettingPopupRow 

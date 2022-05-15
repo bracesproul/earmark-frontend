@@ -1,23 +1,21 @@
 /* eslint-disable */
 import EditAccountSettingPopupRow from '../EditAccountSettingPopupRow'
 import styles from '../../../styles/Account/Account.module.css';
+import { getAuth } from "firebase/auth";
+import { useEffect } from 'react';
+const auth = getAuth();
+console.log(auth.currentUser)
 
 const Security = ({ data, uid }) => {
+
     return (
         <div className={styles.accountDivContainer}>
             <h1 className={styles.title}>Security</h1>
             <EditAccountSettingPopupRow 
-            element="userId" 
-            user_id={uid} 
-            title="User ID:" 
-            content={data.userId} 
-            />
-            
-            <EditAccountSettingPopupRow 
             element="email" 
             user_id={uid} 
             title="Email:" 
-            content={data.email} 
+            content={auth.currentUser.email} 
             />
             
             <EditAccountSettingPopupRow 

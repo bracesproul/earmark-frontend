@@ -33,6 +33,7 @@ const updateFirestore = async (user_id, phone_number, email, first_name, last_na
         email: email,
         first_name: first_name,
         last_name: last_name,
+        full_name: `${first_name} ${last_name}`,
         account_id: uniqid(),
     }
     await setDoc(docRef, docData);
