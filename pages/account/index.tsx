@@ -5,7 +5,6 @@ import React, {
 } from 'react';
 import Head from 'next/head';
 
-
 import styles from '../../styles/Account/Account.module.css';
 
 import { initializeApp } from "firebase/app";
@@ -34,7 +33,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+console.log(`${process.env.API_URL}/api/plaid/link/token/create`)
 export default function Home() {
     const [uid, setUid] = useState("Unauthorized");
     const auth = getAuth();

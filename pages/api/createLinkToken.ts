@@ -2,6 +2,8 @@
 import Cors from 'cors'
 import initMiddleware from '../../lib/init-middleware'
 import axios from 'axios'
+import dotenv from 'dotenv'
+dotenv.config();
 
 // Initialize the cors middleware
 const cors = initMiddleware(
@@ -12,7 +14,10 @@ const cors = initMiddleware(
     })
 );
 
+const API_URL = process.env.API_URL || 'http://localhost:8080';
+
 export default async function handler(req, res) {
+    
     // Run cors
     await cors(req, res)
     // Rest of the API logic
@@ -21,7 +26,7 @@ export default async function handler(req, res) {
             const user_id = req.query.user_id
             const config = {
                 method: "POST",
-                url: "http://localhost:5000/api/plaid/link/token/create",
+                url: API_URL + "/api/plaid/link/token/create",
                 params: {
                     user_id: user_id
                 },

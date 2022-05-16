@@ -61,7 +61,7 @@ const TREEMAP_DATA = [
 			{ name: 'March', size: 100000, fill: "Orange" },
 			{ name: 'April', size: 100000, fill: "Yellow" },
 			{ name: 'May', size: 100000, fill: "Green" },
-      { name: 'June', size: 100000, fill: "Blue" },
+            { name: 'June', size: 100000, fill: "Blue" },
 			{ name: 'July', size: 100000, fill: "Indigo" },
 			{ name: 'August', size: 100000, fill: "Violet" },
 			{ name: 'September', size: 100000, fill: "grey" },

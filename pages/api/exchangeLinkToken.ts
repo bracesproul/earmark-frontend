@@ -29,6 +29,7 @@ const cors = initMiddleware(
       methods: ['GET', 'POST', 'OPTIONS'],
     })
 );
+const API_URL = process.env.API_URL || 'http://localhost:8080';
 
 export default async function handler(req, res) {
     // Run cors
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
 
             const config = {
                 method: "POST",
-                url: "http://localhost:5000/api/plaid/item/public_token/exchange",
+                url: API_URL + '/api/earmark/public_token/exchange',
                 params: {
                     publicToken: publicToken,
                     user_id: user_id
@@ -58,8 +59,8 @@ export default async function handler(req, res) {
                 metaData: {
                     user_id: user_id,
                     requestTime: new Date().toLocaleString(),
-                    nextApiUrl: "/api/exchangeLinkToken",
-                    backendApiUrl: "/api/plaid/item/public_token/exchange",
+                    nextApiUrl: "/api/earmark/public_token/exchange",
+                    backendApiUrl: "/api/earmark/public_token/exchange",
                     method: "POST",
                 }
             }

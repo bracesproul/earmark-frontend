@@ -12,6 +12,8 @@ const cors = initMiddleware(
     })
 );
 
+const API_URL = process.env.API_URL || 'http://localhost:8080';
+
 export default async function handler(req, res) {
     // Run cors
     await cors(req, res)
@@ -21,7 +23,7 @@ export default async function handler(req, res) {
             const user_id = req.query.user_id
             const config = {
                 method: "GET",
-                url: "http://localhost:5000/api/plaid/accounts/get",
+                url: API_URL + '/api/plaid/accounts/get',
                 params: {
                     user_id: user_id
                 },

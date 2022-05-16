@@ -12,6 +12,10 @@ import ReBarChart from '../DataVisuals/ReBarChart';
 import RePieChart from '../DataVisuals/RePieChart';
 import VisualizeData from '../DataVisuals/Charts';
 
+// TODO:
+// Get all transactions based on user account
+// Get requested account based off of user_id && 
+
 const gridData = {
     rows: [
         { id: "ejradyRl9Mt9wKvjdow1fZDnvx4GwKi7wpx7E", col1: "McDonald's", col2: '2021-05-07', col3: "12.01", col4: "Food and Drink" },
