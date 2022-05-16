@@ -33,7 +33,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-console.log(`${process.env.API_URL}/api/plaid/link/token/create`)
+console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/plaid/link/token/create`)
 export default function Home() {
     const [uid, setUid] = useState("Unauthorized");
     const auth = getAuth();
