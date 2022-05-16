@@ -2,8 +2,6 @@
 import Cors from 'cors'
 import initMiddleware from '../../lib/init-middleware'
 import axios from 'axios'
-import dotenv from 'dotenv'
-dotenv.config();
 
 // Initialize the cors middleware
 const cors = initMiddleware(
