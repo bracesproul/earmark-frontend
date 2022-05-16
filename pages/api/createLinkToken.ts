@@ -15,7 +15,7 @@ const cors = initMiddleware(
 const API_URL = process.env.API_URL || 'http://localhost:8080';
 
 export default async function handler(req, res) {
-    
+    console.log(API_URL);
     // Run cors
     await cors(req, res)
     // Rest of the API logic
