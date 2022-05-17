@@ -14,7 +14,7 @@ import {
   Treemap,
 	ResponsiveContainer,
 } from 'recharts';
-import Datagrid from "../src/components/NewUIComponents/Datagrid"
+import Datagrid from "../src/components/NewUIComponents/DataGridTransactions"
 import { globalVars } from '../src/lib/globalVars';
 import axios from 'axios';
 const API_URL = globalVars().API_URL;
