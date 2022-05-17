@@ -18,13 +18,16 @@ import styles from '../../../styles/SideNav/SideNav.module.css';
 
 const PlaidLink = ({ user_id }) => {
     if (user_id === null || user_id === "Unauthorized") return <></>;
-
+    console.log(process.env.EARMARK_API_KEY)
     const [linkToken, setLinkToken] = useState(null);
 
     const fetchToken = useCallback(async () => {
         try {
             const config = {
                 method: "post",
+                headers: {
+                    'earmark-api-key': process.env.EARMARK_API_KEY,
+                },
                 params: {
                     user_id: user_id
                 },
@@ -42,8 +45,13 @@ const PlaidLink = ({ user_id }) => {
     }, [fetchToken]);
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
+        console.log('api key:', process.env.EARMARK_API_KEY);
+        console.log('inside onsuc cb')
         const config = {
             method: "post",
+            headers: {
+                'earmark-api-key': process.env.EARMARK_API_KEY,
+            },
             params: {
                 user_id: user_id,
                 publicToken: publicToken,
@@ -52,6 +60,7 @@ const PlaidLink = ({ user_id }) => {
         };
         try {
             const response = await axios(config);
+            console.log(response.data)
         } catch (error) {
             console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }

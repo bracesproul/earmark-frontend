@@ -115,17 +115,25 @@ export async function getServerSideProps({ req, res }) {
         },
     };
     const axiosResponse = await axios(config);
-    console.log(axiosResponse.data)
+    const allTransactionsColumns = [
+        { field: 'col1', headerName: 'Name', width: 150 },
+        { field: 'col2', headerName: 'Date', width: 150 },
+        { field: 'col3', headerName: 'Amount', width: 150 },
+        { field: 'col4', headerName: 'Category', width: 150 },
+    ];
+    const data = [
+        {dataGridColumns: allTransactionsColumns},
+        {dataGridRows: axiosResponse.data.dataGridTransactions},
+        {transactionMetadata: axiosResponse.data.transactionMetadata}
+    ]
     return {
-      props: { dataGridTransactions: axiosResponse.data.dataGridTransactions, 
-        transactionMetadata: axiosResponse.data.transactionMetadata 
-    },
+      props: { data },
     }
 }
 
-export default function Home({ dataGridTransactions, transactionMetadata }) {
+export default function Home({ data }) {
     const auth = useAuth();
-    console.log(dataGridTransactions)
+    console.log(data)
 
     return (
         <div className="">

@@ -133,3 +133,37 @@ a {
   display: flex;
 }
 
+.testing {
+  margin-top: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.datagrid-testing {
+  margin-top: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  min-width: 700px;
+  height: 400px;
+}
+.datagrid-selected {
+  margin-top: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  min-width: 700px;
+  height: 400px;
+}
+.datagrid-testing-container {
+  margin-top: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  min-width: 1400px;
+  height: 400px;
+}
