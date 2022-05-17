@@ -4,6 +4,8 @@ const nextConfig = {
   reactStrictMode: true,
 };
 
+const dotenv = require('dotenv').config({ path: '.env' });
+
 // module.exports = nextConfig;
 module.exports = {
   compiler: {
@@ -11,4 +13,5 @@ module.exports = {
     styledComponents: true,
   },
   nextConfig,
+  dotenv,
 };

@@ -2,6 +2,7 @@
 import Cors from 'cors'
 import initMiddleware from '../../lib/init-middleware'
 import axios from 'axios'
+import { globalVars } from '../../lib/globalVars'
 
 // Initialize the cors middleware
 const cors = initMiddleware(
@@ -28,7 +29,7 @@ metaData: {
     method: "GET",
 },
 */
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_URL = globalVars().API_URL;
 
 export default async function handler(req, res) {
     // Run cors
@@ -45,6 +46,7 @@ export default async function handler(req, res) {
                 },
                 headers: {
                     'Content-Type': 'application/json',
+                    'earmark-api-key': process.env.EARMARK_API_KEY,
                 },
             };
             const axiosResponse = await axios(config);

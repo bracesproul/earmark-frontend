@@ -2,6 +2,7 @@
 import Cors from 'cors'
 import initMiddleware from '../../lib/init-middleware'
 import axios from 'axios'
+import { globalVars } from '../../lib/globalVars'
 
 // Initialize the cors middleware
 const cors = initMiddleware(
@@ -11,6 +12,8 @@ const cors = initMiddleware(
       methods: ['GET', 'POST', 'OPTIONS'],
     })
 );
+
+const API_URL = globalVars().API_URL;
 
 export default async function handler(req, res) {
     // Run cors
