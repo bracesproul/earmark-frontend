@@ -7,10 +7,7 @@ import DatagridAccounts from '../../components/DatagridAccounts';
 import SideNav from '../../components/Sidenav';
 import Head from 'next/head';
 import NotSignedIn from '../../components/Auth/NotSignedIn';
-import { 
-    getAuth, 
-    onAuthStateChanged 
-} from "firebase/auth";
+import { useAuth } from '../../lib/hooks/useAuth';
 import { initializeApp } from "firebase/app";
 import styles from '../../styles/Institutions/Institutions.module.css';
 
@@ -34,22 +31,7 @@ const accountData = [
 
 
 export default function Home() {
-    const [uid, setUid] = useState("Unauthorized");
-    const auth = getAuth();
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            setUid(auth.currentUser.uid);
-        } else {
-            // User is signed out
-            setUid("Unauthorized");
-            console.log('signed out');
-        }
-        });
-    }, [auth])
+    const auth = useAuth();
 
     return (
         <div className="">
@@ -63,7 +45,8 @@ export default function Home() {
             <div className="institutions-container">
                     
                 <div className="institutions-datagrid">
-                    { uid === "Unauthorized" ? <NotSignedIn /> : <DatagridAccounts data={accountData} /> }
+                    {/* @ts-ignore */}
+                    { !auth.user ? <NotSignedIn /> : <DatagridAccounts data={accountData} /> }
                 </div>
             </div>
         </main>

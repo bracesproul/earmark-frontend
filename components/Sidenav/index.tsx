@@ -3,6 +3,7 @@ import React, {
     useState,
     useEffect,
 } from 'react';
+import { useAuth } from "../../lib/hooks/useAuth";
 
 import styles from '../../styles/SideNav/SideNav.module.css'
 
@@ -17,7 +18,6 @@ const DynamicPlaidLink = dynamic(() => import('../PlaidLink'))
 
 import { initializeApp } from "firebase/app";
 import { getAuth, 
-    onAuthStateChanged,
     signOut,
 } from "firebase/auth";
 
@@ -69,26 +69,11 @@ const accounts = [
 
 
 const Sidenav = ({ }) => {
-    const [uid, setUid] = useState("Unauthorized");
-    const auth = getAuth();
-
+    const auth = useAuth();
     const router = useRouter()
     const [isExpanded, setExpanded] = useState(false)
     const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            setUid(auth.currentUser.uid);
-        } else {
-            // User is signed out
-            setUid("Unauthorized");
-            console.log('signed out');
-        }
-        });
-    }, [auth])
 
     const handleClick = (e) => {
         let id;
@@ -128,7 +113,8 @@ const Sidenav = ({ }) => {
                 </h3>
             </a>
             <section {...getCollapseProps()}>
-                {uid === "Unauthorized" ? 
+                {/* @ts-ignore */}
+                {!auth.user ? 
                     <a onClick={e => handleAccountClick("null", "null")}>
                         <p className={styles.accountDropdownList}>All Transactions</p>
                     </a>
@@ -163,8 +149,8 @@ const Sidenav = ({ }) => {
             <Link href="/account/transfers">
                 <h3 id="transfers" className={styles.sideNavOption}>Transfers</h3>
             </Link>
-
-            { uid === "Unauthorized" ? null : <DynamicPlaidLink user_id={uid} /> }
+            {/* @ts-ignore */}
+            { !auth.user ? null : <DynamicPlaidLink user_id={auth.user.uid} /> }
             <hr />
 
         <Auth />
@@ -173,35 +159,15 @@ const Sidenav = ({ }) => {
 }
 
 const Auth = () => {
-
-    const [uid, setUid] = useState('Unauthorized')
-
-    const auth = getAuth();
-    const signOutAuth = () => {
-        signOut(auth).then(() => {
-            console.log('signed out')
-        }).catch((error) => {
-            console.log('error signing out', error)
-        });
-    };
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            const user_id = user.uid;
-            setUid(user_id)
-        } else {
-            setUid('Unauthorized')
-        }
-        });
-    }, [auth])
+    const auth = useAuth();
 
     return (
         <div className={styles.sideNavAuthContainer}>
             <Link href="/account">
                 <h3 id="account" className={styles.authOption}>Account</h3>
             </Link>
-            { uid === 'Unauthorized' ? 
+            {/* @ts-ignore */}
+            { !auth.user ? 
                 <>
                 <Link href="/auth/signIn">
                     <h3 id="signOut" className={styles.authOption}>Sign In</h3>
@@ -212,7 +178,8 @@ const Auth = () => {
                 </>
             : 
             <Link href="/auth/signIn">
-                <h3 onClick={signOutAuth} id="signIn" className={styles.authOption}>Sign Out</h3>
+                {/* @ts-ignore */}
+                <h3 onClick={() => auth.signout()} id="signIn" className={styles.authOption}>Sign Out</h3>
             </Link>
             }
 

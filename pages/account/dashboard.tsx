@@ -7,11 +7,11 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import useCollapse from 'react-collapsed'
 import styles from '../../styles/Dashboard/Dashboard.module.css'
+import axios from 'axios';
+import { globalVars } from '../../lib/globalVars';
+import { useAuth } from '../../lib/hooks/useAuth';
 
-import { 
-    getAuth, 
-    onAuthStateChanged 
-} from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
 import { DataGrid, 
@@ -22,6 +22,10 @@ import { DataGrid,
 import SideNav from '../../components/Sidenav';
 import DashboardBody from '../../components/DashboardBody';
 import NotSignedIn from '../../components/Auth/NotSignedIn';
+import { unstable_ownerWindow } from '@mui/utils';
+
+const FRONTEND_URL = globalVars().FRONTEND_URL;
+const API_URL = globalVars().API_URL;
 
 const firebaseConfig = {
     apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
@@ -33,6 +37,7 @@ const firebaseConfig = {
     measurementId: "G-5474KY2MRV"
 };
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
 // DATA FOR STATIC SITE, REPLACE WITH DYNAMIC FETCHED DATA LATER
 
@@ -94,25 +99,33 @@ const PIE_CHART_DATA = [
   { name: "Leasure", value: 400, fill: "green" },
 ];
 
+export async function getServerSideProps({ req, res }) {
+    const config = {
+        method: "GET",
+        url: API_URL + '/api/earmark/allTransactions',
+        params: {
+            // @ts-ignore
+            user_id: 'A9kohZbP3WRB1qdr3CqEd9GOLi33',
+            startDate: '2021-01-01',
+            endDate: '2022-01-01',
+        },
+        headers: {
+            'Content-Type': 'application/json',
+            'earmark-api-key': process.env.EARMARK_API_KEY,
+        },
+    };
+    const axiosResponse = await axios(config);
+    console.log(axiosResponse.data)
+    return {
+      props: { dataGridTransactions: axiosResponse.data.dataGridTransactions, 
+        transactionMetadata: axiosResponse.data.transactionMetadata 
+    },
+    }
+}
 
-
-export default function Home() {
-    const [uid, setUid] = useState("Unauthorized");
-    const auth = getAuth();
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            setUid(auth.currentUser.uid);
-        } else {
-            // User is signed out
-            setUid("Unauthorized");
-            console.log('signed out');
-        }
-        });
-    }, [auth])
+export default function Home({ dataGridTransactions, transactionMetadata }) {
+    const auth = useAuth();
+    console.log(dataGridTransactions)
 
     return (
         <div className="">
@@ -126,7 +139,8 @@ export default function Home() {
             <div className="dashboard-container">
                 
                 <div className="data-container">
-                    { uid === "Unauthorized" ? <NotSignedIn /> : <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} /> }
+                    {/* @ts-ignore */}
+                    { !auth.user ? <NotSignedIn /> : <DashboardBody transactionData={transactionData} accountData={accountData} bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} /> }
                 </div>
             </div>
         </main>

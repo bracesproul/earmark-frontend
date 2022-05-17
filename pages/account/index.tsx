@@ -6,12 +6,8 @@ import React, {
 import Head from 'next/head';
 
 import styles from '../../styles/Account/Account.module.css';
-
+import { useAuth } from '../../lib/hooks/useAuth';
 import { initializeApp } from "firebase/app";
-import { 
-    getAuth, 
-    onAuthStateChanged 
-} from "firebase/auth";
 import { getFirestore, 
     doc, 
     getDoc 
@@ -33,25 +29,9 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/plaid/link/token/create`)
+
 export default function Home() {
-    const [uid, setUid] = useState("Unauthorized");
-    const auth = getAuth();
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            setUid(auth.currentUser.uid);
-        } else {
-            // User is signed out
-            setUid("Unauthorized");
-            console.log('signed out');
-        }
-        });
-    }, [auth])
-
+    const auth = useAuth();
 
     return (
         <div className="">
@@ -61,13 +41,15 @@ export default function Home() {
             <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className={styles.main}>
-                { uid === "Unauthorized" ? 
+            { /* @ts-ignore */ }
+                { !auth.user ? 
                 <>
                 <SideNav />
                 <NotSignedIn />
                 </>  : 
                 <>
-                <Account user_id={uid} />
+                { /* @ts-ignore */ }
+                <Account />
                 </> }
         </main>
         <footer></footer>
@@ -75,28 +57,13 @@ export default function Home() {
     )
 };
 
-const Account = ({ user_id }) => {
-    const [uid, setUid] = useState("Unauthorized");
+const Account = ({ }) => {
     const [setup, setSetup] = useState(false);
-
-    const auth = getAuth();
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            setUid(auth.currentUser.uid);
-        } else {
-            // User is signed out
-            setUid("Unauthorized");
-            console.log('signed out');
-        }
-        });
-    }, [auth])
+    const auth = useAuth();
 
     const checkForSetup = async () => {
-        const docRef = doc(db, "users", user_id);
+        // @ts-ignore
+        const docRef = doc(db, "users", auth.user.uid);
         const docSnap = await getDoc(docRef);
     
         if (!docSnap.data().setup) {
@@ -109,12 +76,16 @@ const Account = ({ user_id }) => {
     }
     useEffect(() => {
         checkForSetup();
-    }, [uid])
+        // @ts-ignore
+    }, [auth.user])
 
     return (
         <>
         { setup ?  
-        <SetupAccount user_id={user_id} />
+        <>
+        { /* @ts-ignore */ }
+        <SetupAccount user_id={auth.user.uid} />
+        </>
         : 
         <>
         <SideNav />

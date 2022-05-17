@@ -5,11 +5,9 @@ import React, {
 } from 'react';
 
 import styles from '../../../styles/Account/Account.module.css';
+import { useAuth } from "../../../lib/hooks/useAuth";
 
 import { initializeApp } from "firebase/app";
-import { getAuth, 
-    onAuthStateChanged 
-} from "firebase/auth";
 import { getFirestore, 
     doc, 
     getDoc,
@@ -65,26 +63,13 @@ const db = getFirestore(app);
 
 
 const ViewAccount = () => {
-    const [uid, setUid] = useState("Unauthorized");
     const [docData, setDocData] = useState(null);
-    const auth = getAuth();
+    const auth = useAuth();
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            setUid(auth.currentUser.uid);
-        } else {
-            // User is signed out
-            setUid("Unauthorized");
-            console.log('signed out');
-        }
-        });
-    }, [auth])
 
     const getUserInfo = async () => {
-        const docRef = doc(db, "users", uid);
+        /* @ts-ignore */
+        const docRef = doc(db, "users", auth.user.uid);
         const docSnap = await getDoc(docRef);
     
         if (docSnap.exists()) {
@@ -100,7 +85,8 @@ const ViewAccount = () => {
 
     useEffect(() => {
         getUserInfo();
-    }, [uid]);
+        /* @ts-ignore */
+    }, [auth.user.uid]);
 
     if (!docData) return <h1>Loading...</h1>
 
@@ -110,11 +96,14 @@ const ViewAccount = () => {
         const data = account.account;
         return (
         <div className={styles.accountInfoContainer} key={index}>
-            <Personal data={data} uid={uid} />
+            {/* @ts-ignore */}
+            <Personal data={data} uid={auth.user.uid} />
             <hr />
-            <Security uid={uid} data={data} />
+            {/* @ts-ignore */}
+            <Security uid={auth.user.uid} data={data} />
             <hr />
-            <Billing uid={uid} billing_info={account.account.billing_info} />
+            {/* @ts-ignore */}
+            <Billing uid={auth.user.uid} billing_info={account.account.billing_info} />
         </div>
         )
         })}
