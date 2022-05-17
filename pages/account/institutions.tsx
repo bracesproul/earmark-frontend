@@ -3,11 +3,11 @@ import React, {
     useEffect,
     useState,
 } from 'react';
-import DatagridAccounts from '../../components/DatagridAccounts';
-import SideNav from '../../components/Sidenav';
+import DatagridAccounts from '../../src/components/DatagridAccounts';
+import SideNav from '../../src/components/Sidenav';
 import Head from 'next/head';
-import NotSignedIn from '../../components/Auth/NotSignedIn';
-import { useAuth } from '../../lib/hooks/useAuth';
+import NotSignedIn from '../../src/components/Auth/NotSignedIn';
+import { useAuth } from '../../src/lib/hooks/useAuth';
 import { initializeApp } from "firebase/app";
 import styles from '../../styles/Institutions/Institutions.module.css';
 

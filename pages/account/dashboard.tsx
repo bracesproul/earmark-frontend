@@ -8,8 +8,8 @@ import { useRouter } from 'next/router';
 import useCollapse from 'react-collapsed'
 import styles from '../../styles/Dashboard/Dashboard.module.css'
 import axios from 'axios';
-import { globalVars } from '../../lib/globalVars';
-import { useAuth } from '../../lib/hooks/useAuth';
+import { globalVars } from '../../src/lib/globalVars';
+import { useAuth } from '../../src/lib/hooks/useAuth';
 
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
@@ -19,9 +19,9 @@ import { DataGrid,
     GridColDef,
  } from '@mui/x-data-grid';
 
-import SideNav from '../../components/Sidenav';
-import DashboardBody from '../../components/DashboardBody';
-import NotSignedIn from '../../components/Auth/NotSignedIn';
+import SideNav from '../../src/components/Sidenav';
+import DashboardBody from '../../src/components/DashboardBody';
+import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import { unstable_ownerWindow } from '@mui/utils';
 
 const FRONTEND_URL = globalVars().FRONTEND_URL;

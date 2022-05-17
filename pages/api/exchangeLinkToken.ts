@@ -1,8 +1,8 @@
 /* eslint-disable */
 import Cors from 'cors'
-import initMiddleware from '../../lib/init-middleware'
+import initMiddleware from '../../src/lib/init-middleware'
 import axios from 'axios'
-import { globalVars } from '../../lib/globalVars'
+import { globalVars } from '../../src/lib/globalVars'
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, 

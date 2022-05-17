@@ -1,9 +1,9 @@
 /* eslint-disable */
 import Head from "next/head";
-import { useAuth } from "../../lib/hooks/useAuth";
-import AccountExists from '../../components/Auth/AccountExists';
-import SignUp from '../../components/Auth/SignUp';
-import SideNav from '../../components/Sidenav';
+import { useAuth } from "../../src/lib/hooks/useAuth";
+import AccountExists from '../../src/components/Auth/AccountExists';
+import SignUp from '../../src/components/Auth/SignUp';
+import SideNav from '../../src/components/Sidenav';
 import React from "react";
 import styles from '../../styles/Auth/SignUp.module.css'
 

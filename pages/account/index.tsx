@@ -6,17 +6,17 @@ import React, {
 import Head from 'next/head';
 
 import styles from '../../styles/Account/Account.module.css';
-import { useAuth } from '../../lib/hooks/useAuth';
+import { useAuth } from '../../src/lib/hooks/useAuth';
 import { initializeApp } from "firebase/app";
 import { getFirestore, 
     doc, 
     getDoc 
 } from "firebase/firestore";
 
-import NotSignedIn from '../../components/Auth/NotSignedIn'
-import SideNav from '../../components/Sidenav';
-import ViewAccount from '../../components/Account/ViewAccount'
-import SetupAccount from '../../components/Account/SetupAccount'
+import NotSignedIn from '../../src/components/Auth/NotSignedIn'
+import SideNav from '../../src/components/Sidenav';
+import ViewAccount from '../../src/components/Account/ViewAccount'
+import SetupAccount from '../../src/components/Account/SetupAccount'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",

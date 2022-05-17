@@ -3,11 +3,11 @@ import React, {
     useEffect,
     useState,
 } from 'react';
-import VisualizeData from "../../components/DataVisuals/Charts"
-import SideNav from "../../components/Sidenav";
+import VisualizeData from "../../src/components/DataVisuals/Charts"
+import SideNav from "../../src/components/Sidenav";
 import Head from "next/head";
-import { useAuth } from "../../lib/hooks/useAuth";
-import NotSignedIn from '../../components/Auth/NotSignedIn';
+import { useAuth } from "../../src/lib/hooks/useAuth";
+import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import styles from '../../styles/Visualize/Visualize.module.css';
 
 const TREEMAP_DATA = [

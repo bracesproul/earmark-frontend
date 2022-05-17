@@ -3,10 +3,10 @@ import React, {
     useEffect,
     useState,
 } from 'react';
-import SideNav from '../../components/Sidenav';
+import SideNav from '../../src/components/Sidenav';
 import Head from 'next/head';
-import { useAuth } from '../../lib/hooks/useAuth';
-import NotSignedIn from '../../components/Auth/NotSignedIn';
+import { useAuth } from '../../src/lib/hooks/useAuth';
+import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import styles from '../../styles/Investments/Investments.module.css';
 
 export default function Home() {

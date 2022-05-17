@@ -3,11 +3,11 @@ import React, {
     useEffect,
     useState,
 } from 'react';
-import SideNav from '../../components/Sidenav';
+import SideNav from '../../src/components/Sidenav';
 import Head from 'next/head';
-import NotSignedIn from '../../components/Auth/NotSignedIn';
+import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import styles from '../../styles/Transfers/Transfers.module.css';
-import { useAuth } from '../../lib/hooks/useAuth';
+import { useAuth } from '../../src/lib/hooks/useAuth';
 
 export default function Home() {
     const auth = useAuth();
