@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useAuth } from "../../src/lib/hooks/useAuth";
 import AccountExists from '../../src/components/Auth/AccountExists';
 import SignIn from '../../src/components/Auth/SignIn';
-import SideNav from '../../src/components/Sidenav';
+import SideNav from '../../src/components/Nav/SideNav';
 import React from "react";
 import styles from '../../styles/Auth/SignIn.module.css'
 

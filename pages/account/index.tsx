@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import Head from 'next/head';
 
+
 import styles from '../../styles/Account/Account.module.css';
 import { useAuth } from '../../src/lib/hooks/useAuth';
 import { initializeApp } from "firebase/app";
@@ -14,7 +15,7 @@ import { getFirestore,
 } from "firebase/firestore";
 
 import NotSignedIn from '../../src/components/Auth/NotSignedIn'
-import SideNav from '../../src/components/Sidenav';
+import SideNav from '../../src/components/Nav/SideNav';
 import ViewAccount from '../../src/components/Account/ViewAccount'
 import SetupAccount from '../../src/components/Account/SetupAccount'
 

@@ -8,7 +8,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../src/lib/hooks/useAuth';
 import { globalVars } from '../../src/lib/globalVars';
-import SideNav from '../../src/components/Sidenav';
+import { parseCookies } from '../../src/lib/parseCookies';
+import SideNav from '../../src/components/Nav/SideNav';
 import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import DataGridTransactions from '../../src/components/NewUIComponents/DataGridTransactions';
 import styles from '../../styles/Dashboard/Dashboard.module.css';
@@ -17,12 +18,21 @@ import HeadTemplate from '../../src/components/Head';
 const API_URL = globalVars().API_URL;
 
 export async function getServerSideProps({ req, res }) {
+    const cookie = parseCookies(req).user_id
+    console.log('COOKIE', cookie);
+
+    if (res) {
+        if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
+          res.writeHead(301, { Location: "/" })
+          res.end()
+        }
+    }
     const config = {
         method: "GET",
         url: API_URL + '/api/earmark/allTransactions',
         params: {
             // @ts-ignore
-            user_id: 'A9kohZbP3WRB1qdr3CqEd9GOLi33',
+            user_id: cookie,
             startDate: '2021-01-01',
             endDate: '2022-01-01',
         },
@@ -42,14 +52,25 @@ export async function getServerSideProps({ req, res }) {
       props: { 
         dataGridColumns: allTransactionsColumns,
         dataGridRows: axiosResponse.data.dataGridTransactions,
-        transactionMetadata: axiosResponse.data.transactionMetadata
+        transactionMetadata: axiosResponse.data.transactionMetadata,
+        cookie: cookie,
        },
     }
 }
 
 
-const Dashboard = ({ dataGridColumns, dataGridRows, transactionMetadata }) => {
+const Dashboard = ({ dataGridColumns, dataGridRows, transactionMetadata, cookie }) => {
     const auth = useAuth();
+    const router = useRouter();
+    
+    useEffect(() => {
+        // @ts-ignore
+        if (!auth.user) return;
+        // @ts-ignore
+        router.push(`?user_id=${auth.user.uid}`);
+        // @ts-ignore
+    }, [auth.user])
+    
     /* @ts-ignore */
     if (!auth.user) return <NeedAuth />;
 

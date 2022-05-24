@@ -1,10 +1,10 @@
 /* eslint-disable */
+/*
 import React, {
     useEffect,
     useState,
 } from 'react';
 import VisualizeData from "../../src/components/DataVisuals/Charts"
-import SideNav from "../../src/components/Sidenav";
 import Head from "next/head";
 import { useAuth } from "../../src/lib/hooks/useAuth";
 import NotSignedIn from '../../src/components/Auth/NotSignedIn';
@@ -66,7 +66,6 @@ export default function Home() {
             <SideNav />
             <div className="visualize-container">
                 <div className="visualize">
-                    {/* @ts-ignore */}
                     { !auth.user ? <NotSignedIn /> : <VisualizeData bar_chart={BAR_CHART_DATA} tree_map={TREEMAP_DATA} pie_chart={PIE_CHART_DATA} /> }
                 </div>
             </div>
@@ -74,4 +73,36 @@ export default function Home() {
         <footer></footer>
         </div>
     )
+};
+*/
+
+/* eslint-disable */
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+import SideNav from '../../src/components/Nav/SideNav';
+import NotSignedIn from '../../src/components/Auth/NotSignedIn';
+import styles from '../../styles/Dashboard/Visualize.module.css';
+import { useAuth } from '../../src/lib/hooks/useAuth';
+import HeadTemplate from '../../src/components/Head';
+
+export default function Home() {
+  const auth = useAuth();
+
+  return (
+      <div className={styles.page}>
+      <HeadTemplate title="Visualize" description="Visualize data for Earmark" iconPath="/favicon.ico" />
+      <main className={styles.main}>
+          <section className={styles.sidenavContainer}>
+              <SideNav />
+          </section>
+          <section className={styles.body}>
+              {/* @ts-ignore */}
+              { !auth.user ? <NotSignedIn /> : <h1>Visualize</h1> }
+          </section>
+      </main>
+      <footer></footer>
+      </div>
+  )
 };
