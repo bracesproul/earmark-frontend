@@ -73,11 +73,9 @@ const PlaidLink = ({ user_id }) => {
     const { open, exit, ready } = usePlaidLink(config);
 
     return (
-    <>
-    <a onClick={() => open()} hidden={!ready}>
-    <h3 id="plaidLink" className={styles.sideNavOption}>Connect an Account</h3>
+    <a onClick={() => open()} hidden={!ready} id="plaidLink" className={styles.sideNavOption}>
+    Connect an Account
     </a>
-    </>
     )
 }
 
