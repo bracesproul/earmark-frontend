@@ -20,7 +20,6 @@ import { DataGrid,
     GridColDef,
  } from '@mui/x-data-grid';
 
-import SideNav from '../../src/components/Sidenav';
 import DashboardBody from '../../src/components/DashboardBody';
 import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import { unstable_ownerWindow } from '@mui/utils';
