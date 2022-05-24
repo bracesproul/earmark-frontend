@@ -8,7 +8,7 @@ import { getAuth,
   sendPasswordResetEmail,
   onAuthStateChanged,
 } from "firebase/auth";
-
+import { useCookies } from "react-cookie";
 // Paramater ordering: user_id, phone_number?, email?, first_name?, last_name?, account_id?, dob?, street?, city?, state?, zip?, username?, setup?
 import updateFirestoreUser from "../../firestore/updateFirestoreUser"
 
@@ -40,13 +40,24 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [user, setUser] = useState(null);
-  
+  const [cookie, setCookie, removeCookie] = useCookies(["user_id"]);
+
   const signin = async (email, password) => {
-  return await signInWithEmailAndPassword(firebaseAuth, email, password)
-    .then((response) => {
-      setUser(response.user);
-      return response.user;
-    });
+    try {
+      return await signInWithEmailAndPassword(firebaseAuth, email, password)
+      .then((response) => {
+        setUser(response.user);
+        setCookie("user_id", response.user.uid, {
+          path: "/",
+          maxAge: 604800,
+          sameSite: true,
+        });
+        console.log('cookie set');
+        return response.user;
+      });
+    } catch(error) {
+      console.log(error)
+    }
   };
 
   const signup = async (email, password, phoneNumber, firstName, lastName) => {
@@ -54,6 +65,11 @@ function useProvideAuth() {
       .then( async (response) => {
         await updateFirestoreUser(response.user.uid, phoneNumber, email, firstName, lastName, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)
         setUser(response.user);
+        setCookie("user_id", response.user.uid, {
+          path: "/",
+          maxAge: 604800,
+          sameSite: true,
+        });
         return response.user;
       });
   };
@@ -62,6 +78,7 @@ function useProvideAuth() {
     return signOut(firebaseAuth)
       .then(() => {
         setUser(false);
+        removeCookie("user_id")
       });
   };
 
@@ -79,8 +96,14 @@ function useProvideAuth() {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
         setUser(user);
+        setCookie("user_id", user.uid, {
+          path: "/",
+          maxAge: 604800,
+          sameSite: true,
+        });
       } else {
         setUser(false);
+        removeCookie("user_id")
       }
     });
 
