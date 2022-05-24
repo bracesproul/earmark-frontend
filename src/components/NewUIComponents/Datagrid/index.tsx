@@ -35,7 +35,10 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
     },
 }));
 
-const Placeholder = () => {
+
+
+const DataGridComponent = ({ rows, columns, selectionModel, setSelectionModel, message }) => {
+  const Placeholder = () => {
     return (
         <StyledGridOverlay>
         <svg
@@ -77,12 +80,11 @@ const Placeholder = () => {
             </g>
             </g>
         </svg>
-        <Box sx={{ mt: 1 }}>No transactions selected</Box>
+        <Box sx={{ mt: 1 }}>{message}</Box>
         </StyledGridOverlay>
     )
-};
+  };
 
-const DataGridComponent = ({ rows, columns, selectionModel, setSelectionModel }) => {
       return (
         <DataGrid 
         rows={rows}

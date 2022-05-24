@@ -19,7 +19,7 @@ const DataGridTransactions = ({ dataGridColumns, dataGridRows, transactionMetada
     const [newDataGrid, setNewDataGrid] = useState(<></>);
     const [newCategory, setNewCategory] = useState(null);
     const [disabled, setDisabled] = useState(false);
-    const dataGridPlaceholder = <DataGridComponent rows={[]} columns={columns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />;
+    const dataGridPlaceholder = <DataGridComponent message="No transactions selected" rows={[]} columns={columns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />;
     let selectedRowIds = new Array;
     // @ts-ignore
     const { success } = useFirestore();
@@ -55,7 +55,7 @@ const DataGridTransactions = ({ dataGridColumns, dataGridRows, transactionMetada
         if (selectedRowIds.length > 0) {
             console.log(selectedRowIds);
             setNewDataGrid(
-                <DataGridComponent rows={selectedRowIds} columns={columns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
+                <DataGridComponent message="No transactions selected" rows={selectedRowIds} columns={columns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
             )
         }
     }, [selectionModel])
@@ -68,7 +68,7 @@ const DataGridTransactions = ({ dataGridColumns, dataGridRows, transactionMetada
       return (
         <>
         <section className={styles.datagridContainer}>
-            <DataGridComponent rows={rows} columns={columns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
+            <DataGridComponent message="No transactions selected" rows={rows} columns={columns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
             {!selectionModel || selectionModel.length == 0 ? dataGridPlaceholder : newDataGrid}
         </section>
         <section className={styles.createCategoryContainer}>
