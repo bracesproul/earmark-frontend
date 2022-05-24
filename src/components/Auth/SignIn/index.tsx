@@ -40,7 +40,7 @@ const SignIn = () => {
             .then((userCredential) => {
                 setEmail("");
                 setPassword("");
-                router.push('/account/dashboard');
+                router.push('/account');
             });
         } catch (error) {
             console.log(error);
