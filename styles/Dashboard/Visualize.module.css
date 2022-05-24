@@ -1,0 +1,23 @@
+.page {
+    background-color: #f4f4f4;
+    padding: 0;
+}
+.main {
+    min-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    margin: 0px;
+}
+
+.sidenavContainer {
+    min-width: 190px;
+    min-height: 100%;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    min-width: 80%;
+    min-height: 100%;
+    margin: 0;
+}

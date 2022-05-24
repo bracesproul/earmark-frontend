@@ -12,6 +12,13 @@
   align-items: center;
 }
 
+.navBar {
+  position: fixed;
+  top: 0;
+  width: 100%
+
+}
+
 .footer {
   display: flex;
   flex: 1;

@@ -1,4 +1,6 @@
 .sideNavContainer {
+    display: flex;
+    flex-direction: column;
     padding: 10px;
     position: relative;
     left: 0;
@@ -6,6 +8,11 @@
     min-width: 190px;
     min-height: 100%;
     background-color: rgb(63, 63, 63);
+}
+
+.accountDropdownContainer {
+    display: flex;
+    flex-direction: column;
 }
 
 .sideNavOption {
