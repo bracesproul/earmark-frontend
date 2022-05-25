@@ -1,174 +1,151 @@
 /* eslint-disable */
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import styled from 'styled-components';
-import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/router'
-import uniqid from 'uniqid';
+import * as React from 'react';
+import Router from 'next/router';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useAuth } from '../../../lib/hooks/useAuth';
 
-const StyledLink = styled.a`
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
-`
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
-    authDomain: "earmark-8d1d3.firebaseapp.com",
-    projectId: "earmark-8d1d3",
-    storageBucket: "earmark-8d1d3.appspot.com",
-    messagingSenderId: "46302537330",
-    appId: "1:46302537330:web:403eac7f28d2a4868944eb",
-    measurementId: "G-5474KY2MRV"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const updateFirestore = async (user_id, phone_number, email, first_name, last_name) => {
-    const docRef = doc(db, "users", user_id);
-    const docData = {
-        phone_number: phone_number,
-        email: email,
-        first_name: first_name,
-        last_name: last_name,
-        full_name: `${first_name} ${last_name}`,
-        account_id: uniqid(),
-    }
-    await setDoc(docRef, docData);
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="/">
+        Earmark
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
 }
 
-const SignUp = () => {
+const theme = createTheme();
 
+export default function SignUp() {
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [disabled, setDisabled] = useState(true);
-    const router = useRouter();
+    const auth = useAuth();
 
-    const handleSubmitCreateAccount = async (e) => {
-        e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+    const phoneNumber = data.get('phoneNumber');
+    const firstName = data.get('firstName');
+    const lastName = data.get('lastName');
+    //@ts-ignore
+    await auth.signup(email, password, phoneNumber, firstName, lastName);
+    Router.push('/account');
+  };
 
-        const auth = getAuth();
-        try {
-            await createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                updateFirestore(userCredential.user.uid, phoneNumber, email, firstName, lastName);
-                setFirstName("");
-                setLastName("");
-                setEmail("");
-                setPhoneNumber("");
-                setPassword("");
-                setFirstName("");
-                setLastName("");
-                router.push('/account');
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const checkPasswords = (e) => {
-        if (password === e.target.value) {
-            setDisabled(false);
-        } else {
-            setDisabled(true);
-        }
-    }
-
-
-    return (
-        <div>
-            <h2>Create an account</h2>
-            <form id="createAccount" onSubmit={e => handleSubmitCreateAccount(e)}>
-                <label>First Name</label>
-                <input
-                    id="new-first-name"
-                    name="new-name"
-                    type="name"
-                    placeholder="First Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    autoComplete="given-name"
-                    required
+  return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
                 />
-                <br />
-                <label>Last Name</label>
-                <input
-                    id="new-last-name"
-                    name="new-name"
-                    type="name"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    autoComplete="family-name"
-                    required
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
                 />
-                <br />
-                <label>Email</label>
-                <input
-                    id="new-email"
-                    name="new-email"
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    required
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="phone"
+                  label="Phone Number"
+                  name="phone"
+                  autoComplete="phone"
                 />
-                <br />
-                <label>Phone Number</label>
-                <input
-                    id="new-phone"
-                    name="new-phone"
-                    type="tel"
-                    placeholder="Phone Number"
-                    pattern="[0-9]{10}" 
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    autoComplete="phone"
-                    required
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
                 />
-                <br />
-                <label>Password</label>
-                <input
-                    id="new-password"
-                    name="new-password"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="new-password"
-                    required
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
                 />
-                <br />
-                <label>Confirm Password</label>
-                <input
-                    id="new-password-confirm"
-                    name="new-password-confirm"
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => {
-                        setConfirmPassword(e.target.value)
-                        checkPasswords(e)
-                    }}
-                    autoComplete="new-password"
-                    required
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  label="I want to receive inspiration, marketing promotions and updates via email."
                 />
-                <br />
-                <button disabled={disabled} type="submit" id="submitCreateAccount">Create Account</button>
-            </form>
-            <p>Have an account? Click <Link href="/auth/signIn">
-                    <StyledLink>here</StyledLink>
-                </Link> to sign in.</p>
-        </div>
-    )
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex">
+              <Grid item>
+                <Link href="/auth/signIn" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 5 }} />
+      </Container>
+    </ThemeProvider>
+  );
 }
-
-export default SignUp;
