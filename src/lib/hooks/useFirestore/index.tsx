@@ -49,6 +49,26 @@ function useProvideFirestore() {
   const test = () => {
     console.log('test func, inside the useFirestore hook')
   }
+
+  const createUserEntry = async (user_id, phoneNumber, email, firstName, lastName) => {
+    const docRef = doc(db, "users", user_id);
+    const docData = {
+      user_id: user_id,
+      phone_number: phoneNumber,
+      email: email,
+      first_name: firstName,
+      last_name: lastName,
+      full_name: `${firstName} ${lastName}`,
+    }
+    await setDoc(docRef, docData, { merge: true })
+    .then((res) => {
+        console.log('updated create user entry');
+        setSuccess(true);
+    })
+    .catch((err) => {
+      console.log('err creating user entry, ', err)
+    })
+  }
   
   const updateCategory = async (category, transactionObjects) => {
     // @ts-ignore
@@ -66,6 +86,59 @@ function useProvideFirestore() {
     })
   };
 
+  const addBillingPlan = async (user_id, plan) => {
+    // @ts-ignore
+    const docRef = doc(db, "users", user_id);
+    const docData = {
+      billing_info: {
+        billing_account_name: "",
+        billing_address: {
+          address_city: "",
+          address_state: "",
+          address_street: "",
+          address_zip: "",
+        },
+        billing_id: "",
+        billing_plan: plan,
+        card_exp_date: "",
+        card_last_four: "",
+        card_type: "",
+        first_name: "",
+        last_name: "",
+      },
+    }
+    await setDoc(docRef, docData, { merge: true })
+    .then((res) => {
+        console.log('updated billing plan');
+        setSuccess(true);
+    })
+    .catch((err) => {
+      console.log('err updating billing plan, ', err)
+    })
+  };
+
+  const setupUserAccount = async (user_id, dob, street, street2, city, state, zip, userId) => {
+    const docRef = doc(db, "users", user_id);
+    const docData = {
+        date_of_birth: dob,
+        address_street: street,
+        address_street2: street2,
+        address_city: city,
+        address_state: state,
+        address_zip: zip,
+        userId: userId,
+        setup: true,
+    };
+    await setDoc(docRef, docData, { merge: true })
+    .then(() => {
+      console.log('updated category');
+      setSuccess(true);
+    })
+    .catch((err) => {
+      console.log('err updating category, ', err)
+    })
+  }
+
   useEffect(() => {
     setSuccess(false);
     console.log('set success false')
@@ -74,7 +147,10 @@ function useProvideFirestore() {
   return {
     success,
     test,
-    updateCategory
+    createUserEntry,
+    addBillingPlan,
+    updateCategory,
+    setupUserAccount,
   };
 }
 

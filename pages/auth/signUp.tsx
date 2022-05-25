@@ -2,7 +2,7 @@
 import Head from "next/head";
 import { useAuth } from "../../src/lib/hooks/useAuth";
 import AccountExists from '../../src/components/Auth/AccountExists';
-import SignUp from '../../src/components/Auth/SignUp';
+import App from '../../src/components/Auth/SignUp';
 import SideNav from '../../src/components/Nav/SideNav';
 import React from "react";
 import styles from '../../styles/Auth/SignUp.module.css'
@@ -21,7 +21,8 @@ export default function Home() {
             <SideNav />
             <div className="signUp-container">
                 {/* @ts-ignore */}
-                { !auth.user ? <SignUp /> : <AccountExists /> }
+                {/*!auth.user ? <App /> : <AccountExists /> */  }
+                <App />
             </div>
         </main>
         <footer></footer>

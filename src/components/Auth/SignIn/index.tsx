@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Router from 'next/router';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,13 +34,14 @@ function SignIn() {
 
     const auth = useAuth();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
     // @ts-ignore
-    auth.signin(email, password);
+    await auth.signin(email, password);
+    Router.push('/account');
   };
 
   return (

@@ -9,6 +9,7 @@ import { getAuth,
   onAuthStateChanged,
 } from "firebase/auth";
 import { useCookies } from "react-cookie";
+import { useFirestore } from "../useFirestore";
 // Paramater ordering: user_id, phone_number?, email?, first_name?, last_name?, account_id?, dob?, street?, city?, state?, zip?, username?, setup?
 import updateFirestoreUser from "../../firestore/updateFirestoreUser"
 
@@ -39,6 +40,7 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
+  const firestore = useFirestore();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user_id"]);
 
@@ -63,7 +65,6 @@ function useProvideAuth() {
   const signup = async (email, password, phoneNumber, firstName, lastName) => {
     return await createUserWithEmailAndPassword(firebaseAuth, email, password)
       .then( async (response) => {
-        await updateFirestoreUser(response.user.uid, phoneNumber, email, firstName, lastName, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)
         setUser(response.user);
         setCookie("user_id", response.user.uid, {
           path: "/",

@@ -127,10 +127,18 @@ a {
 
 .signIn-container{
   display: flex;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
 }
 
 .signUp-container{
   display: flex;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
 }
 
 .testing {
