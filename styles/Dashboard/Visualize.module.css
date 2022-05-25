@@ -19,10 +19,25 @@
     flex-direction: column;
     min-width: 80%;
     min-height: 100%;
-    margin: 0;
+    margin: 3rem;
 }
 
 .visualsContainer {
     width: 100%;
-    height: 800px;
+    height: 600px;
+}
+
+.paperInside {
+    padding: 3rem;
+}
+
+.paperOutside {
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.selectContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

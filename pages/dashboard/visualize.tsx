@@ -8,7 +8,6 @@ import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import styles from '../../styles/Dashboard/Visualize.module.css';
 import { useAuth } from '../../src/lib/hooks/useAuth';
 import HeadTemplate from '../../src/components/Head';
-// src\components\CompileVisuals
 import CompileVisuals from '../../src/components/CompileVisuals';
 
 export default function Home() {
