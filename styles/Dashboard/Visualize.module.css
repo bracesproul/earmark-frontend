@@ -21,3 +21,8 @@
     min-height: 100%;
     margin: 0;
 }
+
+.visualsContainer {
+    width: 100%;
+    height: 800px;
+}
