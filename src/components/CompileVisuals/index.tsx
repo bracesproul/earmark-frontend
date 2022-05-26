@@ -9,12 +9,22 @@ import PieChartComponent from '../ReCharts/PieChartComponent';
 import TreemapComponent from '../ReCharts/TreeMapComponent';
 
 const categories = [
-    "Travel",
-    "Food",
+    "Income",
+    "Transfer In",
+    "Transfer Out",
+    "Loan Payments",
+    "Bank Fees",
     "Entertainment",
-    "Shopping",
-    "Bills",
-    "Other"
+    "Food and Drink",
+    "General Merchandise",
+    "Home Improvement",
+    "Medical",
+    "Personal Care",
+    "General Services",
+    "Government and Non-Profit",
+    "Transportation",
+    "Travel",
+    "Rent and Utilities"
 ];
 
 const ITEM_HEIGHT = 48;

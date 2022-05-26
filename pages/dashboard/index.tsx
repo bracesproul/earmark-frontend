@@ -17,19 +17,19 @@ import HeadTemplate from '../../src/components/Head';
 
 const API_URL = globalVars().API_URL;
 
+
 export async function getServerSideProps({ req, res }) {
     const cookie = parseCookies(req).user_id
-    console.log('COOKIE', cookie);
-
     if (res) {
         if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
           res.writeHead(301, { Location: "/" })
           res.end()
         }
     }
-    const config = {
+
+    const byCategoryConfig = {
         method: "GET",
-        url: API_URL + '/api/earmark/allTransactions',
+        url: API_URL + '/api/earmark/allTransactionsByCategory',
         params: {
             // @ts-ignore
             user_id: cookie,
@@ -41,7 +41,25 @@ export async function getServerSideProps({ req, res }) {
             'earmark-api-key': process.env.EARMARK_API_KEY,
         },
     };
+    const categoryResponse = await axios(byCategoryConfig);
+
+    const config = {
+        method: "GET",
+        url: API_URL + '/api/earmark/allTransactions',
+        params: {
+            // @ts-ignore
+            user_id: cookie,
+            startDate: '2021-01-01',
+            endDate: '2022-01-01',
+            queryType: 'datagrid',
+        },
+        headers: {
+            'Content-Type': 'application/json',
+            'earmark-api-key': process.env.EARMARK_API_KEY,
+        },
+    };
     const axiosResponse = await axios(config);
+    console.log('axiosResponse', axiosResponse.data.dataGridTransactions)
     const allTransactionsColumns = [
         { field: 'col1', headerName: 'Name', width: 150 },
         { field: 'col2', headerName: 'Date', width: 150 },
@@ -51,6 +69,7 @@ export async function getServerSideProps({ req, res }) {
     return {
       props: { 
         dataGridColumns: allTransactionsColumns,
+        categoryRows: categoryResponse.data.transactions,
         dataGridRows: axiosResponse.data.dataGridTransactions,
         transactionMetadata: axiosResponse.data.transactionMetadata,
         cookie: cookie,
@@ -59,7 +78,7 @@ export async function getServerSideProps({ req, res }) {
 }
 
 
-const Dashboard = ({ dataGridColumns, dataGridRows, transactionMetadata, cookie }) => {
+const Dashboard = ({ categoryRows, dataGridColumns, dataGridRows, transactionMetadata, cookie }) => {
     const auth = useAuth();
     const router = useRouter();
     
@@ -82,7 +101,7 @@ const Dashboard = ({ dataGridColumns, dataGridRows, transactionMetadata, cookie 
                 <SideNav />
             </section>
             <section className={styles.dashboardContainer}>
-                <DataGridTransactions dataGridColumns={dataGridColumns} dataGridRows={dataGridRows} transactionMetadata={transactionMetadata} identifier="test" />
+                <DataGridTransactions categoryRows={categoryRows} dataGridColumns={dataGridColumns} dataGridRows={dataGridRows} transactionMetadata={transactionMetadata} identifier="test" />
             </section>
         </main>
         <footer></footer>
