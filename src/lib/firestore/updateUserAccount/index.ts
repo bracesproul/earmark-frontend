@@ -14,6 +14,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// in backend under <updateAccountElement>
 const updateUserAccount = async (user_id, element, edit) => {
     const docRef = doc(db, "users", user_id);
     const docData = {

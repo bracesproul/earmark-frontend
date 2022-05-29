@@ -1,4 +1,5 @@
 /* eslint-disable */
+import React, { useState, useCallback, useEffect } from 'react';
 import Router from 'next/router';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,6 +15,20 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth } from '../../../lib/hooks/useAuth';
+import firebase, { initializeApp, } from "firebase/app";
+
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
+const app = initializeApp({
+  apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
+  authDomain: "earmark-8d1d3.firebaseapp.com",
+  projectId: "earmark-8d1d3",
+  storageBucket: "earmark-8d1d3.appspot.com",
+  messagingSenderId: "46302537330",
+  appId: "1:46302537330:web:403eac7f28d2a4868944eb",
+  measurementId: "G-5474KY2MRV"
+});
+
 
 function Copyright(props) {
   return (
@@ -28,11 +43,13 @@ function Copyright(props) {
   );
 }
 
+
+
 const theme = createTheme();
 
 function SignIn() {
 
-    const auth = useAuth();
+  const auth = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();

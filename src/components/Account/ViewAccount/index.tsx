@@ -84,9 +84,11 @@ const ViewAccount = () => {
     }
 
     useEffect(() => {
+        // @ts-ignore
+        if (!auth.user) return;
         getUserInfo();
         /* @ts-ignore */
-    }, [auth.user.uid]);
+    }, [auth.user]);
 
     if (!docData) return <h1>Loading...</h1>
 

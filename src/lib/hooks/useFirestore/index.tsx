@@ -50,6 +50,7 @@ function useProvideFirestore() {
     console.log('test func, inside the useFirestore hook')
   }
 
+  // in backend under <createUserEntry>
   const createUserEntry = async (user_id, phoneNumber, email, firstName, lastName) => {
     const docRef = doc(db, "users", user_id);
     const docData = {
@@ -70,6 +71,7 @@ function useProvideFirestore() {
     })
   }
   
+  // in backend under <updateCategory>
   const updateCategory = async (category, transactionObjects) => {
     // @ts-ignore
     const docRef = doc(db, "users", auth.user.uid, "categories", category);
@@ -86,6 +88,7 @@ function useProvideFirestore() {
     })
   };
 
+  // in backend under <addBillingPlan>
   const addBillingPlan = async (user_id, plan) => {
     // @ts-ignore
     const docRef = doc(db, "users", user_id);

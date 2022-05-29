@@ -7,6 +7,7 @@ import { getAuth,
   signOut,
   sendPasswordResetEmail,
   onAuthStateChanged,
+  UserProfile,
 } from "firebase/auth";
 import { useCookies } from "react-cookie";
 import { useFirestore } from "../useFirestore";
@@ -35,11 +36,13 @@ export function ProvideAuth({ children }) {
 }
 // Hook for child components to get the auth object ...
 // ... and re-render when it changes.
-export const useAuth = () => {
+/*
+const useAuth = () => {
   return useContext(authContext);
 };
+*/
 
-function useProvideAuth() {
+const useProvideAuth = () => {
   const firestore = useFirestore();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user_id"]);
@@ -119,14 +122,15 @@ function useProvideAuth() {
     passwordResetEmail,
   };
 }
-
-// TODO: setup interface so I don't need to add @ts-ignore above every call of this hook
-/*
-interface AuthContextType {
-  user: IUser;
-  signOut: () => void;
-  signIn: () => void;
+interface IUseProvideAuth {
+  user: any;
+  signin: (email: string, password: string) => Promise<any>;
+  signup: (email: string, password: string, phoneNumber: string, firstName: string, lastName: string) => Promise<any>;
+  signout: () => Promise<any>;
+  passwordResetEmail: (email: string) => Promise<any>;
+  useContext: () => any;
+  useAuth: () => any;
+  ProvideAuth: any;
 }
 
-export const useAuth = () => React.useContext(AuthContext) as AuthContextType;
-*/
+export const useAuth = () => useContext(authContext) as IUseProvideAuth;

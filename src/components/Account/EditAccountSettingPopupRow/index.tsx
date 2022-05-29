@@ -30,6 +30,7 @@ const db = getFirestore(app);
 const auth = getAuth();
 const user = auth.currentUser;
 
+// in backend under <updateAccountElement>
 const updateFirestore = async (user_id, element, edit) => {
     const docRef = doc(db, "users", user_id);
     const docData = {
@@ -56,6 +57,7 @@ const updateUserEmail = async (user_id, email) => {
       });
 };
 
+// in backend under <addSecurityChangelog>
 const securityChangeLogUpdate = async (user_id, changeType) => {
     const docRef = doc(db, "users", user_id);
     const docData = {

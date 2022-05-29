@@ -17,19 +17,7 @@ import { getFirestore,
 import NotSignedIn from '../../src/components/Auth/NotSignedIn'
 import SideNav from '../../src/components/Nav/SideNav';
 import ViewAccount from '../../src/components/Account/ViewAccount'
-import SetupAccount from '../../src/components/Account/SetupAccount'
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
-    authDomain: "earmark-8d1d3.firebaseapp.com",
-    projectId: "earmark-8d1d3",
-    storageBucket: "earmark-8d1d3.appspot.com",
-    messagingSenderId: "46302537330",
-    appId: "1:46302537330:web:403eac7f28d2a4868944eb",
-    measurementId: "G-5474KY2MRV"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import SeeAccount from '../../src/components/Account/Account'
 
 export default function Home() {
     const auth = useAuth();
@@ -47,17 +35,20 @@ export default function Home() {
                 <>
                 <SideNav />
                 <NotSignedIn />
-                </>  : 
+                </>  
+                : 
                 <>
-                { /* @ts-ignore */ }
-                <Account />
-                </> }
+                <SideNav />
+                <SeeAccount />
+                </>
+                }
         </main>
         <footer></footer>
         </div>
     )
 };
 
+/*
 const Account = ({ }) => {
     const [setup, setSetup] = useState(false);
     const auth = useAuth();
@@ -81,18 +72,7 @@ const Account = ({ }) => {
     }, [auth.user])
 
     return (
-        <>
-        { setup ?  
-        <>
-        { /* @ts-ignore */ }
-        <SetupAccount user_id={auth.user.uid} />
-        </>
-        : 
-        <>
-        <SideNav />
-        <ViewAccount />
-        </>
-        }
-        </>
+
     )
 }
+*/

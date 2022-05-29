@@ -14,4 +14,7 @@ module.exports = {
   },
   nextConfig,
   dotenv,
+  extends: [
+    'plugin:@next/next/recommended',
+  ],
 };

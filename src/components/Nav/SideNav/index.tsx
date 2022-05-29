@@ -5,6 +5,8 @@ import React, {
 } from 'react';
 import Router from 'next/router';
 import { useAuth } from '../../../lib/hooks/useAuth';
+import PlaidLinkCopy from '../../PlaidLink'
+import { usePLink } from '../../../lib/hooks/usePlaidLink';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -25,19 +27,13 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // for transfers 
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'; // for account tab
 import LoginIcon from '@mui/icons-material/Login'; // for sign in tab
 import LogoutIcon from '@mui/icons-material/Logout'; // for sign out tab
-
+import CachedIcon from '@mui/icons-material/Cached';
+import CableIcon from '@mui/icons-material/Cable';
 
 
 const drawerWidth = 240;
 // ['Transactions', 'Visualize', 'Investments', 'Transfers', 'Institutions']
-const SIDENAV_PAGES = [
-    {pageName: "Dashboard", pageLink: "/dashboard"},
-    {pageName: "Transactions", pageLink: "/dashboard/transactions"},
-    {pageName: "Visualize", pageLink: "/dashboard/visualize"},
-    {pageName: "Investments", pageLink: "/dashboard/investments"},
-    {pageName: "Transfers", pageLink: "/dashboard/transfers"},
-    {pageName: "Institutions", pageLink: "/dashboard/institutions"},
-];
+
 
 const SIDENAV_OTHER_PAGES_AUTH = [
     {pageName: "Account", pageLink: "/account"},
@@ -51,7 +47,25 @@ const SIDENAV_OTHER_PAGES_NO_AUTH = [
 
 const SideNav = () => {
     const auth = useAuth();
+    const plaidLink = usePLink();
+    useEffect(() => {
+        // @ts-ignore
+        if (!auth.user) return;
+        // @ts-ignore
+        plaidLink.fetchToken();
+        // @ts-ignore
+    }, [auth.user])
     const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
+    const SIDENAV_PAGES = [
+        {pageName: "Dashboard", pageLink: "/dashboard", isPlaidLink: false},
+        {pageName: "Transactions", pageLink: "/dashboard/transactions", isPlaidLink: false},
+        {pageName: "Visualize", pageLink: "/dashboard/visualize", isPlaidLink: false},
+        {pageName: "Recurring", pageLink: "/dashboard/recurring", isPlaidLink: false},
+        {pageName: "Investments", pageLink: "/dashboard/investments", isPlaidLink: false},
+        {pageName: "Transfers", pageLink: "/dashboard/transfers", isPlaidLink: false},
+        {pageName: "Institutions", pageLink: "/dashboard/institutions", isPlaidLink: false},
+        {pageName: "Connect Bank", pageLink: "/dashboard/PLACEHOLDER", isPlaidLink: true},
+    ];
 
     useEffect(() => {
         // @ts-ignore
@@ -70,7 +84,13 @@ const SideNav = () => {
     }
 
     const handleButtonClick = (index) => {
-        if (index.pageName == "Sign Out") {
+        // @ts-ignore
+        if (index.isPlaidLink && !plaidLink.ready) {
+            console.log('plaid link clicked');
+            // @ts-ignore
+            plaidLink.open();
+            return;
+        } else if (index.pageName == "Sign Out") {
             // @ts-ignore
             auth.signout();
             Router.push('/auth/signIn');
@@ -110,9 +130,11 @@ const SideNav = () => {
                         { index === 0 ? <DashboardIcon /> : null}
                         { index === 1 ? <PaidIcon /> : null }
                         { index === 2 ? <BarChartIcon /> : null }
-                        { index === 3 ? <ShowChartIcon /> : null }
-                        { index === 4 ? <AttachMoneyIcon /> : null }
-                        { index === 5 ? <AccountBalanceIcon /> : null }
+                        { index === 3 ? <CachedIcon /> : null }
+                        { index === 4 ? <ShowChartIcon /> : null }
+                        { index === 5 ? <AttachMoneyIcon /> : null }
+                        { index === 6 ? <AccountBalanceIcon /> : null }
+                        { index === 7 ? <CableIcon /> : null }
                     </ListItemIcon>
                     <ListItemText primary={text.pageName} />
                     </ListItemButton>
@@ -141,5 +163,13 @@ const SideNav = () => {
         </Box>
     );
 }
+
+const PLink = () => {
+    return (
+        <>
+        
+        </>
+    )
+};
 
 export default SideNav;
