@@ -30,8 +30,11 @@ import { GlobalStyles,
   Step,
   InputLabel,
   MenuItem,
-  Select
+  Select,
+  Alert
 } from '@mui/material';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { MongoSystemError } from 'mongoose/node_modules/mongodb';
 
 const steps = [
   'Sign up', 
@@ -110,9 +113,9 @@ const theme = createTheme();
 export default function App() {
   const auth = useAuth();
   const firestore = useFirestore();
+  const firebaseAuth = getAuth();
   // useState for stepper
   const [activeStep, setActiveStep] = useState(0);
-
   // useState for initial sign up form
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
@@ -148,29 +151,7 @@ export default function App() {
     handleNext();
   };
 
-  const handleSubmitNotState = async (e) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const email = data.get('email');
-    const password = data.get('password');
-    const phoneNumber = data.get('phone');
-    const firstName = data.get('firstName');
-    const lastName = data.get('lastName');
-    console.log({
-      email: email,
-      password: password,
-      phone: phoneNumber,
-      firstName: firstName,
-      lastName: lastName
-    });
-    // @ts-ignore
-    await auth.signup(email, password, phoneNumber, firstName, lastName);
-    setFirstName(firstName);
-    setLastName(lastName);
-    setPhoneNumber(phoneNumber);
-    setEmail(email);
-    handleNext();
-  };
+
 
   const handleBillingSelect = async (tier) => {
     // @ts-ignore
@@ -230,6 +211,58 @@ export default function App() {
   }
 
   function SignUp() {
+    const [createPassword, setCreatePassword] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
+    const [allowNext, setAllowNext] = useState(false);
+    const [emailUsed, setEmailUsed] = useState(false);
+    const [unexpectedError, setUnexpectedError] = useState(false);
+
+    const handleSubmitNotState = async (e) => {
+      e.preventDefault();
+      const data = new FormData(e.currentTarget);
+      const email = data.get('email');
+      const password = data.get('password');
+      const phoneNumber = data.get('phone');
+      const firstName = data.get('firstName');
+      const lastName = data.get('lastName');
+      // @ts-ignore
+      // await auth.signup(email, password, phoneNumber, firstName, lastName);
+      createUserWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCredential) => {
+        setFirstName(firstName);
+        setLastName(lastName);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        handleNext();
+      })
+      .catch((error) => {
+        if (error == 'FirebaseError: Firebase: Error (auth/email-already-in-use).') {
+          setEmailUsed(true)
+        } else {
+          setUnexpectedError(true)
+        }
+        console.error(error);
+      });
+    };
+
+    useEffect(() => {
+      if ((createPassword.length < 6) && (createPassword.length >= 1)) {
+        setShowAlert(true)
+        setShowInfo(false)
+      }
+      if (createPassword.length < 6) {
+        console.log('bad pw')
+        setShowAlert(true)
+        setAllowNext(false)
+      } else {
+        console.log('good pw')
+        setShowInfo(false)
+        setShowAlert(false)
+        setAllowNext(true)
+      }
+    }, [createPassword]);
+
     return (
       <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -295,12 +328,18 @@ export default function App() {
                 <TextField
                   required
                   fullWidth
+                  value={createPassword}
+                  onChange={(e) => setCreatePassword(e.target.value)}
                   name="password"
                   label="Password"
                   type="password"
                   id="password"
                   autoComplete="new-password"
                 />
+              </Grid>
+              <Grid item xs={12}>
+                { showAlert ? <Alert severity="warning">Password does not meet requirements</Alert> : null}
+                { showInfo ? <Alert severity="info">Password must be at least 6 characters</Alert> : null}
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
@@ -314,9 +353,14 @@ export default function App() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!allowNext}
             >
               Sign Up
             </Button>
+            <Grid item xs={12}>
+                { emailUsed ? <Alert severity="error">Email already in use, please sign in</Alert> : null}
+                { unexpectedError ? <Alert severity="error">Unexpected error, please try again</Alert> : null}
+              </Grid>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="#" variant="body2">
