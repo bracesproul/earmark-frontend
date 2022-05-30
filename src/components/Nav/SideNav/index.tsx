@@ -2,11 +2,12 @@
 import React, {
     useState,
     useEffect,
+    useCallback,
 } from 'react';
 import Router from 'next/router';
 import { useAuth } from '../../../lib/hooks/useAuth';
-import PlaidLinkCopy from '../../PlaidLink'
-import { usePLink } from '../../../lib/hooks/usePlaidLink';
+import PlaidLinkCopy from '../../../archive/PlaidLink'
+import { usePLink } from '../../../archive/usePlaidLink';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -29,6 +30,8 @@ import LoginIcon from '@mui/icons-material/Login'; // for sign in tab
 import LogoutIcon from '@mui/icons-material/Logout'; // for sign out tab
 import CachedIcon from '@mui/icons-material/Cached';
 import CableIcon from '@mui/icons-material/Cable';
+import axios from 'axios';
+import { usePlaidLink } from 'react-plaid-link';
 
 
 const drawerWidth = 240;
@@ -47,14 +50,7 @@ const SIDENAV_OTHER_PAGES_NO_AUTH = [
 
 const SideNav = () => {
     const auth = useAuth();
-    const plaidLink = usePLink();
-    useEffect(() => {
-        // @ts-ignore
-        if (!auth.user) return;
-        // @ts-ignore
-        plaidLink.fetchToken();
-        // @ts-ignore
-    }, [auth.user])
+
     const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
     const SIDENAV_PAGES = [
         {pageName: "Dashboard", pageLink: "/dashboard", isPlaidLink: false},
@@ -64,7 +60,6 @@ const SideNav = () => {
         {pageName: "Investments", pageLink: "/dashboard/investments", isPlaidLink: false},
         {pageName: "Transfers", pageLink: "/dashboard/transfers", isPlaidLink: false},
         {pageName: "Institutions", pageLink: "/dashboard/institutions", isPlaidLink: false},
-        {pageName: "Connect Bank", pageLink: "/dashboard/PLACEHOLDER", isPlaidLink: true},
     ];
 
     useEffect(() => {
@@ -83,14 +78,9 @@ const SideNav = () => {
         Router.push('/');
     }
 
-    const handleButtonClick = (index) => {
-        // @ts-ignore
-        if (index.isPlaidLink && !plaidLink.ready) {
-            console.log('plaid link clicked');
-            // @ts-ignore
-            plaidLink.open();
-            return;
-        } else if (index.pageName == "Sign Out") {
+
+    const handleButtonClick = async (index) => {
+        if (index.pageName == "Sign Out") {
             // @ts-ignore
             auth.signout();
             Router.push('/auth/signIn');
@@ -134,12 +124,12 @@ const SideNav = () => {
                         { index === 4 ? <ShowChartIcon /> : null }
                         { index === 5 ? <AttachMoneyIcon /> : null }
                         { index === 6 ? <AccountBalanceIcon /> : null }
-                        { index === 7 ? <CableIcon /> : null }
                     </ListItemIcon>
                     <ListItemText primary={text.pageName} />
                     </ListItemButton>
                 </ListItem>
                 ))}
+                <PlaidLink user_id={auth.user.uid} />
             </List>
             <Divider />
             </>
@@ -164,12 +154,71 @@ const SideNav = () => {
     );
 }
 
-const PLink = () => {
+const PlaidLink = ({ user_id }) => {
+    if (user_id === null || user_id === "Unauthorized") return <></>;
+    const [linkToken, setLinkToken] = useState(null);
+
+    const fetchToken = useCallback(async () => {
+        try {
+            const config = {
+                method: "post",
+                headers: {
+                    'earmark-api-key': process.env.EARMARK_API_KEY,
+                },
+                params: {
+                    user_id: user_id
+                },
+                url:'/api/createLinkToken',
+            }
+            const response = await axios(config);
+            setLinkToken(response.data.linkToken);
+        } catch (error) {
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchToken();
+    }, [fetchToken]);
+
+    const onSuccess = useCallback(async (publicToken, metadata) => {
+        console.log('api key:', process.env.EARMARK_API_KEY);
+        console.log('inside onsuc cb')
+        const config = {
+            method: "post",
+            headers: {
+                'earmark-api-key': process.env.EARMARK_API_KEY,
+            },
+            params: {
+                user_id: user_id,
+                publicToken: publicToken,
+            },
+            url: '/api/exchangeLinkToken',
+        };
+        try {
+            const response = await axios(config);
+            console.log(response.data)
+        } catch (error) {
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+        }
+    }, []);
+
+    const config = {
+        token: linkToken,
+        onSuccess,
+    }
+    const { open, exit, ready } = usePlaidLink(config);
+
     return (
-        <>
-        
-        </>
+        <ListItem onClick={() => open()} disabled={!ready} key={'plaidLink'} disablePadding>
+            <ListItemButton>
+            <ListItemIcon>
+            <CableIcon />
+            </ListItemIcon>
+            <ListItemText primary='Connect Bank' />
+            </ListItemButton>
+        </ListItem>
     )
-};
+}
 
 export default SideNav;

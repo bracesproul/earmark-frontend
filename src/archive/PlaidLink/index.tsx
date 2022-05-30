@@ -12,11 +12,13 @@ import {
     PlaidLinkError,
     PlaidLinkOnExitMetadata,
 } from 'react-plaid-link';
+import { ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
+import CableIcon from '@mui/icons-material/Cable';
 import axios from 'axios';
 
 import styles from '../../../styles/SideNav/SideNav.module.css';
 
-const PlaidLink = ({ user_id }) => {
+const PlaidLink = ({ user_id, text }) => {
     if (user_id === null || user_id === "Unauthorized") return <></>;
     const [linkToken, setLinkToken] = useState(null);
 
@@ -72,9 +74,12 @@ const PlaidLink = ({ user_id }) => {
     const { open, exit, ready } = usePlaidLink(config);
 
     return (
-    <a onClick={() => open()} hidden={!ready} id="plaidLink" className={styles.sideNavOption}>
-    Connect an Account
-    </a>
+        <ListItemButton>
+        <ListItemIcon>
+        <CableIcon />
+        </ListItemIcon>
+        <ListItemText primary={text.pageName} />
+        </ListItemButton>
     )
 }
 

@@ -1,8 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext, createContext, useCallback } from "react";
-import { useAuth } from "../useAuth";
+import { useAuth } from "../../lib/hooks/useAuth";
 import { usePlaidLink } from 'react-plaid-link';
-import { auth } from "firebase-admin";
 import axios from "axios";
 
 const plaidLinkContext = createContext({});
@@ -24,9 +23,9 @@ function useProvidePlaidLink() {
     const [linkToken, setLinkToken] = useState(null);
 
     const fetchToken = useCallback(async () => {
-        // @ts-ignore
+        console.log('fetching token before user check')
         if (!auth.user) return null;
-        console.log('fetching token');
+        console.log('fetching token AFTER user check')
         try {
             const config = {
                 method: "post",
@@ -79,7 +78,12 @@ function useProvidePlaidLink() {
     }
     const { open, exit, ready } = usePlaidLink(config);
 
-    return { open, exit, ready, fetchToken }
+    return { 
+        open, 
+        exit, 
+        ready, 
+        fetchToken 
+    }
 }
 
 // TODO: setup interface so I don't need to add @ts-ignore above every call of this hook

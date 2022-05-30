@@ -3,6 +3,7 @@ import React, {
     useEffect,
     useState,
 } from 'react';
+import axios from 'axios';
 import Router from 'next/router';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -32,11 +33,26 @@ const user = auth.currentUser;
 
 // in backend under <updateAccountElement>
 const updateFirestore = async (user_id, element, edit) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        params: {
+            user_id: user_id,
+            element: element,
+            edit: edit
+        },
+        url: '/api/updateAccount',
+        method: "GET"
+    }
+    const response = await axios(config);
+    /*
     const docRef = doc(db, "users", user_id);
     const docData = {
         [element]: edit,
     };
     await setDoc(docRef, docData, { merge: true });
+    */
 };
 
 const updateUserPassword = async (user_id, password) => {

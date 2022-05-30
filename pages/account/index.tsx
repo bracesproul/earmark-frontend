@@ -16,7 +16,6 @@ import { getFirestore,
 
 import NotSignedIn from '../../src/components/Auth/NotSignedIn'
 import SideNav from '../../src/components/Nav/SideNav';
-import ViewAccount from '../../src/components/Account/ViewAccount'
 import SeeAccount from '../../src/components/Account/Account'
 
 export default function Home() {

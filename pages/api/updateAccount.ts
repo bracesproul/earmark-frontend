@@ -89,6 +89,75 @@ export default async function handler(req, res) {
                 finalResponse = 'error';
                 finalStatus = 400;
             }
+        } else if (req.query.func == 'deleteAccount') {
+            try {
+                console.log(req.query)
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'earmark-api-key': process.env.EARMARK_API_KEY,
+                    },
+                    params: {
+                        user_id: req.query.user_id,
+                        params: req.query.params,
+                        func: 'deleteAccount',
+                    },
+                    url: API_URL + "/api/firebase/firestore",
+                    method: "POST",
+                }
+                const response = await axios(config);
+                finalResponse = response.data;
+                finalStatus = 200;
+            } catch (error) {
+                finalResponse = 'error';
+                finalStatus = 400;
+            }
+        } else if (req.query.func == 'deleteAllInstitutions') {
+            try {
+                console.log(req.query)
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'earmark-api-key': process.env.EARMARK_API_KEY,
+                    },
+                    params: {
+                        user_id: req.query.user_id,
+                        params: req.query.params,
+                        func: 'deleteAllInstitutions',
+                    },
+                    url: API_URL + "/api/firebase/firestore",
+                    method: "POST",
+                }
+                const response = await axios(config);
+                finalResponse = response.data;
+                finalStatus = 200;
+            } catch (error) {
+                finalResponse = 'error';
+                finalStatus = 400;
+            }
+        } else if (req.query.func == 'updateAccountElement') {
+            try {
+                console.log(req.query)
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'earmark-api-key': process.env.EARMARK_API_KEY,
+                    },
+                    params: {
+                        user_id: req.query.user_id,
+                        params: req.query.params,
+                        func: 'updateAccountElement',
+                    },
+                    url: API_URL + "/api/firebase/firestore",
+                    method: "POST",
+                }
+                const response = await axios(config);
+                finalResponse = response.data;
+                finalStatus = 200;
+            } catch (error) {
+                finalResponse = 'error';
+                finalStatus = 400;
+            }
         }
 
         await res.status(finalStatus);

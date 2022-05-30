@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 
 import styles from '../../../../styles/Account/Account.module.css';
-import { useAuth } from "../../../lib/hooks/useAuth";
+import { useAuth } from "../../lib/hooks/useAuth";
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, 
@@ -13,9 +13,9 @@ import { getFirestore,
     getDoc,
 } from "firebase/firestore";
 
-import Security from '../Security'
-import Personal from '../Personal'
-import Billing from '../Billing'
+import Security from '../../components/Account/Security'
+import Personal from '../../components/Account/Personal'
+import Billing from '../../components/Account/Billing'
 
 const accountData = [
     {account: {

@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
+import Router from 'next/router';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -17,7 +18,19 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useAuth } from '../../../lib/hooks/useAuth';
-import { InputLabel, Select, MenuItem } from '@mui/material';
+import { InputLabel, 
+    Select, 
+    MenuItem,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Slide,
+    formLabelClasses
+ } from '@mui/material';
+ import { TransitionProps } from '@mui/material/transitions';
+import { makeStyles } from '@mui/styles';
 import { globalVars } from '../../../lib/globalVars';
 
 import { initializeApp } from "firebase/app";
@@ -38,18 +51,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+const useStyles = makeStyles({
+    deleteButton: {
+      background: '#ed0000',
+      '&:hover': {
+        background: '#c40404',
+    },
+  }})
 
 const STATE_ARRAY = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
 const API_URL = globalVars().API_URL;
@@ -58,9 +66,19 @@ const theme = createTheme();
 
 export default function Account() {
     const auth = useAuth();
+    const styling = useStyles();
     const [editSuccessSecurity, setEditSuccessSecurity] = useState(null);
     const [editSuccessAddress, setEditSuccessAddress] = useState(null);
     const [editSuccessPersonal, setEditSuccessPersonal] = useState(null);
+
+    const [openReAuthDialog, setOpenReAuthDialog] = useState(false);
+
+    const [deleteAccountSuccess, setDeleteAccountSuccess] = useState('error.main');
+    const [deleteAccountText, setDeleteAccountText] = useState("Delete Account");
+    const [removeInstitutionsSuccess, setRemoveInstitutionsSuccess] = useState('error.main');
+    const [removeInstitutionsText, setRemoveInstitutionsText] = useState("Delete All Institutions");
+    const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = useState(false);
+    const [openRemoveInstitutionsDialog, setOpenRemoveInstitutionsDialog] = useState(false);
 
     const [securityButtonText, setSecurityButtonText] = useState("Save Changes");
     const [addressButtonText, setAddressButtonText] = useState("Save Changes");
@@ -120,6 +138,94 @@ export default function Account() {
             setPersonalButtonText("Save Changes");
         }, 2000)
     }, [editSuccessSecurity, editSuccessAddress, editSuccessPersonal]);
+
+    const handleOpenDeleteAccountDialog = () => {
+        setOpenDeleteAccountDialog(true);
+    };
+
+    const handleOpenRemoveInstitutionsDialog = () => {
+        setOpenRemoveInstitutionsDialog(true);
+    };
+
+    const handleCloseDeleteAccountDialog = () => {
+        setOpenDeleteAccountDialog(false);
+    };
+
+    const handleCloseRemoveInstitutionsDialog = () => {
+        setOpenRemoveInstitutionsDialog(false);
+    };
+
+    const handleCloseReAuthDialog = () => {
+        setOpenReAuthDialog(false);
+    };
+
+    const DialogTransition = React.forwardRef(function Transition(
+        props: TransitionProps & {
+          children: React.ReactElement<any, any>;
+        },
+        ref: React.Ref<unknown>,
+      ) {
+        return <Slide direction="up" ref={ref} {...props} />;
+    });
+
+    const handleDeleteAccount = async (event) => {
+        event.preventDefault();
+        console.log('delete account');
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                params: {
+                    user_id: auth.user.uid,
+                    func: 'deleteAccount',
+                    params: {}
+                },
+                method: "GET",
+                url: '/api/updateAccount',
+            }
+            const response = await axios(config);
+            if (response.data.response === 'user deleted') {
+                Router.push('/');
+            } 
+        } catch (error) {
+            if (error.response.data === 'error') {
+                setDeleteAccountSuccess('error.main');
+                setDeleteAccountText("Failed to delete account");
+            }
+        }
+    };
+
+    const handleRemoveAllInstitutions = async (event) => {
+        event.preventDefault();
+        console.log('delete institutions');
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                params: {
+                    user_id: auth.user.uid,
+                    func: 'deleteAllInstitutions',
+                    params: {}
+                },
+                method: "GET",
+                url: '/api/updateAccount',
+            }
+            const response = await axios(config);
+            if (response.data.response === 'success') {
+                handleCloseRemoveInstitutionsDialog();
+                setRemoveInstitutionsSuccess('success.main');
+                setRemoveInstitutionsText("Successfully removed all institutions");
+            } 
+        } catch (error) {
+            if (error.response.data === 'error') {
+                setDeleteAccountSuccess('error.main');
+                setDeleteAccountText("Failed to delete account");
+            }
+        }
+    };
+
     const handleSubmitSecurity = async (event) => {
         event.preventDefault();
         try {
@@ -135,6 +241,7 @@ export default function Account() {
                         lastName: lastName,
                         phone: phone,
                         email: email,
+                        password: password,
                     }
                 },
                 method: "GET",
@@ -144,6 +251,7 @@ export default function Account() {
             if (response.data.response === 'success') {
                 setEditSuccessSecurity('success.main');
                 setSecurityButtonText("Success!");
+                setOpenReAuthDialog(true)
             } 
         } catch (error) {
             if (error.response.data === 'error') {
@@ -220,10 +328,92 @@ export default function Account() {
         }
     };
 
+    const DeleteAccountDialog = () => {
+        return (
+            <>
+            <Dialog
+            open={openDeleteAccountDialog}
+            TransitionComponent={DialogTransition}
+            keepMounted
+            onClose={handleCloseDeleteAccountDialog}
+            aria-describedby="alert-dialog-slide-description"
+            >
+            <DialogTitle>Confirm delete account</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="delete-account-dialog-info">
+                By clicking "Delete Account" Earmark will delete all data, info and linked institutions on your account.
+                </DialogContentText>
+                <DialogContentText id="delete-account-dialog-notice">
+                This action CAN NOT be undone.
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCloseDeleteAccountDialog}>Exit</Button>
+                <Button onClick={handleDeleteAccount}>Delete Account</Button>
+            </DialogActions>
+            </Dialog>
+            </>
+        )
+    };
+
+    const DeleteInstitutionsDialog = () => {
+        return (
+            <>
+            <Dialog
+            open={openRemoveInstitutionsDialog}
+            TransitionComponent={DialogTransition}
+            keepMounted
+            onClose={handleCloseRemoveInstitutionsDialog}
+            aria-describedby="alert-dialog-slide-description"
+            >
+            <DialogTitle>Confirm remove all linked institutions</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="remove-institutions-dialog-info">
+                By clicking "Remove Institutions" Earmark will delete all institutions linked to your account.
+                </DialogContentText>
+                <DialogContentText id="remove-institutions-dialog-notice">
+                This action CAN NOT be undone.
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCloseRemoveInstitutionsDialog}>Exit</Button>
+                <Button onClick={handleRemoveAllInstitutions}>Remove Institutions</Button>
+            </DialogActions>
+            </Dialog>
+            </>
+        )
+    };
+
+    const ReAuthDialog = () => {
+        return (
+            <>
+            <Dialog
+            open={openReAuthDialog}
+            TransitionComponent={DialogTransition}
+            keepMounted
+            onClose={handleCloseReAuthDialog}
+            aria-describedby="reAuth-slide-description"
+            >
+            <DialogTitle>Please sign in again</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="reAuth-dialog-info">
+                Account settings changed, please re-authenticate.
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => Router.push('/auth/signIn')}>Sign In</Button>
+            </DialogActions>
+            </Dialog>
+            </>
+        )
+    };
+
     return (
+        <>
         <ThemeProvider theme={theme} >
             <Box sx={{ display: 'flex', flexDirection: 'column', margin: 'auto', padding: '3rem'}}>
-            <Paper sx={{ display: 'flex', flexDirection: 'column', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
+            <ReAuthDialog />
+            <Paper sx={{ display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -312,7 +502,7 @@ export default function Account() {
                 </Container>
             </Paper>
 
-            <Paper sx={{ display: 'flex', flexDirection: 'column', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
+            <Paper sx={{ display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -407,7 +597,7 @@ export default function Account() {
                 </Container>
             </Paper>
 
-            <Paper sx={{ display: 'flex', flexDirection: 'column', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
+            <Paper sx={{ display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -462,8 +652,81 @@ export default function Account() {
                     </Box>
                 </Container>
             </Paper>
+
+            <Paper sx={{ background: '#121212', display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={15}>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <Box
+                    sx={{
+                        marginTop: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                    >
+                    <Box component="form" noValidate sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                        <Typography sx={{ color: 'white' }} margin="auto" variant="h4" component="h4">
+                        Manage Account
+                        </Typography>
+                        </Grid>
+                        <Button
+                        type="button"
+                        fullWidth
+                        className={styling.deleteButton}
+                        variant="contained"
+                        onClick={handleOpenDeleteAccountDialog}
+                        sx={{ backgroundColor: deleteAccountSuccess, mt: 3, mb: 2 }}
+                        >
+                        {deleteAccountText}
+                        </Button>
+                        <DeleteAccountDialog />
+
+                        <Button
+                        type="button"
+                        fullWidth
+                        className={styling.deleteButton}
+                        variant="contained"
+                        onClick={handleOpenRemoveInstitutionsDialog}
+                        sx={{ backgroundColor: removeInstitutionsSuccess, mt: 3, mb: 2 }}
+                        >
+                        {removeInstitutionsText}
+                        </Button>
+                        <DeleteInstitutionsDialog />
+                        <Grid container justifyContent="flex-end">
+                        </Grid>
+                    </Box>
+                    </Box>
+                </Container>
+            </Paper>
             </Box>
 
         </ThemeProvider>
+        </>
     );
 }
+
+const PersonalSettings = () => {
+    return (
+        <>
+        
+        </>
+    )
+};
+
+const AddressSettings = () => {
+    return (
+        <>
+        
+        </>
+    )
+};
+
+const SecuritySettings = () => {
+    return (
+        <>
+        
+        </>
+    )
+};
+
