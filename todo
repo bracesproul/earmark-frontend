@@ -1,4 +1,6 @@
 FOR PRODUCTION
+
+- FIX CREATE/SIGN IN ADD COOKIES IN HOOK, RETURN ERRORS IF ERROR
 - fix plaid link
 - add admin firestore to db DONE
     - change all firebase reads/writes/auth to db

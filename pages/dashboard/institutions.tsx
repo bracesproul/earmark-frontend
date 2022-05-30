@@ -3,6 +3,9 @@ import React, {
     useEffect,
     useState,
 } from 'react';
+import axios from 'axios';
+import { globalVars } from '../../src/lib/globalVars';
+import { parseCookies } from '../../src/lib/parseCookies';
 import SideNav from '../../src/components/Nav/SideNav';
 import Head from 'next/head';
 import NotSignedIn from '../../src/components/Auth/NotSignedIn';
@@ -18,9 +21,43 @@ const accountData = [
     { id: "ejra43gMt9wKvjdow1fZDnvx4GwKi7wpx7E", col1: 'Plaid IRA', col2: "19,663.91", col3: "Investment" },
 ];
 
-export default function Home() {
-    const auth = useAuth();
+const API_URL = globalVars().API_URL;
 
+export async function getServerSideProps({ req, res }) {
+    const cookie = parseCookies(req).user_id
+    if (res) {
+        if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
+          res.writeHead(301, { Location: "/" })
+          res.end()
+        }
+    }
+    console.log('COOKIE', cookie)
+    const config = {
+        method: "GET",
+        url: API_URL + '/api/earmark/allAccountInfo',
+        params: {
+            user_id: cookie,
+        },
+        headers: {
+            'Content-Type': 'application/json',
+            'earmark-api-key': process.env.EARMARK_API_KEY,
+        },
+    };
+    const response = await axios(config);
+    const accounts = response.data.accounts
+
+    return {
+      props: { 
+        accounts: accounts,
+        cookie: cookie,
+       },
+    }
+}
+
+export default function Home({ accounts, cookie }) {
+    const auth = useAuth();
+    console.log('accounts', accounts)
+    console.log('cookie', cookie)
     return (
         <div className={styles.page}>
         <HeadTemplate title="Institutions" description="List of all linked institutions for Earmark" iconPath="/favicon.ico" />
@@ -30,7 +67,7 @@ export default function Home() {
             </section>
             <section className={styles.body}>
                 {/* @ts-ignore */}
-                { !auth.user ? <NotSignedIn /> : <DatagridAccounts data={accountData} /> }
+                { !auth.user ? <NotSignedIn /> : <DatagridAccounts data={accounts} /> }
             </section>
         </main>
         <footer></footer>

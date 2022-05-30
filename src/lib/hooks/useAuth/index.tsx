@@ -61,7 +61,15 @@ const useProvideAuth = () => {
         return response.user;
       });
     } catch(error) {
-      console.log(error)
+      if (error == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
+        console.log(error);
+        return 'FirebaseError: Firebase: Error (auth/wrong-password).'
+        // setPasswordError(true);
+      } else if (error == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
+        console.log(error)
+        return 'FirebaseError: Firebase: Error (auth/user-not-found).'
+        // setLoginError(true);
+      }
     }
   };
 
@@ -75,7 +83,14 @@ const useProvideAuth = () => {
           sameSite: true,
         });
         return response.user;
-      });
+      })
+      .catch((error) => {
+        if (error == 'FirebaseError: Firebase: Error (auth/email-already-in-use).') {
+          return 'FirebaseError: Firebase: Error (auth/email-already-in-use).'
+        } else {
+          return 'unexpected error'
+        }
+      })
   };
 
   const signout = () => {

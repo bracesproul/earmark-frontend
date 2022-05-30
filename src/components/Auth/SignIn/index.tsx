@@ -118,19 +118,19 @@ function SignIn() {
     const email = data.get('email');
     const password = data.get('password');
     // @ts-ignore
-    signInWithEmailAndPassword(firebaseAuth, email, password)
-    .then((userCredential) => {
-      console.log(userCredential);
+    const response = await auth.signin(email, password);
+    if (response == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
+      console.log(response);
+      setLoginError(false);
+      setPasswordError(true);
+    } else if (response == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
+      console.log(response)
+      setLoginError(true);
+      setPasswordError(false);
+    } else if (response.uid) {
+      console.log(response.uid);
       Router.push('/account');
-    }).catch((error) => {
-      if (error == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
-        console.log(error);
-        setPasswordError(true);
-      } else if (error == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
-        console.log(error)
-        setLoginError(true);
-      }
-    })
+    }
   };
 
   const handlePasswordReset = async (setEmail) => {

@@ -34,7 +34,6 @@ import { GlobalStyles,
   Alert
 } from '@mui/material';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { MongoSystemError } from 'mongoose/node_modules/mongodb';
 
 const steps = [
   'Sign up', 
@@ -227,23 +226,18 @@ export default function App() {
       const firstName = data.get('firstName');
       const lastName = data.get('lastName');
       // @ts-ignore
-      // await auth.signup(email, password, phoneNumber, firstName, lastName);
-      createUserWithEmailAndPassword(firebaseAuth, email, password)
-      .then((userCredential) => {
+      const response = await auth.signup(email, password, phoneNumber, firstName, lastName);
+      if (response == 'FirebaseError: Firebase: Error (auth/email-already-in-use).') {
+        setEmailUsed(true)
+      } else if (response == 'unexpected error') {
+        setUnexpectedError(true)
+      } else if (response.uid) {
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);
         setEmail(email);
         handleNext();
-      })
-      .catch((error) => {
-        if (error == 'FirebaseError: Firebase: Error (auth/email-already-in-use).') {
-          setEmailUsed(true)
-        } else {
-          setUnexpectedError(true)
-        }
-        console.error(error);
-      });
+      }
     };
 
     useEffect(() => {

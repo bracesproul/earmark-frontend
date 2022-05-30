@@ -1,47 +1,74 @@
 /* eslint-disable */
 import React from 'react';
 import axios from 'axios';
+import Router from 'next/router';
 
 import { DataGrid, 
     GridRowsProp,
     GridColDef,
 } from '@mui/x-data-grid';
+import { Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+  deleteButton: {
+    background: '#ed0000',
+    padding: '0.25rem 0.5rem',
+    '&:hover': {
+      background: '#c40404',
+  },
+}})
 
 const DatagridAccounts = ({ data }) => {
-  /*
-  const rows: GridRowsProp = [
-    { id: "RLPVWZlv7wu7gEz5ArgbtDynKbxkzpiJ8aeWQ", col1: "Bank of America", col2: '588.12', col3: "Checking", col4: "9900009606", col5: "011401533" },
-    { id: "ejrat9wKvjdow1fZDnvx4GwKi7wpx7E", col1: 'Chase', col2: "822.01", col3: "Savings", col4: "4521459658", col5: "114586254"  },
-    { id: "ejradyRl9Mt9wjwefjdow1fZDnvx4GwKi7wpx7E", col1: 'Fidelity', col2: "4,008.62", col3: "Investment", col4: "4785123658", col5: "411123589"  },
-    { id: "ejra43gMt9wKvjdow1fZDnvx4GwKi7wpx7E", col1: 'Plaid IRA', col2: "19,663.91", col3: "Investment", col4: "9658741256", col5: "125563288"  },
-  ];
+  const styling = useStyles();
 
-    const columns: GridColDef[] = [
-      { field: 'col1', headerName: 'Name', width: 150 },
-      { field: 'col2', headerName: 'Balance', width: 150 },
-      { field: 'col3', headerName: 'Type', width: 150 },
-      { field: 'col4', headerName: 'Account Number', width: 150 },
-      { field: 'col5', headerName: 'Routing Number', width: 150 },
-    ];
-    */
-    const rows = [
-      { id: "RLPVWZlv7wu7gEz5ArgbtDynKbxkzpiJ8aeWQ", col1: "Bank of America", col2: '588.12', col3: "Checking", col4: "9900009606", col5: "011401533" },
-      { id: "ejrat9wKvjdow1fZDnvx4GwKi7wpx7E", col1: 'Chase', col2: "822.01", col3: "Savings", col4: "4521459658", col5: "114586254"  },
-      { id: "ejradyRl9Mt9wjwefjdow1fZDnvx4GwKi7wpx7E", col1: 'Fidelity', col2: "4,008.62", col3: "Investment", col4: "4785123658", col5: "411123589"  },
-      { id: "ejra43gMt9wKvjdow1fZDnvx4GwKi7wpx7E", col1: 'Plaid IRA', col2: "19,663.91", col3: "Investment", col4: "9658741256", col5: "125563288"  },
-    ];
-  
-      const columns = [
-        { field: 'col1', headerName: 'Name', width: 150 },
-        { field: 'col2', headerName: 'Balance', width: 150 },
-        { field: 'col3', headerName: 'Type', width: 150 },
-        { field: 'col4', headerName: 'Account Number', width: 150 },
-        { field: 'col5', headerName: 'Routing Number', width: 150 },
-      ];
+  const handleRemoveInstitution = (institutionId) => {
+    console.log('remove ins', institutionId);
+  };
+
+  const columns = [
+    { field: 'col1', headerName: 'Name', width: 150 },
+    { field: 'col2', headerName: 'Balance', width: 150 },
+    { field: 'col3', headerName: 'Type', width: 150 },
+    { field: 'col4', headerName: 'Account Number', width: 175 },
+    { field: 'col5', headerName: 'Routing Number', width: 175 },
+    { field: 'col6', headerName: 'Wire Routing Number', width: 175 },
+    { field: 'col7', 
+    headerName: 'Transactions', 
+    width: 150, 
+    renderCell: (data) => (
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={() => Router.push(`/dashboard/${data.row.ins_id}`)}
+          sx={{ padding: '0.25rem 0.5rem' }}
+        >
+          Transactions
+        </Button>
+    )
+    },
+    { field: 'col8', 
+    headerName: 'Remove Institution', 
+    width: 150, 
+    renderCell: (data) => (
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={() => handleRemoveInstitution(data.row.id)}
+          className={styling.deleteButton}
+        >
+          Remove
+        </Button>
+    )
+    },
+    { field: 'ins_id', headerName: 'Ins_id', width: 60, hide: true },
+  ];
     return (
-      <div style={{ height: 600, minWidth: "900px", marginRight: "auto", paddingTop: "5rem" }}>
+      <div style={{ padding: '2rem', height: 600, minWidth: "100%", margin: "auto", }}>
         <h1 style={{ textAlign: "center"}}>Connected Institutions</h1>
-        <DataGrid rows={rows} columns={columns} />
+        <DataGrid autoHeight={true} rows={data} columns={columns} />
       </div>
     );
 }
