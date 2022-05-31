@@ -171,3 +171,10 @@ a {
   min-width: 1400px;
   height: 400px;
 }
+
+.new-nav-con {
+  display: flex;
+  flex-direction: column;
+  max-width: 250px;
+  max-height: 100%;
+}

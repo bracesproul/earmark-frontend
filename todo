@@ -26,3 +26,4 @@ FOR PRODUCTION
 - loading icon/animation, add loading state to all dynamic components
 - look into the next.js 18 features like Streaming, Transitions, and Suspense
 - add homepage styling
+- when sidenav is small, plaid link runs on ever open side nav call

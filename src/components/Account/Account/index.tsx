@@ -262,6 +262,10 @@ export default function Account() {
     };
 
     const handleSubmitAddress = async (event) => {
+        let street_address_2 = '';
+        if (!street2) {
+            street_address_2 = street2;
+        }
         event.preventDefault();
         try {
             const config = {
@@ -273,7 +277,7 @@ export default function Account() {
                     func: 'updateUserAddress',
                     params: {
                         addressStreet: street1,
-                        addressStreet2: street2,
+                        addressStreet2: street_address_2,
                         addressCity: city,
                         addressState: state,
                         addressZip: zip,

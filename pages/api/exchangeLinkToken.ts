@@ -18,6 +18,8 @@ export default async function handler(req, res) {
     // Run cors
     await cors(req, res)
     // Rest of the API logic
+    let response;
+    let responseCode;
     return new Promise( async (resolve, reject)=> {
         try {
             const user_id = req.query.user_id;
@@ -37,7 +39,7 @@ export default async function handler(req, res) {
             };
             const axiosResponse = await axios(config);
 
-            const response = {
+            response = {
                 statusCode: 200,
                 statusMessage: axiosResponse.data,
                 metaData: {
@@ -48,15 +50,15 @@ export default async function handler(req, res) {
                     method: "POST",
                 }
             }
-            res.status(200);
-            res.send(response);
-            res.end();
+            responseCode = 200;
             resolve(response);
         } catch (error) {
-            res.status(400);
-            res.send(error);
-            res.end();
+            response = error;
+            responseCode = 400;
             reject(error);
         }
+        res.status(responseCode);
+        res.send(response);
+        res.end();
     })
 }
