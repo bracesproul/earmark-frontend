@@ -1,29 +1,64 @@
 FOR PRODUCTION
 
-- FIX CREATE/SIGN IN ADD COOKIES IN HOOK, RETURN ERRORS IF ERROR
-- fix plaid link
+- FIX CREATE/SIGN IN ADD COOKIES IN HOOK, RETURN ERRORS IF ERROR - DONE
+
+- fix plaid link - DONE
+
 - add admin firestore to db DONE
     - change all firebase reads/writes/auth to db
+
 - connect visualizations to backend
-- move whats currently on /dashboard to /dashboard/transactions || chage /dashboard to only display every transaction, totals of each category (week and month), and total of all transactions (week and month).
+
+- move whats currently on /dashboard to /dashboard/transactions || chage /dashboard to only display 
+very transaction, totals of each category (week and month), and total of all transactions (week and month).
+
 - fix select txn in datagrid (right now it moves all over and keeps selected, instead of only moving selected)
+
 - have database update on bank account link with ins name, ins id
     - check what insitutionID is (ins_3 or something else)
     - include_optional_metadata: true
     - include_auth_metadata: true
     - include_payment_initiation_metadata: true
-- change edit account options to be more user friendly (change all to input boxes where you can edit and save, (don't cause reLoad, just persist in state that way it's more seamless for user and when they go back it'll reload anyway and their data will be updated))
-- add dir in db for connected insitutions, only store insitutionID and whether or not it can display txns. Use it when looking up insitutions/listing all connected accounts, listing banks which can display txns etc.
+
+- change edit account options to be more user friendly (change all to input 
+boxes where you can edit and save, (dont cause reLoad, just persist in state 
+that way its more seamless for user and when they go back itll reload anyway and their data will be updated))
+
+- add dir in db for connected insitutions, only store insitutionID and whether 
+or not it can display txns. Use it when looking up insitutions/listing all 
+connected accounts, listing banks which can display txns etc.
+
 - create placeholder component showing "This feature is not yet available"
+
 - make product options on account creation steps disabled (except free teir)
+
 - add bank tabs to txns, visualations
+
 - add reoccurring transactions backend api code
+
 - add reoccurring transactions tab
+
 - add datagrid with placeholder data to a. investments
+
 - connect instruments to backend
+
 - remove unused code
+
 - move all api calls to use axios to backend, no native api calls inside next.js
+
 - loading icon/animation, add loading state to all dynamic components
+
 - look into the next.js 18 features like Streaming, Transitions, and Suspense
+
 - add homepage styling
+
 - when sidenav is small, plaid link runs on ever open side nav call
+
+- during account sign up process, link provided phone number to 
+custom auth on firebase (mutipule products)
+
+- add sign in/up with facebook/google/apple/twitter, request email, 
+phone after and link all to the users account
+
+- add option to link facebook/google/apple/twitter as sign in methods 
+after account already created (in account settings page <Connect third party authentication method to your account> )

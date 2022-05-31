@@ -17,4 +17,5 @@ module.exports = {
   extends: [
     'plugin:@next/next/recommended',
   ],
+  concurrentFeatures: true,
 };

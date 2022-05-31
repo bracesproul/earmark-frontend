@@ -2,13 +2,10 @@
 import React from 'react';
 import axios from 'axios';
 import Router from 'next/router';
-
-import { DataGrid, 
-    GridRowsProp,
-    GridColDef,
-} from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { CircularProgress } from '@mui/material';
 
 const useStyles = makeStyles({
   deleteButton: {
@@ -20,6 +17,13 @@ const useStyles = makeStyles({
 }})
 
 const DatagridAccounts = ({ data }) => {
+
+  if (!data) return (
+    <div>
+      <CircularProgress />
+    </div>
+  );
+
   const styling = useStyles();
 
   const handleRemoveInstitution = (institutionId) => {

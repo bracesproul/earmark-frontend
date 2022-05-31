@@ -89,7 +89,6 @@ const SideNav = () => {
         };
         const handleButtonClick = async (index) => {
             if (index.pageName == "Sign Out") {
-                // @ts-ignore
                 auth.signout();
                 Router.push('/auth/signIn');
                 return;
@@ -108,6 +107,7 @@ const SideNav = () => {
         <>
         <List>
             {SIDENAV_PAGES.map((text, index) => (
+            <a href={text.pageLink}>
             <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
                 <ListItemButton>
                 <ListItemIcon>
@@ -122,6 +122,7 @@ const SideNav = () => {
                 <ListItemText primary={text.pageName} />
                 </ListItemButton>
             </ListItem>
+            </a>
             ))}
             <PlaidLink user_id={auth.user.uid} />
         </List>
@@ -131,6 +132,7 @@ const SideNav = () => {
             <Divider />
             <List>
             {otherPages.map((text, index) => (
+                <a href={text.pageLink}>
                 <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
                     <ListItemButton>
                     <ListItemIcon>
@@ -141,6 +143,7 @@ const SideNav = () => {
                     <ListItemText primary={text.pageName} />
                     </ListItemButton>
                 </ListItem>
+                </a>
             ))}
             </List>
         </Box>
@@ -219,6 +222,7 @@ const SideNav = () => {
                 <>
                 <List>
                     {SIDENAV_PAGES.map((text, index) => (
+                    <a href={text.pageLink}>
                     <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
                         <ListItemButton>
                         <ListItemIcon>
@@ -233,6 +237,7 @@ const SideNav = () => {
                         <ListItemText primary={text.pageName} />
                         </ListItemButton>
                     </ListItem>
+                    </a>
                     ))}
                     <PlaidLink user_id={auth.user.uid} />
                 </List>
@@ -242,6 +247,7 @@ const SideNav = () => {
     
                 <List>
                     {otherPages.map((text, index) => (
+                    <a href={text.pageLink}>
                     <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
                         <ListItemButton>
                         <ListItemIcon>
@@ -252,6 +258,7 @@ const SideNav = () => {
                         <ListItemText primary={text.pageName} />
                         </ListItemButton>
                     </ListItem>
+                    </a>
                     ))}
                 </List>
                 </Drawer>
