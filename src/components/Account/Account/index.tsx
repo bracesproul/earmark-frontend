@@ -27,9 +27,21 @@ import { InputLabel,
     DialogContentText,
     DialogTitle,
     Slide,
-    formLabelClasses
+    Divider,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon
  } from '@mui/material';
- import { TransitionProps } from '@mui/material/transitions';
+
+import GoogleIcon from '@mui/icons-material/Google';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import AppleIcon from '@mui/icons-material/Apple';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
+
+import { TransitionProps } from '@mui/material/transitions';
 import { makeStyles } from '@mui/styles';
 import { globalVars } from '../../../lib/globalVars';
 
@@ -430,7 +442,7 @@ export default function Account() {
                     >
                     <Box component="form" noValidate onSubmit={handleSubmitSecurity} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                        <Typography margin="auto" variant="h4" component="h4">
+                        <Typography margin="auto" variant="h5" component="h5" sx={{ fontSize: '25px'}}>
                         Security
                         </Typography>
                         <Grid item xs={12}>
@@ -519,7 +531,7 @@ export default function Account() {
                     >
                     <Box component="form" noValidate onSubmit={handleSubmitAddress} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                        <Typography margin="auto" variant="h4" component="h4">
+                        <Typography margin="auto" variant="h5" component="h5" sx={{ fontSize: '25px'}}>
                         Address
                         </Typography>
                         <Grid item xs={12}>
@@ -614,7 +626,7 @@ export default function Account() {
                     >
                     <Box component="form" noValidate onSubmit={handleSubmitPersonal} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                        <Typography margin="auto" variant="h4" component="h4">
+                        <Typography margin="auto" variant="h5" component="h5" sx={{ fontSize: '25px'}}>
                         Personal
                         </Typography>
                         <Grid item xs={12}>
@@ -670,7 +682,7 @@ export default function Account() {
                     >
                     <Box component="form" noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                        <Typography sx={{ color: 'white' }} margin="auto" variant="h4" component="h4">
+                        <Typography sx={{ color: 'white', fontSize: '25px' }} margin="auto" variant="h5" component="h5">
                         Manage Account
                         </Typography>
                         </Grid>
@@ -703,6 +715,7 @@ export default function Account() {
                     </Box>
                 </Container>
             </Paper>
+            <Authentication />
             </Box>
 
         </ThemeProvider>
@@ -710,27 +723,73 @@ export default function Account() {
     );
 }
 
-const PersonalSettings = () => {
+const Authentication = () => {
     return (
         <>
-        
+        <Paper sx={{ display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                sx={{
+                    marginTop: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+                >
+                    <Box component="form" noValidate sx={{ mt: 3 }}>
+                        <Grid container spacing={2} sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography margin="auto" variant="h5" component="h5" sx={{ fontSize: '25px'}}>
+                        Authentication
+                        </Typography>
+
+                        <List sx={{ display: 'flex', flexDirection: 'column' }} component="nav" aria-label="other auth services">
+                            <ListItem button divider>
+                                <ListItemIcon>
+                                    <GoogleIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Connect Google account for sign in" />
+                            </ListItem>
+                            <ListItem button divider>
+                                <ListItemIcon>
+                                    <TwitterIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Connect Twitter account for sign in" />
+                            </ListItem>
+                            <ListItem button divider>
+                                <ListItemIcon>
+                                    <AppleIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Connect Apple account for sign in" />
+                            </ListItem>
+                            <ListItem button divider>
+                                <ListItemIcon>
+                                    <FacebookIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Connect Facebook account for sign in" />
+                            </ListItem>
+                        </List>
+
+                        <List component="nav" aria-label="verify phone email">
+                            <ListItem button divider>
+                                <ListItemIcon>
+                                    <PhoneIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Verify email address" />
+                            </ListItem>
+                            <ListItem button divider>
+                                <ListItemIcon>
+                                    <EmailIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Verify phone number" />
+                            </ListItem>
+                        </List>
+
+                        </Grid>
+                    </Box>
+                </Box>
+            </Container>
+        </Paper>
         </>
     )
 };
-
-const AddressSettings = () => {
-    return (
-        <>
-        
-        </>
-    )
-};
-
-const SecuritySettings = () => {
-    return (
-        <>
-        
-        </>
-    )
-};
-

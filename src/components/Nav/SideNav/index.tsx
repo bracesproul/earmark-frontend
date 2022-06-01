@@ -107,8 +107,8 @@ const SideNav = () => {
         <>
         <List>
             {SIDENAV_PAGES.map((text, index) => (
-            <a href={text.pageLink}>
-            <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
+            <a key={text.pageName} href={text.pageLink}>
+            <ListItem onClick={index => handleButtonClick(text)} disablePadding>
                 <ListItemButton>
                 <ListItemIcon>
                     { index === 0 ? <DashboardIcon /> : null}
@@ -132,8 +132,8 @@ const SideNav = () => {
             <Divider />
             <List>
             {otherPages.map((text, index) => (
-                <a href={text.pageLink}>
-                <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
+                <a key={text.pageName} href={text.pageLink}>
+                <ListItem onClick={index => handleButtonClick(text)} disablePadding>
                     <ListItemButton>
                     <ListItemIcon>
                         { index === 0 ? <ManageAccountsIcon /> : null }
@@ -222,8 +222,8 @@ const SideNav = () => {
                 <>
                 <List>
                     {SIDENAV_PAGES.map((text, index) => (
-                    <a href={text.pageLink}>
-                    <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
+                    <a key={text.pageName} href={text.pageLink}>
+                    <ListItem onClick={index => handleButtonClick(text)} disablePadding>
                         <ListItemButton>
                         <ListItemIcon>
                             { index === 0 ? <DashboardIcon /> : null}
@@ -247,8 +247,8 @@ const SideNav = () => {
     
                 <List>
                     {otherPages.map((text, index) => (
-                    <a href={text.pageLink}>
-                    <ListItem onClick={index => handleButtonClick(text)} key={text.pageName} disablePadding>
+                    <a key={text.pageName} href={text.pageLink}>
+                    <ListItem onClick={index => handleButtonClick(text)} disablePadding>
                         <ListItemButton>
                         <ListItemIcon>
                             { index === 0 ? <ManageAccountsIcon /> : null }
