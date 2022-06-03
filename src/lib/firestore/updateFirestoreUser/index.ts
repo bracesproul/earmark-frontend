@@ -14,6 +14,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+
 // Paramater ordering: user_id, phone_number?, email?, first_name?, last_name?, account_id?, dob?, street?, city?, state?, zip?, username?, setup?
 const updateFirestoreUser = async (user_id, phone_number, email, first_name, last_name, account_id, dob, street, city, state, zip, username, setup) => {
     const docRef = doc(db, "users", user_id);

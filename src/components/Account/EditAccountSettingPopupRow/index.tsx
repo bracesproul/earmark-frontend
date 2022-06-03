@@ -9,7 +9,6 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import styles from '../../../../styles/Account/Account.module.css';
-
 import { initializeApp } from "firebase/app";
 import { getFirestore, 
     doc, 
@@ -28,11 +27,14 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
 const auth = getAuth();
 const user = auth.currentUser;
 
+
 // in backend under <updateAccountElement>
 const updateFirestore = async (user_id, element, edit) => {
+
     const config = {
         headers: {
             "Content-Type": "application/json",

@@ -19,7 +19,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import firebase, { initializeApp, } from "firebase/app";
 import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
-
+import { useFirestore } from '../../../lib/hooks/useFirestore';
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const app = initializeApp({
@@ -51,7 +51,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 function SignIn() {
-
+  const firestore = useFirestore();
   const auth = useAuth();
   const firebaseAuth = getAuth();
   const [userEmail, setUserEmail] = useState('');

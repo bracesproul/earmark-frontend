@@ -9,10 +9,10 @@ import NotSignedIn from '../../src/components/Auth/NotSignedIn';
 import styles from '../../styles/Dashboard/Investments.module.css';
 import { useAuth } from '../../src/lib/hooks/useAuth';
 import HeadTemplate from '../../src/components/Head';
-
+import { useFirestore } from '../../src/lib/hooks/useFirestore';
 export default function Home() {
     const auth = useAuth();
-
+    const firestore = useFirestore();
     return (
         <div className={styles.page}>
         <HeadTemplate title="Investments" description="Data on investments for Earmark" iconPath="/favicon.ico" />
@@ -22,7 +22,12 @@ export default function Home() {
             </section>
             <section className={styles.body}>
                 {/* @ts-ignore */}
-                { !auth.user ? <NotSignedIn /> : <h1>Investments</h1> }
+                { !auth.user ? <NotSignedIn /> : (
+                    <>
+                    <h1>Investments</h1>
+                    <button onClick={e => firestore.logTest('dashclick')}>click to log test</button>
+                    </>
+                ) }
             </section>
         </main>
         <footer></footer>

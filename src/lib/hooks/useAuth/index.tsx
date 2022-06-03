@@ -8,6 +8,12 @@ import { getAuth,
   sendPasswordResetEmail,
   onAuthStateChanged,
   UserProfile,
+  GoogleAuthProvider, 
+  FacebookAuthProvider, 
+  TwitterAuthProvider,
+  linkWithRedirect,
+  getRedirectResult,
+  sendEmailVerification
 } from "firebase/auth";
 import { useCookies } from "react-cookie";
 import { useFirestore } from "../useFirestore";
@@ -46,6 +52,9 @@ const useProvideAuth = () => {
   const firestore = useFirestore();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user_id"]);
+  const googleProvider = new GoogleAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
+  const twitterProvider = new TwitterAuthProvider();
 
   const signin = async (email, password) => {
     try {
@@ -58,6 +67,7 @@ const useProvideAuth = () => {
           sameSite: true,
         });
         console.log('cookie set');
+        firestore.logSignIn('custom')
         return response.user;
       });
     } catch(error) {
@@ -93,6 +103,61 @@ const useProvideAuth = () => {
       })
   };
 
+  const linkOtherProvider = async (provider) => {
+    if (provider === 'google') {
+      linkWithRedirect(firebaseAuth.currentUser, googleProvider)
+      .then(async (response) => {
+        getRedirectResult(firebaseAuth).then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          if (credential) {
+            // Accounts successfully linked.
+            const user = result.user;
+            console.log('NEW USER CRED', user);
+          }
+        }).catch((error) => {
+          console.error(error)
+        });
+      })
+      .catch((error) => {
+        console.error(error)
+      });
+    } else if (provider === 'facebook') {
+      linkWithRedirect(firebaseAuth.currentUser, facebookProvider)
+      .then(async (response) => {
+        getRedirectResult(firebaseAuth).then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          if (credential) {
+            // Accounts successfully linked.
+            const user = result.user;
+            console.log('NEW USER CRED', user);
+          }
+        }).catch((error) => {
+          console.error(error)
+        });
+      })
+      .catch((error) => {
+        console.error(error)
+      });
+    } else if (provider === 'twitter') {
+      linkWithRedirect(firebaseAuth.currentUser, twitterProvider)
+      .then(async (response) => {
+        getRedirectResult(firebaseAuth).then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          if (credential) {
+            // Accounts successfully linked.
+            const user = result.user;
+            console.log('NEW USER CRED', user);
+          }
+        }).catch((error) => {
+          console.error(error)
+        });
+      })
+      .catch((error) => {
+        console.error(error)
+      });
+    }
+  };
+
   const signout = () => {
     return signOut(firebaseAuth)
       .then(() => {
@@ -101,16 +166,28 @@ const useProvideAuth = () => {
       });
   };
 
-  const passwordResetEmail = (email) => {
-    return sendPasswordResetEmail(firebaseAuth, email)
-      .then(() => {
-        return true;
+  const passwordResetEmail = async (email) => {
+      return await sendPasswordResetEmail(firebaseAuth, email)
+      .then( async () => {
+        return 'success';
+      })
+      .catch((error) => {
+        console.error(error)
+        return error;
       });
   };
-  // Subscribe to user on mount
-  // Because this sets state in the callback it will cause any
-  // component that utilizes this hook to re-render with the
-  // latest auth object.
+
+  const sendVerificationEmail = async () => {
+    return await sendEmailVerification(firebaseAuth.currentUser)
+    .then(() => {
+      return 'success';
+    })
+    .catch((error) => {
+      console.error(error)
+      return error;
+    })
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
@@ -135,6 +212,8 @@ const useProvideAuth = () => {
     signup,
     signout,
     passwordResetEmail,
+    linkOtherProvider,
+    sendVerificationEmail
   };
 }
 interface IUseProvideAuth {
@@ -146,6 +225,8 @@ interface IUseProvideAuth {
   useContext: () => any;
   useAuth: () => any;
   ProvideAuth: any;
+  linkOtherProvider,
+  sendVerificationEmail: () => Promise<any>;
 }
 
 export const useAuth = () => useContext(authContext) as IUseProvideAuth;

@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import CloseIcon  from '@mui/icons-material/Close';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import { InputLabel, 
     Select, 
@@ -27,11 +27,12 @@ import { InputLabel,
     DialogContentText,
     DialogTitle,
     Slide,
-    Divider,
+    Alert,
     List,
     ListItem,
     ListItemText,
-    ListItemIcon
+    ListItemIcon,
+    IconButton
  } from '@mui/material';
 
 import GoogleIcon from '@mui/icons-material/Google';
@@ -79,6 +80,8 @@ const theme = createTheme();
 export default function Account() {
     const auth = useAuth();
     const styling = useStyles();
+
+
     const [editSuccessSecurity, setEditSuccessSecurity] = useState(null);
     const [editSuccessAddress, setEditSuccessAddress] = useState(null);
     const [editSuccessPersonal, setEditSuccessPersonal] = useState(null);
@@ -722,8 +725,90 @@ export default function Account() {
         </>
     );
 }
-
 const Authentication = () => {
+    const auth = useAuth();
+
+    const [verifyEmailSent, setVerifyEmailSent] = useState(false);
+    const [verifyEmailError, setVerifyEmailError] = useState(false);
+    const [verifyEmailWarning, setVerifyEmailWarning] = useState(false);
+
+    const handleLinkProvider = (provider) => {
+        const response = auth.linkOtherProvider(provider)
+        console.log(response)
+    };
+
+    const handleVerifyEmail = async () => {
+        const response = await auth.sendVerificationEmail();
+        if (response === 'success') {
+            setVerifyEmailSent(true)
+        } else if (response == 'FirebaseError: Firebase: Error (auth/too-many-requests).') {
+            setVerifyEmailWarning(true)
+        } else {
+            setVerifyEmailError(true)
+        }
+    };
+
+    const warningAlert = (
+        <Alert
+        severity="warning"
+        action={
+          <IconButton
+            aria-label="close"
+            color="inherit"
+            size="small"
+            onClick={() => {
+                setVerifyEmailWarning(false);
+            }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        }
+        sx={{ mb: 2 }}
+      >
+        Something went wrong. Please try again in a few minutes.
+      </Alert>
+    )
+
+    const errorAlert = (
+        <Alert
+        severity="error"
+        action={
+          <IconButton
+            aria-label="close"
+            color="inherit"
+            size="small"
+            onClick={() => {
+                setVerifyEmailError(false);
+            }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        }
+        sx={{ mb: 2 }}
+      >
+        An error occurred. Please try again.
+      </Alert>
+    )
+    const successAlert = (
+        <Alert
+        action={
+          <IconButton
+            aria-label="close"
+            color="inherit"
+            size="small"
+            onClick={() => {
+                setVerifyEmailSent(false);
+            }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        }
+        sx={{ mb: 2 }}
+      >
+        Email verification sent!
+      </Alert>
+    )
+
     return (
         <>
         <Paper sx={{ display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
@@ -744,25 +829,19 @@ const Authentication = () => {
                         </Typography>
 
                         <List sx={{ display: 'flex', flexDirection: 'column' }} component="nav" aria-label="other auth services">
-                            <ListItem button divider>
+                            <ListItem button divider onClick={() => handleLinkProvider('google')}>
                                 <ListItemIcon>
                                     <GoogleIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Connect Google account for sign in" />
                             </ListItem>
-                            <ListItem button divider>
+                            <ListItem button divider onClick={() => handleLinkProvider('twitter')}>
                                 <ListItemIcon>
                                     <TwitterIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Connect Twitter account for sign in" />
                             </ListItem>
-                            <ListItem button divider>
-                                <ListItemIcon>
-                                    <AppleIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Connect Apple account for sign in" />
-                            </ListItem>
-                            <ListItem button divider>
+                            <ListItem button divider onClick={() => handleLinkProvider('facebook')}>
                                 <ListItemIcon>
                                     <FacebookIcon />
                                 </ListItemIcon>
@@ -771,20 +850,16 @@ const Authentication = () => {
                         </List>
 
                         <List component="nav" aria-label="verify phone email">
-                            <ListItem button divider>
+                            <ListItem button divider onClick={handleVerifyEmail}>
                                 <ListItemIcon>
                                     <PhoneIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Verify email address" />
                             </ListItem>
-                            <ListItem button divider>
-                                <ListItemIcon>
-                                    <EmailIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Verify phone number" />
-                            </ListItem>
                         </List>
-
+                        { verifyEmailSent && successAlert }
+                        { verifyEmailError && errorAlert }
+                        { verifyEmailWarning && warningAlert }
                         </Grid>
                     </Box>
                 </Box>
@@ -793,3 +868,5 @@ const Authentication = () => {
         </>
     )
 };
+
+

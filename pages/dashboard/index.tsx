@@ -17,7 +17,6 @@ import AccountBalance from '../../src/components/Dashboard/AccountBalance';
 import Goals from '../../src/components/Dashboard/Goals';
 import Budgets from '../../src/components/Dashboard/Budgets';
 import TotalSpending from '../../src/components/Dashboard/TotalSpending';
-
 const API_URL = globalVars().API_URL;
 
 
@@ -39,7 +38,6 @@ export async function getServerSideProps({ req, res }) {
 
 const Dashboard = ({ cookie }) => {
     console.log('COOKIE: ', cookie);
-
     return (
         <PageTemplate title="Dashboard" description="Dashboard overview for Earmark" >
             <Grid container spacing={3}>
