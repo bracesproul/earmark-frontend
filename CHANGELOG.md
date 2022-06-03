@@ -25,3 +25,25 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Changed font size of titles for [account settings elements](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Account/Account) to be 25px and h5
+
+## [0.0.3] - 2022-06-02
+
+### Notes
+New dashboard components only have static data, not hooked up to backend yet
+
+#### Added
+- Added new [/Dashboard](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Dashboard) folder inside [/src/components](https://github.com/bracesproul/earmark-frontend/tree/main/src/components)
+- Added to [dashboard](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/index.tsx)
+    - Account Balance
+    - Budgets
+    - Goals
+    - Spending Overview
+    - Top Merchants
+    - Total Spending
+- New [page template](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/PageTemplate), includes head, main, footer. Can add children to it (cleaner than old <Head /> component)
+
+### Fixed
+
+### Changed
+- Moved transactions datagrid and api call from [/dashboard](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/index.tsx) to [/dashboard/transactions](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/transactions.tsx)
+- Changed icon url to be static variable instead of passed by props in old <Head /> component - [head component](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Head)
