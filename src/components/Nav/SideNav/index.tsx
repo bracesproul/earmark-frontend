@@ -217,7 +217,6 @@ const SideNav = () => {
                 </Typography>
                 </Toolbar>
                 <Divider />
-                {/* @ts-ignore */}
                 { !auth.user ? null : 
                 <>
                 <List>
