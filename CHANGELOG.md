@@ -68,3 +68,18 @@ Added verify email functionality
 - Verify email functionality is now working inside [account settings](https://github.com/bracesproul/earmark-frontend/tree/main/pages/account) page
 - Connect a google account now works
 - Added code to add facebook/twitter account, getting unknown errors at the moment
+
+
+## [0.0.5] - 2022-06-02
+
+### Notes
+Sign in with provider 1/3 working
+
+#### Added
+- Button to sign in with google/facebook/twitter **FACEBOOK/TWITTER STILL GIVING UNKNOWN ERRORS**
+- Added error/warning alerts for sign in with google/facebook/twitter
+- Added sign in with google/facebook/twitter code to [useAuth](https://github.com/bracesproul/earmark-frontend/tree/main/src/lib/hooks/useAuth) hook
+
+### Fixed
+
+### Changed

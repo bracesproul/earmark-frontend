@@ -14,13 +14,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Alert } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Alert, IconButton } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import firebase, { initializeApp, } from "firebase/app";
 import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { useFirestore } from '../../../lib/hooks/useFirestore';
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import CloseIcon  from '@mui/icons-material/Close';
 
 const app = initializeApp({
   apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
@@ -58,6 +59,8 @@ function SignIn() {
   const [openDialog, setOpenDialog] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [providerError, setProviderError] = useState(false);
+  const [providerWarning, setProviderWarning] = useState(false);
 
   const DialogTransition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -142,8 +145,56 @@ function SignIn() {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      setProviderError(true);
     });
   };
+
+  const handleProviderSignin = async (provider) => {
+    console.log(provider, 'sign in clicked');
+    auth.signInWithProvider(provider)
+  };
+
+  const warningAlert = (
+    <Alert
+    severity="warning"
+    action={
+      <IconButton
+        aria-label="close"
+        color="inherit"
+        size="small"
+        onClick={() => {
+          setProviderWarning(false);
+        }}
+      >
+        <CloseIcon fontSize="inherit" />
+      </IconButton>
+    }
+    sx={{ mb: 2 }}
+    >
+      Something went wrong. Please try again in a few minutes.
+    </Alert>
+  )
+
+  const errorAlert = (
+    <Alert
+    severity="error"
+    action={
+      <IconButton
+        aria-label="close"
+        color="inherit"
+        size="small"
+        onClick={() => {
+          setProviderError(false);
+        }}
+      >
+        <CloseIcon fontSize="inherit" />
+      </IconButton>
+      }
+    sx={{ mb: 2 }}
+    >
+      An error occurred. Please try again.
+    </Alert>
+)
 
   return (
     <ThemeProvider theme={theme}>
@@ -201,6 +252,32 @@ function SignIn() {
             >
               Sign In
             </Button>
+            <Button
+            sx={{ mt: 1, mb: 1 }}
+            fullWidth
+            variant="outlined"
+            onClick={() => handleProviderSignin('google')}
+            >
+              Sign in with Google
+            </Button>
+            <Button
+            sx={{ mt: 1, mb: 1 }}
+            fullWidth
+            variant="outlined"
+            onClick={() => handleProviderSignin('facebook')}
+            >
+              Sign in with Facebook
+            </Button>
+            <Button
+            sx={{ mt: 1, mb: 1 }}
+            fullWidth
+            variant="outlined"
+            onClick={() => handleProviderSignin('twitter')}
+            >
+              Sign in with Twitter
+            </Button>
+            { providerError && errorAlert }
+            { providerWarning && warningAlert }
             <Grid container>
               <Grid item xs>
                 <Link href="" onClick={(event) => handleOpenDialog(event)} variant="body2">

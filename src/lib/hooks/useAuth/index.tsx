@@ -13,7 +13,8 @@ import { getAuth,
   TwitterAuthProvider,
   linkWithRedirect,
   getRedirectResult,
-  sendEmailVerification
+  sendEmailVerification,
+  signInWithRedirect
 } from "firebase/auth";
 import { useCookies } from "react-cookie";
 import { useFirestore } from "../useFirestore";
@@ -188,6 +189,79 @@ const useProvideAuth = () => {
     })
   };
 
+  const signInWithProvider = async (provider) => {
+    if (provider === 'google') {
+      await signInWithRedirect(firebaseAuth, googleProvider);
+      getRedirectResult(firebaseAuth)
+      .then((result) => {
+        setUser(result.user);
+        setCookie("user_id", result.user.uid, {
+          path: "/",
+          maxAge: 604800,
+          sameSite: true,
+        });
+        firestore.logSignIn('google')
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        console.log('NEW USER CRED', credential);
+        console.log('NEW USER USER', user);
+        console.log('NEW USER TOKEN', token);
+        return 'success';
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(errorCode);
+        console.error(errorMessage);
+        return error
+      });
+    } else if (provider === 'facebook') {
+      await signInWithRedirect(firebaseAuth, facebookProvider);
+      getRedirectResult(firebaseAuth)
+      .then((result) => {
+        setUser(result.user);
+        setCookie("user_id", result.user.uid, {
+          path: "/",
+          maxAge: 604800,
+          sameSite: true,
+        });
+        firestore.logSignIn('facebook')
+        return 'success';
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(errorCode);
+        console.error(errorMessage);
+        return error
+      });
+    } else if (provider === 'twitter') {
+      await signInWithRedirect(firebaseAuth, twitterProvider);
+      getRedirectResult(firebaseAuth)
+      .then((result) => {
+        setUser(result.user);
+        setCookie("user_id", result.user.uid, {
+          path: "/",
+          maxAge: 604800,
+          sameSite: true,
+        });
+        firestore.logSignIn('twitter')
+        const credential = TwitterAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        console.log('NEW USER CRED', credential);
+        console.log('NEW USER USER', user);
+        console.log('NEW USER TOKEN', token);
+        return 'success';
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(errorCode);
+        console.error(errorMessage);
+        return error
+      });
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
@@ -213,7 +287,8 @@ const useProvideAuth = () => {
     signout,
     passwordResetEmail,
     linkOtherProvider,
-    sendVerificationEmail
+    sendVerificationEmail,
+    signInWithProvider
   };
 }
 interface IUseProvideAuth {
@@ -227,6 +302,7 @@ interface IUseProvideAuth {
   ProvideAuth: any;
   linkOtherProvider,
   sendVerificationEmail: () => Promise<any>;
+  signInWithProvider: (provider: string) => Promise<any>;
 }
 
 export const useAuth = () => useContext(authContext) as IUseProvideAuth;
