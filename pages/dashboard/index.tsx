@@ -9,7 +9,7 @@ import { useAuth } from '../../src/lib/hooks/useAuth';
 import { globalVars } from '../../src/lib/globalVars';
 import { parseCookies } from '../../src/lib/parseCookies';
 
-import PageTemplate from '../../src/components/PageTemplate';
+import PageTemplate, {PageTemplateResponsive} from '../../src/components/PageTemplate';
 import { Box, Grid } from '@mui/material';
 import SpendingOverview from '../../src/components/Dashboard/SpendingOverview';
 import TopMerchants from '../../src/components/Dashboard/TopMerchants';
@@ -42,34 +42,38 @@ const Dashboard = ({ cookie }) => {
     const [accountBalance, setAccountBalance] = useState([]);
     // let topMerchants = [];
 
-
-    console.log('COOKIE: ', cookie);
     return (
-        <PageTemplate title="Dashboard" description="Dashboard overview for Earmark" >
+        <PageTemplateResponsive title="Dashboard" description="Dashboard overview for Earmark">
             <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <SpendingOverview cookie={cookie} />
-            </Grid>
-            <Grid item xs={12}>
-                <TopMerchants cookie={cookie} />
-            </Grid>
-            <Grid item xs={12}>
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
-                <Goals />
-                <Budgets />
-                <TotalSpending cookie={cookie} />
+                <Box sx={{ display: { xs: 'flex', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
+                    <Grid item xs={12}>
+                        <SpendingOverview cookie={cookie} />
+                    </Grid>
                 </Box>
-                <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', margin: 'auto'}}>
-                <Goals />
-                <Budgets />
-                <TotalSpending cookie={cookie} />
+                <Box sx={{ display: { xs: 'flex', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
+                    <Grid item xs={12}>
+                        <TopMerchants cookie={cookie} />
+                    </Grid>
                 </Box>
+                <Grid item xs={12}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
+                        <Goals />
+                        <Budgets />
+                        <TotalSpending cookie={cookie} />
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', margin: 'auto'}}>
+                        <Goals />
+                        <Budgets />
+                        <TotalSpending cookie={cookie} />
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sx={{ margin: 'auto'}}>
+                    <AccountBalance />
+                </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ margin: 'auto'}}>
-                <AccountBalance />
-            </Grid>
-            </Grid>
-        </PageTemplate>
+        </PageTemplateResponsive>
     )
 }
 

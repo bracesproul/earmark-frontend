@@ -111,3 +111,22 @@ Sign in with provider 1/3 working
 - Fixed the placeholder animation for dashboard page when data is still loading
 
 ### Changed
+
+
+## [0.0.7] - 2022-06-6
+
+### Notes
+
+#### Added
+- New Plaid Link export from [PlaidLink component folder](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/PlaidLink) for connect bank through institutions page
+- Connect bank through Plaid Link button on institutions page (code in [datagrid accounts](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/DatagridAccounts)folder)
+- Added step in [sign up](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Auth/SignUp) to link bank account to Earmark account
+
+### Fixed
+- Write to firebase through api call to backend instead of client side write for sign up process
+
+### Changed
+- Removed background color from all css files
+- Changed card headers to be bold for all dashboard cards
+- Changed table headers to be bold for all dashboard tables
+- Changed select dropdown to be bold for all dashboard select dropdowns

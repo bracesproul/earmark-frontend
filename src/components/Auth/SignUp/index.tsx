@@ -31,14 +31,17 @@ import { GlobalStyles,
   InputLabel,
   MenuItem,
   Select,
-  Alert
+  Alert,
+  FormControl
 } from '@mui/material';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { PlaidLinkInstitution } from '../../PlaidLink';
 
 const steps = [
   'Sign up', 
   'Finish account setup', 
   'Select your billing plan',
+  'Connect your first bank'
 ];
 
 const STATE_ARRAY = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
@@ -113,17 +116,16 @@ export default function App() {
   const auth = useAuth();
   const firestore = useFirestore();
   const firebaseAuth = getAuth();
-  // useState for stepper
   const [activeStep, setActiveStep] = useState(0);
-  // useState for initial sign up form
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [email, setEmail] = useState(null);
-
+  const [canFinish, setCanFinish] = useState(false);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
+  console.log('pn', phoneNumber);
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -133,29 +135,15 @@ export default function App() {
     setActiveStep(0);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const username = data.get('userId');
-    const birthday = data.get('birthday');
-    const address1 = data.get('street1');
-    const address2 = data.get('street2');
-    const city = data.get('city');
-    const state = data.get('state');
-    const zip = data.get('zip');
-    // @ts-ignore 
-    await firestore.createUserEntry(auth.user.uid, phoneNumber, email, firstName, lastName)
-    // @ts-ignore
-    await firestore.setupUserAccount(auth.user.uid, birthday, address1, address2, city, state, zip, username)
-    handleNext();
-  };
+  
 
 
 
   const handleBillingSelect = async (tier) => {
     // @ts-ignore
     await firestore.addBillingPlan(auth.user.uid, tier);
-    Router.push('/account')
+    handleNext();
+    // Router.push('/account')
   };
 
   function HorizontalLinearStepper() {
@@ -173,6 +161,7 @@ export default function App() {
         </Stepper>
         {activeStep === 1 && <FinishSetup />}
         {activeStep === 2 && <PricingContent />}
+        {activeStep === 3 && <ConnectFirstBank />}
         {activeStep === steps.length ? (
           <>
             <Typography sx={{ mt: 2, mb: 1 }}>
@@ -371,6 +360,29 @@ export default function App() {
   }
 
   function FinishSetup() {
+    const [username, setUsername] = useState('');
+    const [birthday, setBirthday] = useState('');
+    const [address1, setAddress1] = useState('');
+    const [address2, setAddress2] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [zip, setZip] = useState('');
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      // const data = new FormData(e.currentTarget);
+      // const username = data.get('userId');
+      // const birthday = data.get('birthday');
+      // const address1 = data.get('street1');
+      // const address2 = data.get('street2');
+      // const city = data.get('city');
+      // const state = data.get('state');
+      // const zip = data.get('zip');
+      await firestore.createUserEntry(auth.user.uid, phoneNumber, email, firstName, lastName)
+      await firestore.setupUserAccount(auth.user.uid, birthday, address1, address2, city, state, zip, username)
+      handleNext();
+    };
+
     return (
     <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -400,6 +412,8 @@ export default function App() {
                     id="userId"
                     label="Username"
                     autoFocus
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -410,6 +424,8 @@ export default function App() {
                     id="birthday"
                     name="birthday"
                     autoComplete="birthday"
+                    value={birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
                 />
                 </Grid>
   
@@ -422,6 +438,8 @@ export default function App() {
                     type="street1"
                     id="street1"
                     autoComplete="street"
+                    value={address1}
+                    onChange={(e) => setAddress1(e.target.value)}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -432,6 +450,8 @@ export default function App() {
                     type="street2"
                     id="street2"
                     autoComplete="street"
+                    value={address2}
+                    onChange={(e) => setAddress2(e.target.value)}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -443,20 +463,29 @@ export default function App() {
                     type="city"
                     id="city"
                     autoComplete="city"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
                 />
                 </Grid>
                 <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                <InputLabel id="selectStateLabel">State</InputLabel>
                 <Select
                     labelId="selectStateLabel"
                     fullWidth
                     id="state"
                     name='state'
                     label="State"
+                    required
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
                 >
                     { STATE_ARRAY.map((state, index) => (
                         <MenuItem key={index} value={state}>{state}</MenuItem>
                     ))}
                 </Select>
+                </FormControl>
+
                 </Grid>
                 <Grid item xs={12} sm={6}>
                 <TextField
@@ -466,6 +495,8 @@ export default function App() {
                     label="Zip Code"
                     name="zip"
                     autoComplete="zip"
+                    value={zip}
+                    onChange={(e) => setZip(e.target.value)}
                 />
                 </Grid>
             </Grid>
@@ -474,6 +505,7 @@ export default function App() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={(e) => handleSubmit(e)}
             >
                 Continue
             </Button>
@@ -580,12 +612,39 @@ export default function App() {
     );
   }
 
+  const ConnectFirstBank = () => {
+    const auth = useAuth();
+    return (
+      <>
+      <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
+      <CssBaseline />
+      <Container maxWidth="md" component="main">
+        <Grid container spacing={5} alignItems="flex-end" sx={{ margin: '0 auto', padding: '25%'}}>
+          <Card sx={{ margin: 'auto', paddingTop: '25px', paddingBottom: '25px'}}>
+            <CardHeader>
+              <Typography component="h1" variant="h5">
+                Connect your first bank
+              </Typography>
+            </CardHeader>
+            <CardContent>
+                <PlaidLinkInstitution user_id={auth.user.uid} />
+              <Button onClick={() => Router.push('/dashboard')}>Finish</Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Container>
+      <Copyright sx={{ mt: 5 }} />
+    </>
+    )
+  };
+
   return (
     <>
-      {activeStep === 0 ? <SignUp /> : 
+      { activeStep === 0 ? <SignUp /> : 
       <>
       <HorizontalLinearStepper />
-      </>}
+      </>
+      }
     </>
   )
 };

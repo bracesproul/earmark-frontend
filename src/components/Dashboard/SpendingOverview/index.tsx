@@ -100,7 +100,7 @@ const SpendingOverview = (props) => {
 
   const select = (
     <FormControl sx={{ minWidth: '200px'}}>
-      <InputLabel id="select-date-label">Time Period</InputLabel>
+      <InputLabel sx={{ fontWeight: 'bold'}} id="select-date-label">Time Period</InputLabel>
       <Select
         labelId="select-date-label"
         id="select-date"
@@ -141,10 +141,10 @@ const SpendingOverview = (props) => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Merchant</TableCell>
-              <TableCell align="left">Date</TableCell>
-              <TableCell align="left">Amount&nbsp;($)</TableCell>
-              <TableCell align="left">Category</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}} align="left">Merchant</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}} align="left">Date</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}} align="left">Amount&nbsp;($)</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}} align="left">Category</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -177,7 +177,7 @@ const SpendingOverview = (props) => {
   const card = (
     <>
     <CardContent>
-      <Typography variant="h5" component="div">
+      <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
         Spending Overview
       </Typography>
       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>

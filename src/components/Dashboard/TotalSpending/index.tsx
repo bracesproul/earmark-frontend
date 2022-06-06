@@ -52,7 +52,7 @@ const TotalSpending = (props) => {
     const card = (
       <>
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
           Total Spending
         </Typography>
         <Divider />

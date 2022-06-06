@@ -56,7 +56,7 @@ const AccountBalance = () => {
   
     const card = (
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
           Account Balances
         </Typography>
         {accounts2.map((ins) => (

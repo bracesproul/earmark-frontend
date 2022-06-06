@@ -114,7 +114,7 @@ const TopMerchants = (props) => {
 
     const select = (
         <FormControl sx={{ minWidth: '200px'}}>
-        <InputLabel id="select-date-label">Time Period</InputLabel>
+        <InputLabel id="select-date-label" sx={{ fontWeight: 'bold'}}>Time Period</InputLabel>
         <Select
             labelId="select-date-label"
             id="select-date"
@@ -146,14 +146,14 @@ const TopMerchants = (props) => {
         return (
             <>
             {!loading ? (
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} sx={{ minWidth: '50%' }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                    <TableCell>Merchant</TableCell>
-                    <TableCell align="left">Total Spent&nbsp;($)</TableCell>
-                    <TableCell align="left">Total Transactions</TableCell>
-                    <TableCell align="left">Category</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}} align="left">Merchant</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}} align="left">Total Spent&nbsp;($)</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}} align="left">Total Transactions</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}} align="left">Category</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -182,24 +182,26 @@ const TopMerchants = (props) => {
     const card = (
         <>
         <CardContent>
-        <Typography variant="h5" component="div">
-            Top Merchants
-        </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {spendingTimeframe[dateSelection]}
-        </Typography>
-        <CardActions>
-            {select}
-        </CardActions>
-        <BasicTable />
+            <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
+                Top Merchants
+            </Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {spendingTimeframe[dateSelection]}
+            </Typography>
+            <CardActions>
+                {select}
+            </CardActions>
+            <BasicTable />
         </CardContent>
     </>
     )
 
     return (
-        <Box sx={{ padding: '30px', minWidth: 275 }}>
+        <>
+        <Box sx={{ padding: '30px', flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
             <Card variant="outlined">{card}</Card>
         </Box>
+        </>
     );
 }
 

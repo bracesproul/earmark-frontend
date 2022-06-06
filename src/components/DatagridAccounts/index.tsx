@@ -3,9 +3,13 @@ import React from 'react';
 import axios from 'axios';
 import Router from 'next/router';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { CircularProgress } from '@mui/material';
+import { Button,
+  Skeleton,
+  Box,
+ } from '@mui/material';
+import { PlaidLinkInstitution } from '../PlaidLink';
+import { useAuth } from '../../lib/hooks/useAuth';
 
 const useStyles = makeStyles({
   deleteButton: {
@@ -17,12 +21,16 @@ const useStyles = makeStyles({
 }})
 
 const DatagridAccounts = ({ data }) => {
-
-  if (!data) return (
-    <div>
-      <CircularProgress />
-    </div>
-  );
+  const auth = useAuth();
+  const skeleton = (
+    <>
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    </>
+  )
 
   const styling = useStyles();
 
@@ -70,10 +78,16 @@ const DatagridAccounts = ({ data }) => {
     { field: 'ins_id', headerName: 'Ins_id', width: 60, hide: true },
   ];
     return (
+      <>
       <div style={{ padding: '2rem', height: 600, minWidth: "100%", margin: "auto", }}>
         <h1 style={{ textAlign: "center"}}>Connected Institutions</h1>
+        <Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: '15px'}}>
+          <PlaidLinkInstitution user_id={auth.user.uid} />
+        </Box>
         <DataGrid autoHeight={true} rows={data} columns={columns} />
       </div>
+      
+      </>
     );
 }
 

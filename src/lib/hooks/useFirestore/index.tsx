@@ -7,9 +7,9 @@ import { doc,
 import { useAuth } from "../useAuth";
 import { initializeApp } from "firebase/app";
 import { getAnalytics, logEvent } from "firebase/analytics";
-
+import axios from "axios";
 import updateFirestoreUser from "../../firestore/updateFirestoreUser"
-
+import { globalVars } from "../../globalVars";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
@@ -22,7 +22,7 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
-
+const API_URL = globalVars().API_URL;
 
 const firestoreContext = createContext({});
 // Provider component that wraps your app and makes auth object ...
@@ -49,6 +49,32 @@ function useProvideFirestore() {
 
   // in backend under <createUserEntry>
   const createUserEntry = async (user_id, phoneNumber, email, firstName, lastName) => {
+    try {
+      const config = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: {
+          user_id: user_id,
+          func: 'createUserEntry',
+          params: {
+            phoneNumber: phoneNumber,
+            email: email,
+            firstName: firstName,
+            lastName: lastName
+          }
+        },
+        url: '/api/firebase'
+      }
+      const response = await axios(config)
+      console.log('firebase createUserEntry response: ', response.data)
+      setSuccess(true)
+    } catch (error) {
+      console.log('firebase createUserEntry error: ', error)
+    }
+
+    /*
     const docRef = doc(db, "users", user_id);
     const docData = {
       user_id: user_id,
@@ -66,6 +92,7 @@ function useProvideFirestore() {
     .catch((err) => {
       console.log('err creating user entry, ', err)
     })
+    */
   }
   
   // in backend under <updateCategory>
@@ -117,7 +144,36 @@ function useProvideFirestore() {
     })
   };
 
-  const setupUserAccount = async (user_id, dob, street, street2, city, state, zip, userId) => {
+  const setupUserAccount = async (user_id, date_of_birth, street, street2, city, state, zip, userId) => {
+    try {
+      const config = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: {
+          user_id: user_id,
+          func: 'setupUserAccount',
+          params: {
+            dob: date_of_birth,
+            street: street,
+            street2: street2,
+            city: city,
+            state: state,
+            zip: zip,
+            userId: userId,
+            setup: true,
+          }
+        },
+        url: '/api/firebase'
+      }
+      const response = await axios(config)
+      console.log('firebase createUserEntry response: ', response.data)
+      setSuccess(true)
+    } catch (error) {
+      console.log('firebase createUserEntry error: ', error)
+    }
+    /*
     const docRef = doc(db, "users", user_id);
     const docData = {
         date_of_birth: dob,
@@ -137,6 +193,7 @@ function useProvideFirestore() {
     .catch((err) => {
       console.log('err updating category, ', err)
     })
+    */
   };
 
   const logSignIn = (method) => {
