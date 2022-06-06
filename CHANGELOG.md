@@ -84,7 +84,7 @@ Sign in with provider 1/3 working
 ### Changed
 
 
-## [0.0.6] - 2022-06-5
+## [0.0.6] - 2022-06-05
 
 ### Notes
 
@@ -99,7 +99,7 @@ Sign in with provider 1/3 working
 ### Changed
 
 
-## [0.0.7] - 2022-06-5
+## [0.0.7] - 2022-06-05
 
 ### Notes
 
@@ -113,7 +113,7 @@ Sign in with provider 1/3 working
 ### Changed
 
 
-## [0.0.7] - 2022-06-6
+## [0.0.8] - 2022-06-06
 
 ### Notes
 
