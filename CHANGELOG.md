@@ -10,7 +10,6 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 ### Changed
-
 - Changed [mainNav](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Nav/MainNav) and [sideNav](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Nav/SideNav) component to include wrapping <a> so url is displayed in bottom left of browser on mouse hover
 - Change [mainNav](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Nav/MainNav) to check if user is logged in and display different links based on auth status
 
@@ -81,5 +80,20 @@ Sign in with provider 1/3 working
 - Added sign in with google/facebook/twitter code to [useAuth](https://github.com/bracesproul/earmark-frontend/tree/main/src/lib/hooks/useAuth) hook
 
 ### Fixed
+
+### Changed
+
+
+## [0.0.6] - 2022-06-5
+
+### Notes
+
+#### Added
+- Icons to buttons for sign in with provider (google/facebook/twitter)
+- /api/dashboard route to fetch data for the main /dashboard page
+- "Skeleton" placeholder animation for dashboard page when data is still loading
+
+### Fixed
+- Connected Spending Overview, Top Merchants, Total Spending to backend (date changing still not working)
 
 ### Changed

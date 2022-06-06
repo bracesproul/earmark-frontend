@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { 
   useState,
+  useEffect,
 } from 'react';
 import { Paper,
   Box,
@@ -18,32 +19,41 @@ import { Paper,
   InputLabel,
   Select,
   MenuItem,
+  Skeleton,
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
+import axios from 'axios';
 
-const SpendingOverview = () => {
+const SpendingOverview = (props) => {
   const [dateSelection, setDateSelection] = useState('24 Hours');
+  const [dataRows, setdataRows] = useState(null);
+  const [spendingOverview, setSpendingOverview] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const config = {
+            params: {
+                user_id: props.cookie,
+                startDate: '2022-02-28',
+                endDate: '2022-06-05',
+                queryType: 'spendingOverview',
+            },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: '/api/dashboard',
+        }
+        const response = await axios(config)
+        console.log(response.data)
+        setSpendingOverview(response.data.spendingOverview)
+    }
+    fetchData()
+  }, [])
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     setDateSelection(event.target.value as string);
   }
 
-  function createData(
-    name: string,
-    date: string,
-    amount: number,
-    category: string,
-  ) {
-    return { name, date, amount, category };
-  }
-  
-  const rows = [
-    createData('Uber', '2022-05-01', 6.0, 'Transportation'),
-    createData('Gordos', '2022-05-02', 9.0, 'Food'),
-    createData('United Airlines', '2022-05-03', 16.0, 'Travel'),
-    createData('PG&E', '2022-05-04', 3.7, 'Utilities'),
-    createData('Sliver Pizza', '2022-05-05', 16.0, 'Food'),
-  ];
 
   const spendingTimeframe = {
     '24 Hours': 'Showing spending from the last 24 Hours',
@@ -71,10 +81,22 @@ const SpendingOverview = () => {
       </Select>
     </FormControl>
   )
+
+  const skeleton = (
+    <>
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    </>
+  )
   
   function BasicTable() {
     return (
-      <TableContainer component={Paper}>
+      <>
+      { spendingOverview.length >= 1 ? (
+        <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -85,22 +107,25 @@ const SpendingOverview = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="left">{row.date}</TableCell>
-                <TableCell align="left">${row.amount}</TableCell>
-                <TableCell align="left">{row.category}</TableCell>
-              </TableRow>
-            ))}
+            {spendingOverview.map((row, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="left">{row.date}</TableCell>
+                  <TableCell align="left">${row.amount}</TableCell>
+                  <TableCell align="left">{row.category}</TableCell>
+                </TableRow>
+              ))}
+
           </TableBody>
         </Table>
       </TableContainer>
+      ) : skeleton }
+    </>
     );
   }
   

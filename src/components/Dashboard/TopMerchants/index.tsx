@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { 
     useState,
+    useEffect,
 } from 'react';
 import { Paper,
     Box,
@@ -18,24 +19,49 @@ import { Paper,
     InputLabel,
     Select,
     MenuItem,
+    Skeleton,
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
-  
-const TopMerchants = () => {
+import axios from 'axios';
+
+function createData(
+    name: string,
+    totalSpent: number,
+    totalTransactions: number,
+    category: string,
+) {
+    return { name, totalSpent, totalTransactions, category };
+}
+
+const TopMerchants = (props) => {
     const [dateSelection, setDateSelection] = useState('7 Days');
+    const [topMerchants, setTopMerchants] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const config = {
+                params: {
+                    user_id: props.cookie,
+                    startDate: '2022-02-28',
+                    endDate: '2022-06-05',
+                    queryType: 'topMerchants',
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                url: '/api/dashboard',
+            }
+            const response = await axios(config)
+            console.log(response.data)
+            setTopMerchants(response.data.topMerchants)
+        }
+        fetchData()
+    }, [])
 
     const handleSelectChange = (event: SelectChangeEvent) => {
         setDateSelection(event.target.value as string);
     }
 
-    function createData(
-        name: string,
-        totalSpent: number,
-        totalTransactions: number,
-        category: string,
-    ) {
-        return { name, totalSpent, totalTransactions, category };
-    }
 
     const rows = [
         createData('Uber', 121, 6, 'Transportation'),
@@ -72,35 +98,50 @@ const TopMerchants = () => {
         </FormControl>
     )
 
+    const skeleton = (
+        <>
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" />
+        </>
+      )
+
     function BasicTable() {
+
         return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-                <TableRow>
-                <TableCell>Merchant</TableCell>
-                <TableCell align="left">Total Spent&nbsp;($)</TableCell>
-                <TableCell align="left">Total Transactions</TableCell>
-                <TableCell align="left">Category</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {rows.map((row) => (
-                <TableRow
-                    key={row.name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                    <TableCell component="th" scope="row">
-                    {row.name}
-                    </TableCell>
-                    <TableCell align="left">${row.totalSpent}</TableCell>
-                    <TableCell align="left">{row.totalTransactions}</TableCell>
-                    <TableCell align="left">{row.category}</TableCell>
-                </TableRow>
-                ))}
-            </TableBody>
-            </Table>
-        </TableContainer>
+            <>
+            {topMerchants.length === 5 ? (
+                <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                    <TableCell>Merchant</TableCell>
+                    <TableCell align="left">Total Spent&nbsp;($)</TableCell>
+                    <TableCell align="left">Total Transactions</TableCell>
+                    <TableCell align="left">Category</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {topMerchants.map((row) => (
+                    <TableRow
+                        key={row.name}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                        <TableCell component="th" scope="row">
+                        {row.name}
+                        </TableCell>
+                        <TableCell align="left">${row.totalSpent}</TableCell>
+                        <TableCell align="left">{row.totalTransactions}</TableCell>
+                        <TableCell align="left">{row.category}</TableCell>
+                    </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+            </TableContainer>
+            ) : skeleton}
+            </>
         );
     }
 

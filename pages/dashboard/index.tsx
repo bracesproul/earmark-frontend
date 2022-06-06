@@ -37,26 +37,32 @@ export async function getServerSideProps({ req, res }) {
 
 
 const Dashboard = ({ cookie }) => {
+    const [reload, setReload] = useState(false);
+    const [topMerchants, setTopMerchants] = useState([]);
+    const [accountBalance, setAccountBalance] = useState([]);
+    // let topMerchants = [];
+
+
     console.log('COOKIE: ', cookie);
     return (
         <PageTemplate title="Dashboard" description="Dashboard overview for Earmark" >
             <Grid container spacing={3}>
             <Grid item xs={12}>
-                <SpendingOverview />
+                <SpendingOverview cookie={cookie} />
             </Grid>
             <Grid item xs={12}>
-                <TopMerchants />
+                <TopMerchants cookie={cookie} />
             </Grid>
             <Grid item xs={12}>
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
                 <Goals />
                 <Budgets />
-                <TotalSpending />
+                <TotalSpending cookie={cookie} />
                 </Box>
                 <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', margin: 'auto'}}>
                 <Goals />
                 <Budgets />
-                <TotalSpending />
+                <TotalSpending cookie={cookie} />
                 </Box>
             </Grid>
             <Grid item xs={12} sx={{ margin: 'auto'}}>

@@ -68,8 +68,8 @@ const useProvideAuth = () => {
           sameSite: true,
         });
         console.log('cookie set');
-        firestore.logSignIn('custom')
-        return response.user;
+        // firestore.logSignIn('custom')
+        return 'success';
       });
     } catch(error) {
       if (error == 'FirebaseError: Firebase: Error (auth/wrong-password).') {

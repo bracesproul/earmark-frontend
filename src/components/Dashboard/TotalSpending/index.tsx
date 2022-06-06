@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { 
     useState,
+    useEffect,
   } from 'react';
   import { Box,
     Card,
@@ -8,32 +9,45 @@ import React, {
     Typography,
     Divider,
     Grid,
+    Skeleton,
 } from '@mui/material';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import axios from 'axios';
   
-const TotalSpending = () => {
-  
-    const spending = [
-      {
-        timeframe: 'Today',
-        change: 'more',
-        amount: 38,
-        text: 'Total spent today',
-      },
-      {
-        timeframe: '7 Days',
-        change: 'more',
-        amount: 155,
-        text: 'Total spent in the last 7 days',
-      },
-      {
-        timeframe: '1 Month',
-        change: 'less',
-        amount: 632,
-        text: 'Total spent in the last month',
-      }
-    ];
+const TotalSpending = (props) => {
+  const [totalSpending, setTotalSpending] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const config = {
+            params: {
+                user_id: props.cookie,
+                startDate: '2022-02-28',
+                endDate: '2022-06-05',
+                queryType: 'totalSpending',
+            },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: '/api/dashboard',
+        }
+        const response = await axios(config)
+        console.log(response.data)
+        setTotalSpending(response.data.totalSpending)
+    }
+    fetchData()
+  }, [])
+
+  const skeleton = (
+    <>
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    <Skeleton animation="wave" />
+    </>
+  )
   
     const card = (
       <>
@@ -43,7 +57,9 @@ const TotalSpending = () => {
         </Typography>
         <Divider />
         <Grid spacing={2}>
-        {spending.map((spending) => (
+      { totalSpending.length == 3 ? (
+        <>
+        {totalSpending.map((spending) => (
           <React.Fragment key={spending.timeframe}>
             <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
               {spending.timeframe}
@@ -61,6 +77,8 @@ const TotalSpending = () => {
             <Divider />
           </React.Fragment>
         ))}
+        </>
+      ) : skeleton}
         </Grid>
       </CardContent>
     </>

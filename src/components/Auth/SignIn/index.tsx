@@ -22,6 +22,9 @@ import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from "fir
 import { useFirestore } from '../../../lib/hooks/useFirestore';
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import CloseIcon  from '@mui/icons-material/Close';
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 const app = initializeApp({
   apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
@@ -122,17 +125,18 @@ function SignIn() {
     const password = data.get('password');
     // @ts-ignore
     const response = await auth.signin(email, password);
-    if (response == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
-      console.log(response);
-      setLoginError(false);
-      setPasswordError(true);
+    console.log('res', response);
+    if (response == 'success') {
+      // console.log('RESPONSE: ', response);
+      Router.push('/dashboard');
     } else if (response == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
       console.log(response)
       setLoginError(true);
       setPasswordError(false);
-    } else if (response.uid) {
-      console.log(response.uid);
-      Router.push('/account');
+    } else if (response == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
+      console.log(response);
+      setLoginError(false);
+      setPasswordError(true);
     }
   };
 
@@ -256,6 +260,7 @@ function SignIn() {
             sx={{ mt: 1, mb: 1 }}
             fullWidth
             variant="outlined"
+            startIcon={<GoogleIcon />}
             onClick={() => handleProviderSignin('google')}
             >
               Sign in with Google
@@ -264,6 +269,7 @@ function SignIn() {
             sx={{ mt: 1, mb: 1 }}
             fullWidth
             variant="outlined"
+            startIcon={<FacebookIcon />}
             onClick={() => handleProviderSignin('facebook')}
             >
               Sign in with Facebook
@@ -272,6 +278,7 @@ function SignIn() {
             sx={{ mt: 1, mb: 1 }}
             fullWidth
             variant="outlined"
+            startIcon={<TwitterIcon />}
             onClick={() => handleProviderSignin('twitter')}
             >
               Sign in with Twitter
