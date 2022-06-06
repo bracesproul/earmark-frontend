@@ -38,22 +38,62 @@ export default async function handler(req, res) {
     let finalResponse;
     let finalStatus;
     return new Promise( async (resolve, reject)=> {
+        const user_id = req.query.user_id
+        const queryType = req.query.queryType
+        let config;
         try {
-            const user_id = req.query.user_id
-            const queryType = req.query.queryType
-            const config = {
-                params: {
-                    user_id: user_id,
-                    startDate: '2022-02-28',
-                    endDate: '2022-06-05',
-                    queryType: queryType,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                    'earmark-api-key': process.env.EARMARK_API_KEY,
-                },
-                url: API_URL + '/api/earmark/dashboard',
+            if ( queryType === 'spendingOverview') {
+                const spendingStartDate = req.query.spendingStartDate;
+                const spendingEndDate = req.query.spendingEndDate;
+                config = {
+                    params: {
+                        user_id: user_id,
+                        startDate: '2022-02-28',
+                        endDate: '2022-06-05',
+                        queryType: queryType,
+                        spendingStartDate: spendingStartDate,
+                        spendingEndDate: spendingEndDate,
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'earmark-api-key': process.env.EARMARK_API_KEY,
+                    },
+                    url: API_URL + '/api/earmark/dashboard',
+                }
+            } else if ( queryType === 'topMerchants') {
+                const merchantsStartDate = req.query.merchantsStartDate;
+                const merchantsEndDate = req.query.merchantsEndDate;
+                config = {
+                    params: {
+                        user_id: user_id,
+                        startDate: '2022-02-28',
+                        endDate: '2022-06-05',
+                        queryType: queryType,
+                        merchantsStartDate: merchantsStartDate,
+                        merchantsEndDate: merchantsEndDate,
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'earmark-api-key': process.env.EARMARK_API_KEY,
+                    },
+                    url: API_URL + '/api/earmark/dashboard',
+                }
+            } else {
+                config = {
+                    params: {
+                        user_id: user_id,
+                        startDate: '2022-02-28',
+                        endDate: '2022-06-05',
+                        queryType: queryType,
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'earmark-api-key': process.env.EARMARK_API_KEY,
+                    },
+                    url: API_URL + '/api/earmark/dashboard',
+                }
             }
+ 
             const response = await axios(config)
             console.log(response.data)
             finalResponse = response.data;

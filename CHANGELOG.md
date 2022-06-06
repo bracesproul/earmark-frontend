@@ -97,3 +97,17 @@ Sign in with provider 1/3 working
 - Connected Spending Overview, Top Merchants, Total Spending to backend (date changing still not working)
 
 ### Changed
+
+
+## [0.0.7] - 2022-06-5
+
+### Notes
+
+#### Added
+- Code to change date range in api paramaters
+
+### Fixed
+- Connected the date range selection to work and recall new data on selection
+- Fixed the placeholder animation for dashboard page when data is still loading
+
+### Changed

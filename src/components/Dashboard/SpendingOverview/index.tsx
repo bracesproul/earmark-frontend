@@ -23,19 +23,28 @@ import { Paper,
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import axios from 'axios';
+import moment from 'moment';
 
 const SpendingOverview = (props) => {
+  let firstStartDate = moment();
+  let firstEndDate = moment();
   const [dateSelection, setDateSelection] = useState('24 Hours');
   const [dataRows, setdataRows] = useState(null);
   const [spendingOverview, setSpendingOverview] = useState([]);
+  const [startDate, setStartDate] = useState(firstStartDate.format('YYYY-MM-DD'));
+  const [endDate, setEndDate] = useState(firstEndDate.format('YYYY-MM-DD'));
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(startDate, endDate);
         const config = {
             params: {
                 user_id: props.cookie,
                 startDate: '2022-02-28',
                 endDate: '2022-06-05',
+                spendingStartDate: startDate,
+                spendingEndDate: endDate,
                 queryType: 'spendingOverview',
             },
             headers: {
@@ -46,11 +55,37 @@ const SpendingOverview = (props) => {
         const response = await axios(config)
         console.log(response.data)
         setSpendingOverview(response.data.spendingOverview)
+        setLoading(false)
     }
     fetchData()
-  }, [])
+  }, [startDate])
 
   const handleSelectChange = (event: SelectChangeEvent) => {
+    if (event.target.value === '24 Hours') {
+      let startDate = moment();
+      let endDate = moment();
+      setStartDate(startDate.format('YYYY-MM-DD'));
+      setEndDate(endDate.format('YYYY-MM-DD'));
+      setLoading(true);
+    } else if (event.target.value === '7 Days') {
+      let startDate = moment();
+      let endDate = moment();
+      setStartDate(startDate.subtract(7, 'days').format('YYYY-MM-DD'));
+      setEndDate(endDate.format('YYYY-MM-DD'));
+      setLoading(true);
+    } else if (event.target.value === '2 Weeks') {
+      let startDate = moment();
+      let endDate = moment();
+      setStartDate(startDate.subtract(14, 'days').format('YYYY-MM-DD'));
+      setEndDate(endDate.format('YYYY-MM-DD'));
+      setLoading(true);
+    } else if (event.target.value === '1 Month') {
+      let startDate = moment();
+      let endDate = moment();
+      setStartDate(startDate.subtract(1, 'months').format('YYYY-MM-DD'));
+      setEndDate(endDate.format('YYYY-MM-DD'));
+      setLoading(true);
+    }
     setDateSelection(event.target.value as string);
   }
 
@@ -91,11 +126,17 @@ const SpendingOverview = (props) => {
     <Skeleton animation="wave" />
     </>
   )
-  
+
+  const noData = (
+    <>
+    <Typography variant="h6">No Data</Typography>
+    </>
+  )
+
   function BasicTable() {
     return (
       <>
-      { spendingOverview.length >= 1 ? (
+      { !loading ? (
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -107,19 +148,22 @@ const SpendingOverview = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {spendingOverview.map((row, index) => (
-                <TableRow
-                  key={index}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">{row.date}</TableCell>
-                  <TableCell align="left">${row.amount}</TableCell>
-                  <TableCell align="left">{row.category}</TableCell>
-                </TableRow>
-              ))}
+            {spendingOverview ? (
+            spendingOverview.map((row, index) => (
+              <TableRow
+                key={index}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="left">{row.date}</TableCell>
+                <TableCell align="left">${row.amount}</TableCell>
+                <TableCell align="left">{row.category}</TableCell>
+              </TableRow>
+            ))
+            ) : <h1>No data</h1>}
+
 
           </TableBody>
         </Table>

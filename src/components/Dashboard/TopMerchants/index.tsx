@@ -23,6 +23,7 @@ import { Paper,
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import axios from 'axios';
+import moment from 'moment';
 
 function createData(
     name: string,
@@ -36,6 +37,10 @@ function createData(
 const TopMerchants = (props) => {
     const [dateSelection, setDateSelection] = useState('7 Days');
     const [topMerchants, setTopMerchants] = useState([]);
+    const [startDate, setStartDate] = useState('2022-04-28');
+    const [endDate, setEndDate] = useState('2022-06-05');
+    const [reCallData, setReCallData] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,6 +50,8 @@ const TopMerchants = (props) => {
                     startDate: '2022-02-28',
                     endDate: '2022-06-05',
                     queryType: 'topMerchants',
+                    merchantsStartDate: startDate,
+                    merchantsEndDate: endDate,
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,12 +60,38 @@ const TopMerchants = (props) => {
             }
             const response = await axios(config)
             console.log(response.data)
-            setTopMerchants(response.data.topMerchants)
+            setTopMerchants(response.data.topMerchants);
+            setLoading(false)
         }
         fetchData()
-    }, [])
+    }, [startDate])
 
     const handleSelectChange = (event: SelectChangeEvent) => {
+        if (event.target.value === '7 Days') {
+            let startDate = moment();
+            let endDate = moment();
+            setStartDate(startDate.subtract(7, 'days').format('YYYY-MM-DD'));
+            setEndDate(endDate.format('YYYY-MM-DD'));
+            setLoading(true);
+        } else if (event.target.value === '2 Weeks') {
+            let startDate = moment();
+            let endDate = moment();
+            setStartDate(startDate.subtract(14, 'days').format('YYYY-MM-DD'));
+            setEndDate(endDate.format('YYYY-MM-DD'));
+            setLoading(true);
+        } else if (event.target.value === '30 Days') {
+            let startDate = moment();
+            let endDate = moment();
+            setStartDate(startDate.subtract(30, 'days').format('YYYY-MM-DD'));
+            setEndDate(endDate.format('YYYY-MM-DD'));
+            setLoading(true);
+        } else if (event.target.value === '6 Months') {
+            let startDate = moment();
+            let endDate = moment();
+            setStartDate(startDate.subtract(6, 'months').format('YYYY-MM-DD'));
+            setEndDate(endDate.format('YYYY-MM-DD'));
+            setLoading(true);
+        }
         setDateSelection(event.target.value as string);
     }
 
@@ -74,7 +107,7 @@ const TopMerchants = (props) => {
     const spendingTimeframe = {
         '7 Days': 'Most frequent merchants used in the last 7 days',
         '2 Weeks': 'Most frequent merchants used in the last 2 weeks',
-        '1 Month': 'Most frequent merchants used in the last month',
+        '30 Days': 'Most frequent merchants used in the last month',
         '6 Months': 'Most frequent merchants used in the last 6 months',
         'Custom': 'Custom date range for top merchants'
     }
@@ -91,7 +124,7 @@ const TopMerchants = (props) => {
         >
             <MenuItem value={'7 Days'}>7 Days</MenuItem>
             <MenuItem value={'2 Weeks'}>2 Weeks</MenuItem>
-            <MenuItem value={'1 Month'}>1 Month</MenuItem>
+            <MenuItem value={'30 Days'}>30 Days</MenuItem>
             <MenuItem value={'6 Months'}>6 Months</MenuItem>
             <MenuItem value={'Custom'}>Custom</MenuItem>
         </Select>
@@ -112,7 +145,7 @@ const TopMerchants = (props) => {
 
         return (
             <>
-            {topMerchants.length === 5 ? (
+            {!loading ? (
                 <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
