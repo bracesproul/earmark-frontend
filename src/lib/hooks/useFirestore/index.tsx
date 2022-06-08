@@ -3,6 +3,10 @@ import React, { useState, useEffect, useContext, createContext } from "react";
 import { doc,
   setDoc,
   getFirestore,
+  query,
+  collection,
+  where,
+  getDocs,
 } from 'firebase/firestore'
 import { useAuth } from "../useAuth";
 import { initializeApp } from "firebase/app";
@@ -95,15 +99,20 @@ function useProvideFirestore() {
     */
   }
 
-  const getDynamicPageData = async (user_id, page_id) => {
+  const getDynamicTransactionData = async (user_id: string, page_id: any) => {
     try {
-      const config = {
-        headers: {},
-        method: 'GET',
-        params: {},
-        url: ''
-      }
-    } catch (error) {}
+      console.log('getDynamicTransactionData, user_id: ', user_id);
+      let accessTokens;
+      const q = query(collection(db, "users", user_id, 'access_tokens'));
+      const querySnapshot = await getDocs(q);
+      console.log('before for each');
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+      });
+    } catch (error) {
+      return error;
+    }
   };
   
   // in backend under <updateCategory>
@@ -242,6 +251,7 @@ function useProvideFirestore() {
     logSignIn,
     logLinkInstitution,
     logTest,
+    getDynamicTransactionData,
   };
 }
 
@@ -257,6 +267,7 @@ interface IProvideFirestore {
   logSignIn: (method: string) => void;
   logLinkInstitution: (institution: string) => void;
   logTest: (test: string) => void;
+  getDynamicTransactionData: (user_id: string, page_id: any) => void;
 }
 
 export const useFirestore = () => useContext(firestoreContext) as IProvideFirestore;

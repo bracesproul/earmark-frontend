@@ -93,6 +93,7 @@ const Dashboard = ({ categoryRows, dataGridColumns, dataGridRows, transactionMet
     /* @ts-ignore */
     if (!auth.user) return <NeedAuth />;
 
+    console.log(dataGridRows);
     return (
         <div className={styles.dashboard}>
         <HeadTemplate title="Dashboard" description="Dashboard overview for Earmark" iconPath="/favicon.ico" />

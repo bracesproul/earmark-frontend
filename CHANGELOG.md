@@ -136,6 +136,7 @@ Sign in with provider 1/3 working
 
 ### Notes
 Plaid Link sidenav option removed because it was recalling everytime the page was loaded, or a new page was loaded. This was making excess api calls. Switched to link banks through the institutions page or when you first create an account.
+Commit [main 83f5618](https://github.com/bracesproul/earmark-backend/commit/83f5618)
 
 #### Added
 - Connected [Stacked Bar Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/StackedBarChart) & [Line Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/LineChartComponent) & [Pie Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/PieChartComponent) to backend, select date range working, categories not working
@@ -145,3 +146,18 @@ Plaid Link sidenav option removed because it was recalling everytime the page wa
 
 ### Changed
 - Removed plaid link option from sidenav (see notes for more info)
+
+
+## [0.0.10] - 2022-06-08
+
+### Notes
+Dynamic transaction code inside pages file, not yet inside it's own component folder
+Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+
+#### Added
+- Added funcationality to individual bank account transactions page at [/dashboard/[ins_id]](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/%5Bins_id%5D.tsx)
+- Added [/api/dynamicTransactions](https://github.com/bracesproul/earmark-frontend/blob/main/pages/api/dynamicTransactions.ts) for fetching data to populate the dynamic transactions page
+
+### Fixed
+
+### Changed
