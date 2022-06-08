@@ -130,3 +130,18 @@ Sign in with provider 1/3 working
 - Changed card headers to be bold for all dashboard cards
 - Changed table headers to be bold for all dashboard tables
 - Changed select dropdown to be bold for all dashboard select dropdowns
+
+
+## [0.0.9] - 2022-06-06
+
+### Notes
+Plaid Link sidenav option removed because it was recalling everytime the page was loaded, or a new page was loaded. This was making excess api calls. Switched to link banks through the institutions page or when you first create an account.
+
+#### Added
+- Connected [Stacked Bar Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/StackedBarChart) & [Line Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/LineChartComponent) & [Pie Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/PieChartComponent) to backend, select date range working, categories not working
+- Added [/api/visuals](https://github.com/bracesproul/earmark-frontend/blob/main/pages/api/visuals.ts) route for fetching data for visualizations 
+
+### Fixed
+
+### Changed
+- Removed plaid link option from sidenav (see notes for more info)

@@ -124,7 +124,7 @@ const SideNav = () => {
             </ListItem>
             </a>
             ))}
-            <PlaidLink user_id={auth.user.uid} />
+            {/*<PlaidLink user_id={auth.user.uid} />*/}
         </List>
         <Divider />
         </>

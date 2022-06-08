@@ -1,80 +1,94 @@
 /* eslint-disable */
-import React from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
+import axios from 'axios';
+import moment from 'moment';
+import { useAuth } from '../../../lib/hooks/useAuth';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const data = [
-  {
-    name: 'Jan',
-    food: 100,
-    travel: 200,
-    housing: 300,
-    misc: 400,
-    amt: 1000,
-  },
-  {
-    name: 'Feb',
-    food: 125,
-    travel: 225,
-    housing: 325,
-    misc: 425,
-    amt: 1100,
-  },
-  {
-    name: 'Mar',
-    food: 150,
-    travel: 250,
-    housing: 350,
-    misc: 450,
-    amt: 1200,
-  },
-  {
-    name: 'Apr',
-    food: 175,
-    travel: 275,
-    housing: 375,
-    misc: 475,
-    amt: 1300,
-  },
-  {
-    name: 'May',
-    food: 200,
-    travel: 300,
-    housing: 400,
-    misc: 500,
-    amt: 1400,
-  },
-  {
-    name: 'Jun',
-    food: 225,
-    travel: 325,
-    housing: 425,
-    misc: 525,
-    amt: 1500,
-  },
-  {
-    name: 'Jul',
-    food: 250,
-    travel: 350,
-    housing: 450,
-    misc: 550,
-    amt: 1600,
-  },
-];
-
 const elements = [
-  { dataKey: 'food', stackId: 'a', fill: 'black' },
-  { dataKey: 'travel', stackId: 'a', fill: 'red' },
-  { dataKey: 'housing', stackId: 'a', fill: 'blue' },
-  { dataKey: 'misc', stackId: 'a', fill: 'purple' },
+  { dataKey: 'Income', stackId: 'a', fill: '#00FFFF' },
+  { dataKey: 'Transfer In', stackId: 'a', fill: '#000000' },
+  { dataKey: 'Transfer Out', stackId: 'a', fill: '#0000FF' },
+  { dataKey: 'Loan Payments', stackId: 'a', fill: '#FF00FF' },
+  { dataKey: 'Bank Fees', stackId: 'a', fill: '#808080' },
+  { dataKey: 'Entertainment', stackId: 'a', fill: '#008000' },
+  { dataKey: 'Food And Drink', stackId: 'a', fill: '#00FF00' },
+  { dataKey: 'General Merchandise', stackId: 'a', fill: '#800000' },
+  { dataKey: 'Home Improvement', stackId: 'a', fill: '#000080' },
+  { dataKey: 'Medical', stackId: 'a', fill: '#808000' },
+  { dataKey: 'Personal Care', stackId: 'a', fill: '#800080' },
+  { dataKey: 'General Services', stackId: 'a', fill: '#FF0000' },
+  { dataKey: 'Government And Non-Profit', stackId: 'a', fill: '#C0C0C0' },
+  { dataKey: 'Transportation', stackId: 'a', fill: '#008080' },
+  { dataKey: 'Travel', stackId: 'a', fill: '#804000' },
+  { dataKey: 'Rent And Utilities', stackId: 'a', fill: '#AAFFC3' },
 ]
 
-const LineChartComponent = () => {
+const LineChartComponent = (props) => {
+  const auth = useAuth();
+  const today = moment().format("YYYY-MM-DD");
+
+  const [lineChartData, setLineChartData] = useState([]);
+  const [months, setMonths] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [key, setKey] = useState([]);
+  const [startDate, setStartDate] = useState('2022-01-01');
+  const [first, setFirst] = useState(true);
+
+  useEffect(() => {
+    if (first) return;
+    setStartDate(props.date);
+  }, [props.date]);
+
+  useEffect(() => {
+    setFirst(false)
+  }, [])
+
+  useEffect(() => {
+    if (!auth.user) {
+      console.log('user is logged in, inside the useEffect hook')
+      return;
+    };
+    const fetchData = async () => {
+        console.log('fetchData')
+        const config = {
+            method: "GET",
+            url: '/api/visuals',
+            params: {
+                user_id: auth.user.uid,
+                queryType: 'lineChart',
+                startDate: startDate,
+                endDate: today,
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'earmark-api-key': process.env.EARMARK_API_KEY,
+            },
+        };
+        const axiosResponse = await axios(config);
+        console.log('axiosResponse line chart: ', axiosResponse.data);
+        setLineChartData(axiosResponse.data.final);
+        setMonths(axiosResponse.data.months);
+        let keysArray = [];
+        elements.forEach((element) => {
+          if (axiosResponse.data.categories.includes(element.dataKey)) {
+            keysArray.push({ dataKey: element.dataKey, stackId: element.stackId, fill: element.fill })
+          }
+        });
+        setKey(keysArray);
+    };
+    fetchData();
+  }, [startDate])
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
         width={500}
         height={300}
-        data={data}
+        data={lineChartData}
         margin={{
           top: 5,
           right: 30,
@@ -87,7 +101,7 @@ const LineChartComponent = () => {
         <YAxis />
         <Tooltip />
         <Legend />
-        {elements.map((element, index) => (
+        {key.map((element, index) => (
         <Line key={index} type="monotone" dataKey={element.dataKey} stroke={element.fill} activeDot={{ r: 8 }} />
         ))}
       </LineChart>

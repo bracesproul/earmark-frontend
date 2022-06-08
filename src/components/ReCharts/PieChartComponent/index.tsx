@@ -1,16 +1,62 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { 
+  useState,
+  useEffect,
+} from 'react';
+import axios from 'axios';
+import { useAuth } from '../../../lib/hooks/useAuth';
+import moment from 'moment';
 import { ResponsiveContainer, PieChart, Pie, Sector } from 'recharts';
 
-const data = [
-  { name: 'Group A', value: 400, fill: "blue" },
-  { name: 'Group B', value: 300, fill: "red" },
-  { name: 'Group C', value: 300, fill: "green" },
-  { name: 'Group D', value: 200, fill: "brown" },
-];
+const PieChartComponent = (props) => {
+  const auth = useAuth();
+  const today = moment().format("YYYY-MM-DD");
 
-const PieChartComponent = () => {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [pieData, setPieData] = useState([]);
+  const [first, setFirst] = useState(true);
+  const [startDate, setStartDate] = useState('2022-01-01');
+
+
+  useEffect(() => {
+    if (first) return;
+    setStartDate(props.date);
+  }, [props.date]);
+
+  useEffect(() => setFirst(false), [])
+
+  useEffect(() => {
+    if (!auth.user) {
+      console.log('user is NOT logged in, inside the useEffect hook')
+      return;
+    };
+    const fetchData = async () => {
+      try {
+        console.log('fetchData')
+        const config = {
+            method: "GET",
+            url: '/api/visuals',
+            params: {
+                user_id: auth.user.uid,
+                queryType: 'pieChart',
+                startDate: startDate,
+                endDate: today,
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'earmark-api-key': process.env.EARMARK_API_KEY,
+            },
+        };
+        const axiosResponse = await axios(config);
+        console.log('axiosResponse pie chart: ', axiosResponse.data.final);
+        setPieData(axiosResponse.data.final);
+      } catch (error) {
+        console.log('error: ', error);
+      }
+    };
+    fetchData();
+  }, [startDate])
+
 
   const onPieEnter = (_, index) => {
     setActiveIndex(index)
@@ -54,9 +100,9 @@ const PieChartComponent = () => {
         />
         <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
         <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`PV ${value}`}</text>
+        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`$${value}`}</text>
         <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-          {`(Rate ${(percent * 100).toFixed(2)}%)`}
+          {`(Percent Total ${(percent * 100).toFixed(2)}%)`}
         </text>
       </g>
     );
@@ -68,7 +114,7 @@ const PieChartComponent = () => {
         <Pie
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
-          data={data}
+          data={pieData}
           cx="50%"
           cy="50%"
           innerRadius={60}

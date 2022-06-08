@@ -94,6 +94,17 @@ function useProvideFirestore() {
     })
     */
   }
+
+  const getDynamicPageData = async (user_id, page_id) => {
+    try {
+      const config = {
+        headers: {},
+        method: 'GET',
+        params: {},
+        url: ''
+      }
+    } catch (error) {}
+  };
   
   // in backend under <updateCategory>
   const updateCategory = async (category, transactionObjects) => {

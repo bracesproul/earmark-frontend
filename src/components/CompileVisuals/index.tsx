@@ -7,6 +7,8 @@ import LineChartComponent from '../ReCharts/LineChartComponent';
 import BarChartComponent from '../ReCharts/StackedBarChart';
 import PieChartComponent from '../ReCharts/PieChartComponent';
 import TreemapComponent from '../ReCharts/TreeMapComponent';
+import { useAuth } from '../../lib/hooks/useAuth';
+import moment from 'moment';
 
 const categories = [
     "Income",
@@ -15,16 +17,16 @@ const categories = [
     "Loan Payments",
     "Bank Fees",
     "Entertainment",
-    "Food and Drink",
+    "Food And Drink",
     "General Merchandise",
     "Home Improvement",
     "Medical",
     "Personal Care",
     "General Services",
-    "Government and Non-Profit",
+    "Government And Non-Profit",
     "Transportation",
     "Travel",
-    "Rent and Utilities"
+    "Rent And Utilities"
 ];
 
 const ITEM_HEIGHT = 48;
@@ -42,11 +44,24 @@ const MenuProps = {
 
 const App = () => {
     const theme = useTheme();
+    const today = moment().format("YYYY-MM-DD");
+    const todayMonth = moment().format("M");
+    const todayYear = moment().format("YYYY");
+    const sevenDays = moment().subtract(7, 'days').format("YYYY-MM-DD");
+    const twoWeeks = moment().subtract(14, 'days').format("YYYY-MM-DD");
+    const oneMonth = moment().subtract(30, 'days').format("YYYY-MM-DD");
+    const threeMonths = moment().subtract(90, 'days').format("YYYY-MM-DD");
+    const sixMonths = moment().subtract(180, 'days').format("YYYY-MM-DD");
+    const oneYear = moment().subtract(1, 'years').format("YYYY-MM-DD");
+    const twoYears = moment().subtract(2, 'years').format("YYYY-MM-DD");
     const [selectedVisual, setSelectedVisual] = useState("Line Chart");
-    const [selectedDates, setSelectedDates] = useState("8760");
+    const [selectedDates, setSelectedDates] = useState(today);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [buttonState, setButtonState] = useState("secondary");
     const [buttonText, setButtonText] = useState("Visualize");
+    const auth = useAuth();
+
+
 
     const handleChangeVisuals = (e) => {
         console.log('handle change ran')
@@ -114,7 +129,7 @@ const App = () => {
                             </FormControl>
 
                             <FormControl>
-                                <InputLabel id="select-date">Chart Type</InputLabel>
+                                <InputLabel id="select-date">Date Range</InputLabel>
                                 <Select
                                     labelId="select-date"
                                     id="simple-select-date"
@@ -128,14 +143,12 @@ const App = () => {
                                         minWidth: 150,
                                     }}
                                 >
-                                    <MenuItem value="24">24 hours</MenuItem>
-                                    <MenuItem value="72">3 Days</MenuItem>
-                                    <MenuItem value="168">7 Days</MenuItem>
-                                    <MenuItem value="336">2 Weeks</MenuItem>
-                                    <MenuItem value="730">1 Month</MenuItem>
-                                    <MenuItem value="2190">3 Months</MenuItem>
-                                    <MenuItem value="4380">6 Months</MenuItem>
-                                    <MenuItem value="8760">Year To Date</MenuItem>
+                                    <MenuItem value={today}>Today</MenuItem>
+                                    <MenuItem value={sevenDays}>7 Days</MenuItem>
+                                    <MenuItem value={twoWeeks}>2 Weeks</MenuItem>
+                                    <MenuItem value={oneMonth}>30 Days</MenuItem>
+                                    <MenuItem value={threeMonths}>3 Months (90 days)</MenuItem>
+                                    <MenuItem value={sixMonths}>6 Months (180 days)</MenuItem>
                                     <MenuItem value="Custom">Custom</MenuItem>
                                 </Select>
                             </FormControl>
@@ -184,9 +197,9 @@ const App = () => {
                         </div>
 
                     <div className={styles.visualsContainer}>
-                        {selectedVisual === "Line Chart" && <LineChartComponent />}
-                        {selectedVisual === "Bar Chart" && <BarChartComponent />}
-                        {selectedVisual === "Pie Chart" && <PieChartComponent />}
+                        {selectedVisual === "Line Chart" && <LineChartComponent date={selectedDates} />}
+                        {selectedVisual === "Bar Chart" && <BarChartComponent date={selectedDates} />}
+                        {selectedVisual === "Pie Chart" && <PieChartComponent date={selectedDates} />}
                         {selectedVisual === "Treemap" && <TreemapComponent />}
                     </div>
                 </div>
