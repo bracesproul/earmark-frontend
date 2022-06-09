@@ -68,7 +68,6 @@ export default async function handler(req, res) {
             }
         } else if (req.query.func == 'updateUserPersonal') {
             try {
-                console.log(req.query)
                 const config = {
                     headers: {
                         'Content-Type': 'application/json',
@@ -91,7 +90,6 @@ export default async function handler(req, res) {
             }
         } else if (req.query.func == 'deleteAccount') {
             try {
-                console.log(req.query)
                 const config = {
                     headers: {
                         'Content-Type': 'application/json',
@@ -114,7 +112,6 @@ export default async function handler(req, res) {
             }
         } else if (req.query.func == 'deleteAllInstitutions') {
             try {
-                console.log(req.query)
                 const config = {
                     headers: {
                         'Content-Type': 'application/json',
@@ -137,7 +134,6 @@ export default async function handler(req, res) {
             }
         } else if (req.query.func == 'updateAccountElement') {
             try {
-                console.log(req.query)
                 const config = {
                     headers: {
                         'Content-Type': 'application/json',

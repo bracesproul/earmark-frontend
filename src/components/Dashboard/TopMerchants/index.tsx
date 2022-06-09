@@ -58,9 +58,9 @@ const TopMerchants = (props) => {
                 },
                 url: '/api/dashboard',
             }
-            const response = await axios(config)
-            console.log(response.data)
-            setTopMerchants(response.data.topMerchants);
+            const { data } = await axios(config)
+            console.log('DATA RESPONSE TOP MERCHANTS', data);
+            setTopMerchants(data.topMerchants);
             setLoading(false)
         }
         fetchData()
@@ -94,15 +94,6 @@ const TopMerchants = (props) => {
         }
         setDateSelection(event.target.value as string);
     }
-
-
-    const rows = [
-        createData('Uber', 121, 6, 'Transportation'),
-        createData('Gordos', 338, 9, 'Food'),
-        createData('United Airlines', 829, 1, 'Travel'),
-        createData('PG&E', 405, 3, 'Utilities'),
-        createData('Sliver Pizza', 693, 12, 'Food'),
-    ];
 
     const spendingTimeframe = {
         '7 Days': 'Most frequent merchants used in the last 7 days',
@@ -142,7 +133,29 @@ const TopMerchants = (props) => {
       )
 
     function BasicTable() {
+        const [rowColor, setRowColor] = useState([]);
 
+        useEffect(() => {
+            topMerchants.forEach((row, index) => {
+            if (row.totalSpent < 0) {
+              setRowColor(prevState => [...prevState, {[row.id]: 'bold'}])
+            } else {
+              setRowColor(prevState => [...prevState, {[row.id]: 'normal'}])
+            }
+        });
+        }, [])
+
+        const checkTransactionAmount = (row: any) => {
+            let totalSpent: any = row.totalSpent;
+            if (Math.sign(totalSpent) === -1) {
+              const amountString = totalSpent.toString();
+              totalSpent = `-$${amountString.split('-')[1]}`
+              return totalSpent;
+            } else {
+              totalSpent = `$${totalSpent}`
+              return totalSpent;
+            }
+          };
         return (
             <>
             {!loading ? (
@@ -157,19 +170,28 @@ const TopMerchants = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {topMerchants.map((row) => (
-                    <TableRow
-                        key={row.name}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                        <TableCell component="th" scope="row">
-                        {row.name}
-                        </TableCell>
-                        <TableCell align="left">${row.totalSpent}</TableCell>
-                        <TableCell align="left">{row.totalTransactions}</TableCell>
-                        <TableCell align="left">{row.category}</TableCell>
-                    </TableRow>
-                    ))}
+                    {topMerchants.map((row) => {
+                        let bgColor;
+                        rowColor.forEach((color) => {
+                            const colorKey = Object.keys(color)[0];
+                            if (colorKey === row.id) {
+                                bgColor = color[row.id];
+                            }
+                        })
+                        return (
+                            <TableRow
+                                key={row.name}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell sx={{ fontWeight: `${bgColor}` }}  component="th" scope="row">
+                                {row.name}
+                                </TableCell>
+                                <TableCell sx={{ fontWeight: `${bgColor}` }}  align="left">{checkTransactionAmount(row)}</TableCell>
+                                <TableCell sx={{ fontWeight: `${bgColor}` }}  align="left">{row.totalTransactions}</TableCell>
+                                <TableCell sx={{ fontWeight: `${bgColor}` }}  align="left">{row.category}</TableCell>
+                            </TableRow>
+                            )
+                    })}
                 </TableBody>
                 </Table>
             </TableContainer>

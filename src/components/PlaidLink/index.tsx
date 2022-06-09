@@ -19,7 +19,6 @@ const PlaidLink = ({ user_id }) => {
     const [linkToken, setLinkToken] = useState(null);
 
     const fetchToken = useCallback(async () => {
-        console.log('fetching plaid link token...');
         try {
             const config = {
                 method: "post",
@@ -34,7 +33,7 @@ const PlaidLink = ({ user_id }) => {
             const response = await axios(config);
             setLinkToken(response.data.linkToken);
         } catch (error) {
-            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -43,9 +42,7 @@ const PlaidLink = ({ user_id }) => {
     }, [fetchToken]);
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
-        console.log(metadata);
-        console.log('api key:', process.env.EARMARK_API_KEY);
-        console.log('inside onsuc cb')
+        console.log('PLAID LINK TOKEN METADATA:', metadata);
         const config = {
             method: "post",
             headers: {
@@ -59,9 +56,9 @@ const PlaidLink = ({ user_id }) => {
         };
         try {
             const response = await axios(config);
-            console.log(response.data)
+            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
         } catch (error) {
-            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -88,7 +85,6 @@ export const PlaidLinkInstitution = (props) => {
     const [linkToken, setLinkToken] = useState(null);
 
     const fetchToken = useCallback(async () => {
-        console.log('fetching plaid link token...');
         try {
             const config = {
                 method: "post",
@@ -103,7 +99,7 @@ export const PlaidLinkInstitution = (props) => {
             const response = await axios(config);
             setLinkToken(response.data.linkToken);
         } catch (error) {
-            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -112,9 +108,7 @@ export const PlaidLinkInstitution = (props) => {
     }, [fetchToken]);
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
-        console.log(metadata);
-        console.log('api key:', process.env.EARMARK_API_KEY);
-        console.log('inside onsuc cb')
+        console.log('PLAID LINK TOKEN METADATA:', metadata);
         const config = {
             method: "post",
             headers: {
@@ -128,9 +122,9 @@ export const PlaidLinkInstitution = (props) => {
         };
         try {
             const response = await axios(config);
-            console.log(response.data)
+            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
         } catch (error) {
-            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 

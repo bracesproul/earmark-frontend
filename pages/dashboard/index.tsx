@@ -37,11 +37,6 @@ export async function getServerSideProps({ req, res }) {
 
 
 const Dashboard = ({ cookie }) => {
-    const [reload, setReload] = useState(false);
-    const [topMerchants, setTopMerchants] = useState([]);
-    const [accountBalance, setAccountBalance] = useState([]);
-    // let topMerchants = [];
-
     return (
         <PageTemplateResponsive title="Dashboard" description="Dashboard overview for Earmark">
             <Grid container spacing={3}>

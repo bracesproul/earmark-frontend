@@ -2,9 +2,7 @@
 import EditAccountSettingPopupRow from '../EditAccountSettingPopupRow'
 import styles from '../../../../styles/Account/Account.module.css';
 import { getAuth } from "firebase/auth";
-import { useEffect } from 'react';
 const auth = getAuth();
-console.log(auth.currentUser)
 
 const Security = ({ data, uid }) => {
 

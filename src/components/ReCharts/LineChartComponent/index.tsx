@@ -49,11 +49,10 @@ const LineChartComponent = (props) => {
 
   useEffect(() => {
     if (!auth.user) {
-      console.log('user is logged in, inside the useEffect hook')
+      console.error('user NOT logged in, inside the useEffect hook')
       return;
     };
     const fetchData = async () => {
-        console.log('fetchData')
         const config = {
             method: "GET",
             url: '/api/visuals',
@@ -69,7 +68,6 @@ const LineChartComponent = (props) => {
             },
         };
         const axiosResponse = await axios(config);
-        console.log('axiosResponse line chart: ', axiosResponse.data);
         setLineChartData(axiosResponse.data.final);
         setMonths(axiosResponse.data.months);
         let keysArray = [];

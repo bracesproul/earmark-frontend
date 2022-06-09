@@ -259,9 +259,7 @@ const PlaidLinkV = ({ user_id }) => {
     }, [fetchToken]);
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
-        console.log(metadata);
-        console.log('api key:', process.env.EARMARK_API_KEY);
-        console.log('inside onsuc cb')
+        console.log('PLAID LINK SUCCESS METADATA:', metadata);
         const config = {
             method: "post",
             headers: {
@@ -275,7 +273,7 @@ const PlaidLinkV = ({ user_id }) => {
         };
         try {
             const response = await axios(config);
-            console.log(response.data)
+            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
         } catch (error) {
             console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }

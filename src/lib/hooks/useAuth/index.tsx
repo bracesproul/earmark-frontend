@@ -73,13 +73,11 @@ const useProvideAuth = () => {
       });
     } catch(error) {
       if (error == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
-        console.log(error);
+        console.error(error);
         return 'FirebaseError: Firebase: Error (auth/wrong-password).'
-        // setPasswordError(true);
       } else if (error == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
-        console.log(error)
+        console.error(error)
         return 'FirebaseError: Firebase: Error (auth/user-not-found).'
-        // setLoginError(true);
       }
     }
   };
@@ -113,7 +111,6 @@ const useProvideAuth = () => {
           if (credential) {
             // Accounts successfully linked.
             const user = result.user;
-            console.log('NEW USER CRED', user);
           }
         }).catch((error) => {
           console.error(error)
@@ -130,7 +127,6 @@ const useProvideAuth = () => {
           if (credential) {
             // Accounts successfully linked.
             const user = result.user;
-            console.log('NEW USER CRED', user);
           }
         }).catch((error) => {
           console.error(error)
@@ -147,7 +143,6 @@ const useProvideAuth = () => {
           if (credential) {
             // Accounts successfully linked.
             const user = result.user;
-            console.log('NEW USER CRED', user);
           }
         }).catch((error) => {
           console.error(error)
@@ -204,9 +199,6 @@ const useProvideAuth = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
-        console.log('NEW USER CRED', credential);
-        console.log('NEW USER USER', user);
-        console.log('NEW USER TOKEN', token);
         return 'success';
       }).catch((error) => {
         const errorCode = error.code;
@@ -248,9 +240,6 @@ const useProvideAuth = () => {
         const credential = TwitterAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
-        console.log('NEW USER CRED', credential);
-        console.log('NEW USER USER', user);
-        console.log('NEW USER TOKEN', token);
         return 'success';
       }).catch((error) => {
         const errorCode = error.code;

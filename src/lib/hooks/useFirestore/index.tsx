@@ -72,48 +72,11 @@ function useProvideFirestore() {
         url: '/api/firebase'
       }
       const response = await axios(config)
-      console.log('firebase createUserEntry response: ', response.data)
       setSuccess(true)
     } catch (error) {
-      console.log('firebase createUserEntry error: ', error)
+      console.error('firebase createUserEntry error: ', error)
     }
-
-    /*
-    const docRef = doc(db, "users", user_id);
-    const docData = {
-      user_id: user_id,
-      phone_number: phoneNumber,
-      email: email,
-      first_name: firstName,
-      last_name: lastName,
-      full_name: `${firstName} ${lastName}`,
-    }
-    await setDoc(docRef, docData, { merge: true })
-    .then((res) => {
-        console.log('updated create user entry');
-        setSuccess(true);
-    })
-    .catch((err) => {
-      console.log('err creating user entry, ', err)
-    })
-    */
   }
-
-  const getDynamicTransactionData = async (user_id: string, page_id: any) => {
-    try {
-      console.log('getDynamicTransactionData, user_id: ', user_id);
-      let accessTokens;
-      const q = query(collection(db, "users", user_id, 'access_tokens'));
-      const querySnapshot = await getDocs(q);
-      console.log('before for each');
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-      });
-    } catch (error) {
-      return error;
-    }
-  };
   
   // in backend under <updateCategory>
   const updateCategory = async (category, transactionObjects) => {
@@ -124,11 +87,10 @@ function useProvideFirestore() {
     }
     await setDoc(docRef, docData, { merge: true })
     .then((res) => {
-        console.log('updated category');
         setSuccess(true);
     })
-    .catch((err) => {
-      console.log('err updating category, ', err)
+    .catch((error) => {
+      console.error('err updating category, ', error)
     })
   };
 
@@ -156,11 +118,10 @@ function useProvideFirestore() {
     }
     await setDoc(docRef, docData, { merge: true })
     .then((res) => {
-        console.log('updated billing plan');
         setSuccess(true);
     })
-    .catch((err) => {
-      console.log('err updating billing plan, ', err)
+    .catch((error) => {
+      console.error('err updating billing plan, ', error)
     })
   };
 
@@ -188,32 +149,10 @@ function useProvideFirestore() {
         url: '/api/firebase'
       }
       const response = await axios(config)
-      console.log('firebase createUserEntry response: ', response.data)
       setSuccess(true)
     } catch (error) {
-      console.log('firebase createUserEntry error: ', error)
+      console.error('firebase createUserEntry error: ', error)
     }
-    /*
-    const docRef = doc(db, "users", user_id);
-    const docData = {
-        date_of_birth: dob,
-        address_street: street,
-        address_street2: street2,
-        address_city: city,
-        address_state: state,
-        address_zip: zip,
-        userId: userId,
-        setup: true,
-    };
-    await setDoc(docRef, docData, { merge: true })
-    .then(() => {
-      console.log('updated category');
-      setSuccess(true);
-    })
-    .catch((err) => {
-      console.log('err updating category, ', err)
-    })
-    */
   };
 
   const logSignIn = (method) => {
@@ -251,7 +190,6 @@ function useProvideFirestore() {
     logSignIn,
     logLinkInstitution,
     logTest,
-    getDynamicTransactionData,
   };
 }
 
@@ -267,7 +205,6 @@ interface IProvideFirestore {
   logSignIn: (method: string) => void;
   logLinkInstitution: (institution: string) => void;
   logTest: (test: string) => void;
-  getDynamicTransactionData: (user_id: string, page_id: any) => void;
 }
 
 export const useFirestore = () => useContext(firestoreContext) as IProvideFirestore;

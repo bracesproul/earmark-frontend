@@ -125,23 +125,20 @@ function SignIn() {
     const password = data.get('password');
     // @ts-ignore
     const response = await auth.signin(email, password);
-    console.log('res', response);
     if (response == 'success') {
-      // console.log('RESPONSE: ', response);
       Router.push('/dashboard');
     } else if (response == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
-      console.log(response)
+      console.error(response)
       setLoginError(true);
       setPasswordError(false);
     } else if (response == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
-      console.log(response);
+      console.error(response);
       setLoginError(false);
       setPasswordError(true);
     }
   };
 
   const handlePasswordReset = async (setEmail) => {
-    console.log(setEmail);
     sendPasswordResetEmail(firebaseAuth, setEmail)
     .then(() => {
       console.log("Password reset email sent");
@@ -149,12 +146,12 @@ function SignIn() {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      console.error(errorCode, errorMessage);
       setProviderError(true);
     });
   };
 
   const handleProviderSignin = async (provider) => {
-    console.log(provider, 'sign in clicked');
     auth.signInWithProvider(provider)
   };
 

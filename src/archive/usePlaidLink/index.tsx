@@ -23,9 +23,7 @@ function useProvidePlaidLink() {
     const [linkToken, setLinkToken] = useState(null);
 
     const fetchToken = useCallback(async () => {
-        console.log('fetching token before user check')
         if (!auth.user) return null;
-        console.log('fetching token AFTER user check')
         try {
             const config = {
                 method: "post",
@@ -50,8 +48,6 @@ function useProvidePlaidLink() {
     }, [fetchToken]);
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
-        console.log('api key:', process.env.EARMARK_API_KEY);
-        console.log('inside onsuc cb')
         const config = {
             method: "post",
             headers: {
@@ -66,7 +62,6 @@ function useProvidePlaidLink() {
         };
         try {
             const response = await axios(config);
-            console.log(response.data)
         } catch (error) {
             console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }

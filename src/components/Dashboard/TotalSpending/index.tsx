@@ -33,7 +33,6 @@ const TotalSpending = (props) => {
             url: '/api/dashboard',
         }
         const response = await axios(config)
-        console.log(response.data)
         setTotalSpending(response.data.totalSpending)
     }
     fetchData()

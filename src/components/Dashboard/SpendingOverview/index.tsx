@@ -37,7 +37,6 @@ const SpendingOverview = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(startDate, endDate);
         const config = {
             params: {
                 user_id: props.cookie,
@@ -53,7 +52,6 @@ const SpendingOverview = (props) => {
             url: '/api/dashboard',
         }
         const response = await axios(config)
-        console.log(response.data)
         setSpendingOverview(response.data.spendingOverview)
         setLoading(false)
     }
@@ -134,6 +132,30 @@ const SpendingOverview = (props) => {
   )
 
   function BasicTable() {
+    const [rowColor, setRowColor] = useState([]);
+
+    useEffect(() => {
+      spendingOverview.forEach((row, index) => {
+        if (row.amount < 0) {
+          setRowColor(prevState => [...prevState, {[row.id]: 'bold'}])
+        } else {
+          setRowColor(prevState => [...prevState, {[row.id]: 'normal'}])
+        }
+    });
+    }, [])
+
+    const checkTransactionAmount = (row: any) => {
+      let totalSpent: any = row.amount;
+      if (Math.sign(totalSpent) === -1) {
+        const amountString = totalSpent.toString();
+        totalSpent = `-$${amountString.split('-')[1]}`
+        return totalSpent;
+      } else {
+        totalSpent = `$${totalSpent}`
+        return totalSpent;
+      }
+    };
+
     return (
       <>
       { !loading ? (
@@ -149,22 +171,29 @@ const SpendingOverview = (props) => {
           </TableHead>
           <TableBody>
             {spendingOverview ? (
-            spendingOverview.map((row, index) => (
-              <TableRow
-                key={index}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="left">{row.date}</TableCell>
-                <TableCell align="left">${row.amount}</TableCell>
-                <TableCell align="left">{row.category}</TableCell>
-              </TableRow>
-            ))
+              spendingOverview.map((row, index) => {
+                let bgColor;
+                rowColor.forEach((color) => {
+                  const colorKey = Object.keys(color)[0];
+                  if (colorKey === row.id) {
+                    bgColor = color[row.id];
+                  }
+                })
+                  return (
+                    <TableRow
+                      key={index}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell sx={{ fontWeight: `${bgColor}` }} component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: `${bgColor}` }} align="left">{row.date}</TableCell>
+                      <TableCell sx={{ fontWeight: `${bgColor}` }} align="left">{checkTransactionAmount(row)}</TableCell>
+                      <TableCell sx={{ fontWeight: `${bgColor}` }} align="left">{row.category}</TableCell>
+                    </TableRow>
+                  )
+              })
             ) : <h1>No data</h1>}
-
-
           </TableBody>
         </Table>
       </TableContainer>

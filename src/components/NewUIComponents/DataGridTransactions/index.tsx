@@ -72,7 +72,6 @@ const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, tra
     const { success } = useFirestore();
     
     useEffect(() => {
-        console.log('watching success inside DataGridTransactions', success);
         if (success) {
             setSelectionModel([]);
             setNewDataGrid(dataGridPlaceholder);
@@ -92,14 +91,8 @@ const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, tra
           );
     };
 
-    // dev
-    useEffect(() => {
-        console.log('cats to display', categoriesToDisplay);
-    }, [categoriesToDisplay]);
-
     const handleCategorySubmit = async (e) => {
         e.preventDefault();
-        console.log(selectedCategories);
         let toDisplay = new Array();
         selectedCategories.forEach(category => {
             categoryRows.forEach(row => {
@@ -128,7 +121,7 @@ const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, tra
     
     useEffect(() => {
         if (!selectionModel || selectionModel.length == 0) {
-            console.log("selectionModel is null");
+            console.error("selectionModel is null");
             setNewDataGrid(<></>);
             setDisabled(true);
             return;
@@ -136,7 +129,6 @@ const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, tra
         setRows();
 
         if (selectedRowIds.length > 0) {
-            console.log(selectedRowIds);
             setNewDataGrid(
                 <DataGridComponent message="No transactions selected" rows={categoriesToDisplay} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
             )
@@ -145,7 +137,6 @@ const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, tra
 
     const handleClick = (e) => {
         e.preventDefault();
-        console.log('cc', newCategory)
     }
     const SelectCategory = () => {
         return (

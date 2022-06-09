@@ -152,7 +152,7 @@ Commit [main 83f5618](https://github.com/bracesproul/earmark-backend/commit/83f5
 
 ### Notes
 Dynamic transaction code inside pages file, not yet inside it's own component folder
-Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+Commit [main 641de87](https://github.com/bracesproul/earmark-backend/commit/641de87)
 
 #### Added
 - Added funcationality to individual bank account transactions page at [/dashboard/[ins_id]](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/%5Bins_id%5D.tsx)
@@ -161,3 +161,22 @@ Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
 ### Fixed
 
 ### Changed
+
+
+## [0.0.11] - 2022-06-08
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all other components which use mui datagrid*
+
+#### Added
+- Added global ThemeProvider to _app.tsx for global standardization of colors
+- Added DynamicTransactions folder to components to hold code for /dashboard/ins_id page
+- Selected account button on /dashboard/ins_id page now is contained if that account is selected, outlined if not selected
+- Mobile viewing for /dashboard/ins_id page works well
+
+### Fixed
+- errors now print to console as `console.error` instead of `console.log`
+
+### Changed
+- Removed unnecessary `console.log` statments

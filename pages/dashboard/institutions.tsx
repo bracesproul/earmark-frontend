@@ -30,7 +30,6 @@ export async function getServerSideProps({ req, res }) {
           res.end()
         }
     }
-    console.log('COOKIE', cookie)
     const config = {
         method: "GET",
         url: API_URL + '/api/earmark/allAccountInfo',

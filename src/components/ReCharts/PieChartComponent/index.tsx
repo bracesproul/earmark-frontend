@@ -27,12 +27,11 @@ const PieChartComponent = (props) => {
 
   useEffect(() => {
     if (!auth.user) {
-      console.log('user is NOT logged in, inside the useEffect hook')
+      console.error('user is NOT logged in, inside the useEffect hook')
       return;
     };
     const fetchData = async () => {
       try {
-        console.log('fetchData')
         const config = {
             method: "GET",
             url: '/api/visuals',
@@ -48,10 +47,9 @@ const PieChartComponent = (props) => {
             },
         };
         const axiosResponse = await axios(config);
-        console.log('axiosResponse pie chart: ', axiosResponse.data.final);
         setPieData(axiosResponse.data.final);
       } catch (error) {
-        console.log('error: ', error);
+        console.error('error: ', error);
       }
     };
     fetchData();

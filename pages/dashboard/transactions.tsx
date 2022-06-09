@@ -59,7 +59,6 @@ export async function getServerSideProps({ req, res }) {
         },
     };
     const axiosResponse = await axios(config);
-    console.log('axiosResponse', axiosResponse.data.dataGridTransactions)
     const allTransactionsColumns = [
         { field: 'col1', headerName: 'Name', width: 150 },
         { field: 'col2', headerName: 'Date', width: 150 },
@@ -93,7 +92,6 @@ const Dashboard = ({ categoryRows, dataGridColumns, dataGridRows, transactionMet
     /* @ts-ignore */
     if (!auth.user) return <NeedAuth />;
 
-    console.log(dataGridRows);
     return (
         <div className={styles.dashboard}>
         <HeadTemplate title="Dashboard" description="Dashboard overview for Earmark" iconPath="/favicon.ico" />

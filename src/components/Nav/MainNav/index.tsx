@@ -55,9 +55,7 @@ const MainNav = () => {
       Router.push('/auth/signIn');
       return;
     }
-    console.log('page', page);
     handleCloseNavMenu();
-    console.log(page.pageLink);
     Router.push(page.pageLink);
   }
 

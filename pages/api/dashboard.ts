@@ -95,7 +95,6 @@ export default async function handler(req, res) {
             }
  
             const response = await axios(config)
-            console.log(response.data)
             finalResponse = response.data;
             finalStatus = 200;
             resolve(resolve);

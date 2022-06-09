@@ -10,6 +10,7 @@ import { Button,
  } from '@mui/material';
 import { PlaidLinkInstitution } from '../PlaidLink';
 import { useAuth } from '../../lib/hooks/useAuth';
+import { createTheme, Theme, ThemeProvider, useTheme } from '@mui/material/styles';
 
 const useStyles = makeStyles({
   deleteButton: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles({
 }})
 
 const DatagridAccounts = ({ data }) => {
+  const theme = useTheme();
   const auth = useAuth();
   const skeleton = (
     <>
@@ -66,10 +68,9 @@ const DatagridAccounts = ({ data }) => {
     renderCell: (data) => (
         <Button
           variant="contained"
-          color="primary"
+          color="error"
           size="small"
           onClick={() => handleRemoveInstitution(data.row.id)}
-          className={styling.deleteButton}
         >
           Remove
         </Button>

@@ -62,7 +62,7 @@ const updateUserPassword = async (user_id, password) => {
         await securityChangeLogUpdate(user_id, "Password");
         console.log("Password updated successfully");
       }).catch((error) => {
-        console.log("Error changing password:", error);
+        console.error("Error changing password:", error);
       });
 };
 
@@ -71,7 +71,7 @@ const updateUserEmail = async (user_id, email) => {
         await securityChangeLogUpdate(user_id, "Email");
         console.log("Email updated successfully");
       }).catch((error) => {
-        console.log("Error changing email:", error);
+        console.error("Error changing email:", error);
       });
 };
 
@@ -221,42 +221,34 @@ const EditAccountSettingPopupRowV = ({ element, user_id, title, content }) => {
             case "full_name":
                 setPopupTitle(fullNameInput.title);
                 setToChange(fullNameInput.toChange);
-                console.log(fullNameInput.title);
                 break;
             case "userId":
                 setPopupTitle(usernameInput.title);
                 setToChange(usernameInput.toChange);
-                console.log(usernameInput.title);
                 break;
             case "date_of_birth":
                 setPopupTitle(dateOfBirth.title);
                 setToChange(dateOfBirth.toChange);
-                console.log(dateOfBirth.title);
                 break;
             case "usersAddress":
                 setPopupTitle(addressInput.title);
                 setToChange(addressInput.toChange);
-                console.log(addressInput.title);
                 break;
             case "billing_plan":
                 setPopupTitle(billingPlan.title);
                 setToChange(billingPlan.toChange);
-                console.log(billingPlan.title);
                 break;
             case "email":
                 setPopupTitle(emailInput.title);
                 setToChange(emailInput.toChange);
-                console.log(emailInput.title);
                 break;
             case "phone_number":
                 setPopupTitle(phoneInput.title);
                 setToChange(phoneInput.toChange);
-                console.log(phoneInput.title);
                 break;
             case "password":
                 setPopupTitle(passwordInput.title);
                 setToChange(passwordInput.toChange);
-                console.log(passwordInput.title);
                 break;
         }
     }, []);
@@ -274,7 +266,6 @@ const EditAccountSettingPopupRowV = ({ element, user_id, title, content }) => {
             // Router.reload();
             return;
         } else {
-            console.log('handleSubmit-not password');
             await updateFirestore(user_id, element, edit);
             setEdit("");
             Router.reload();

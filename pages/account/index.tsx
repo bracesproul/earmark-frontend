@@ -46,32 +46,3 @@ export default function Home() {
         </div>
     )
 };
-
-/*
-const Account = ({ }) => {
-    const [setup, setSetup] = useState(false);
-    const auth = useAuth();
-
-    const checkForSetup = async () => {
-        // @ts-ignore
-        const docRef = doc(db, "users", auth.user.uid);
-        const docSnap = await getDoc(docRef);
-    
-        if (!docSnap.data().setup) {
-            console.log("SETUP:", docSnap.data().setup)
-            setSetup(true);
-        } else {
-            console.log()
-            setSetup(false);
-        }
-    }
-    useEffect(() => {
-        checkForSetup();
-        // @ts-ignore
-    }, [auth.user])
-
-    return (
-
-    )
-}
-*/

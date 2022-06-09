@@ -46,8 +46,6 @@ const PlaidLink = ({ user_id, text }) => {
     }, [fetchToken]);
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
-        console.log('api key:', process.env.EARMARK_API_KEY);
-        console.log('inside onsuc cb')
         const config = {
             method: "post",
             headers: {
@@ -61,7 +59,7 @@ const PlaidLink = ({ user_id, text }) => {
         };
         try {
             const response = await axios(config);
-            console.log(response.data)
+            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
         } catch (error) {
             console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
@@ -113,8 +111,6 @@ const PlaidLinkCopy = ({ user_id }) => {
     }, [fetchToken]);
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
-        console.log('api key:', process.env.EARMARK_API_KEY);
-        console.log('inside onsuc cb')
         const config = {
             method: "post",
             headers: {
@@ -128,7 +124,7 @@ const PlaidLinkCopy = ({ user_id }) => {
         };
         try {
             const response = await axios(config);
-            console.log(response.data)
+            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
         } catch (error) {
             console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }

@@ -49,14 +49,13 @@ const StackedBarChart = (props) => {
 
   useEffect(() => {
     if (!auth.user) {
-      console.log('user is logged in, inside the useEffect hook')
+      console.error('user NOT logged in, inside the useEffect hook')
       return;
     };
     
     const fetchData = async () => {
       const user_id: string = auth.user.uid;
       try {
-        console.log('fetchData')
         const config = {
             method: "GET",
             url: '/api/visuals',
@@ -73,7 +72,6 @@ const StackedBarChart = (props) => {
         };
 
         const axiosResponse = await axios(config);
-        console.log('axiosResponse bar chart: ', axiosResponse.data.final);
         setBarChartData(axiosResponse.data.final);
         setMonths(axiosResponse.data.months);
         let keysArray = [];

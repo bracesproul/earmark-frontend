@@ -125,7 +125,6 @@ export default function App() {
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-  console.log('pn', phoneNumber);
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -235,11 +234,10 @@ export default function App() {
         setShowInfo(false)
       }
       if (createPassword.length < 6) {
-        console.log('bad pw')
+        console.error('bad pw')
         setShowAlert(true)
         setAllowNext(false)
       } else {
-        console.log('good pw')
         setShowInfo(false)
         setShowAlert(false)
         setAllowNext(true)

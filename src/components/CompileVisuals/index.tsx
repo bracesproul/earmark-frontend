@@ -64,7 +64,6 @@ const App = () => {
 
 
     const handleChangeVisuals = (e) => {
-        console.log('handle change ran')
         setSelectedVisual(e.target.value);
     };
     const handleChangeDates = (e) => {

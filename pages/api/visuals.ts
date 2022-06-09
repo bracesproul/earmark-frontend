@@ -16,7 +16,6 @@ const cors = initMiddleware(
 const API_URL = globalVars().API_URL;
 
 export default async function handler(req, res) {
-    console.log(req.query);
     // Run cors
     await cors(req, res)
     // Rest of the API logic
@@ -39,7 +38,6 @@ export default async function handler(req, res) {
                 },
             };
             const { data } = await axios(config);
-            console.log('RESPONSE DATA: ', data);
             finalResponse = data;
             finalStatus = 200;
         } catch (error) {

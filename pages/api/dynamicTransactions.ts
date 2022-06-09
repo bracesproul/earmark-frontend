@@ -15,7 +15,6 @@ const cors = initMiddleware(
 const API_URL = globalVars().API_URL;
 
 export default async function handler(req, res) {
-    console.log('inside api call');
     await cors(req, res)
     let finalResponse;
     let finalStatus;

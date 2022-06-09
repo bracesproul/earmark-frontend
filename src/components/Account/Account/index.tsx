@@ -14,7 +14,6 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import CloseIcon  from '@mui/icons-material/Close';
 import { useAuth } from '../../../lib/hooks/useAuth';
@@ -64,23 +63,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const useStyles = makeStyles({
-    deleteButton: {
-      background: '#ed0000',
-      '&:hover': {
-        background: '#c40404',
-    },
-}})
-
 const STATE_ARRAY = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
 const API_URL = globalVars().API_URL;
 
-const theme = createTheme();
-
 export default function Account() {
     const auth = useAuth();
-    const styling = useStyles();
-
 
     const [editSuccessSecurity, setEditSuccessSecurity] = useState(null);
     const [editSuccessAddress, setEditSuccessAddress] = useState(null);
@@ -88,9 +75,9 @@ export default function Account() {
 
     const [openReAuthDialog, setOpenReAuthDialog] = useState(false);
 
-    const [deleteAccountSuccess, setDeleteAccountSuccess] = useState('error.main');
+    const [deleteAccountSuccess, setDeleteAccountSuccess] = useState('error.light');
     const [deleteAccountText, setDeleteAccountText] = useState("Delete Account");
-    const [removeInstitutionsSuccess, setRemoveInstitutionsSuccess] = useState('error.main');
+    const [removeInstitutionsSuccess, setRemoveInstitutionsSuccess] = useState('error.light');
     const [removeInstitutionsText, setRemoveInstitutionsText] = useState("Delete All Institutions");
     const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = useState(false);
     const [openRemoveInstitutionsDialog, setOpenRemoveInstitutionsDialog] = useState(false);
@@ -115,12 +102,10 @@ export default function Account() {
     const [username, setUsername] = useState('');
 
     const getUserInfo = async () => {
-        /* @ts-ignore */
         const userRef = doc(db, "users", auth.user.uid);
         const docSnap = await getDoc(userRef);
     
         if (docSnap.exists()) {
-            // console.log("Document data:", docSnap.data().account_id);
             setFirstName(docSnap.data().first_name);
             setLastName(docSnap.data().last_name);
             setEmail(docSnap.data().email);
@@ -133,8 +118,7 @@ export default function Account() {
             setBirthday(docSnap.data().date_of_birth);
             setUsername(docSnap.data().userId);
         } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
+            console.error("No such document!");
         }
     };
 
@@ -205,7 +189,7 @@ export default function Account() {
             } 
         } catch (error) {
             if (error.response.data === 'error') {
-                setDeleteAccountSuccess('error.main');
+                setDeleteAccountSuccess('error.light');
                 setDeleteAccountText("Failed to delete account");
             }
         }
@@ -230,12 +214,12 @@ export default function Account() {
             const response = await axios(config);
             if (response.data.response === 'success') {
                 handleCloseRemoveInstitutionsDialog();
-                setRemoveInstitutionsSuccess('success.main');
+                setRemoveInstitutionsSuccess('success.light');
                 setRemoveInstitutionsText("Successfully removed all institutions");
             } 
         } catch (error) {
             if (error.response.data === 'error') {
-                setDeleteAccountSuccess('error.main');
+                setDeleteAccountSuccess('error.light');
                 setDeleteAccountText("Failed to delete account");
             }
         }
@@ -264,13 +248,13 @@ export default function Account() {
             }
             const response = await axios(config);
             if (response.data.response === 'success') {
-                setEditSuccessSecurity('success.main');
+                setEditSuccessSecurity('success.light');
                 setSecurityButtonText("Success!");
                 setOpenReAuthDialog(true)
             } 
         } catch (error) {
             if (error.response.data === 'error') {
-                setEditSuccessSecurity('error.main');
+                setEditSuccessSecurity('error.light');
                 setSecurityButtonText("Changes failed to save");
             }
         }
@@ -303,12 +287,12 @@ export default function Account() {
             }
             const response = await axios(config);
             if (response.data.response === 'success') {
-                setEditSuccessAddress('success.main');
+                setEditSuccessAddress('success.light');
                 setAddressButtonText("Success!");
             } 
         } catch (error) {
             if (error.response.data === 'error') {
-                setEditSuccessAddress('error.main');
+                setEditSuccessAddress('error.light');
                 setAddressButtonText("Changes failed to save");
             }
         }
@@ -334,14 +318,13 @@ export default function Account() {
             }
             const response = await axios(config);
             if (response.data.response === 'success') {
-                console.log('success personal');
-                setEditSuccessPersonal('success.main');
+                setEditSuccessPersonal('success.light');
                 setPersonalButtonText("Success!");
             } 
         } catch (error) {
-            console.log(error)
+            console.error(error)
             if (error.response.data === 'error') {
-                setEditSuccessPersonal('error.main');
+                setEditSuccessPersonal('error.light');
                 setPersonalButtonText("Changes failed to save");
             }
         }
@@ -367,8 +350,8 @@ export default function Account() {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCloseDeleteAccountDialog}>Exit</Button>
-                <Button onClick={handleDeleteAccount}>Delete Account</Button>
+                <Button color="secondary" onClick={handleCloseDeleteAccountDialog}>Exit</Button>
+                <Button color="error" onClick={handleDeleteAccount}>Delete Account</Button>
             </DialogActions>
             </Dialog>
             </>
@@ -395,8 +378,8 @@ export default function Account() {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCloseRemoveInstitutionsDialog}>Exit</Button>
-                <Button onClick={handleRemoveAllInstitutions}>Remove Institutions</Button>
+                <Button color="secondary" onClick={handleCloseRemoveInstitutionsDialog}>Exit</Button>
+                <Button color="error" onClick={handleRemoveAllInstitutions}>Remove Institutions</Button>
             </DialogActions>
             </Dialog>
             </>
@@ -420,7 +403,7 @@ export default function Account() {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => Router.push('/auth/signIn')}>Sign In</Button>
+                <Button sx={{fontWeight: 'bold'}} color='primary' onClick={() => Router.push('/auth/signIn')}>Sign In</Button>
             </DialogActions>
             </Dialog>
             </>
@@ -429,7 +412,6 @@ export default function Account() {
 
     return (
         <>
-        <ThemeProvider theme={theme} >
             <Box sx={{ display: 'flex', flexDirection: 'column', margin: 'auto', padding: '3rem'}}>
             <ReAuthDialog />
             <Paper sx={{ display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={3}>
@@ -692,7 +674,7 @@ export default function Account() {
                         <Button
                         type="button"
                         fullWidth
-                        className={styling.deleteButton}
+                        color="error"
                         variant="contained"
                         onClick={handleOpenDeleteAccountDialog}
                         sx={{ backgroundColor: deleteAccountSuccess, mt: 3, mb: 2 }}
@@ -704,7 +686,7 @@ export default function Account() {
                         <Button
                         type="button"
                         fullWidth
-                        className={styling.deleteButton}
+                        color="error"
                         variant="contained"
                         onClick={handleOpenRemoveInstitutionsDialog}
                         sx={{ backgroundColor: removeInstitutionsSuccess, mt: 3, mb: 2 }}
@@ -720,8 +702,6 @@ export default function Account() {
             </Paper>
             <Authentication />
             </Box>
-
-        </ThemeProvider>
         </>
     );
 }
@@ -734,7 +714,6 @@ const Authentication = () => {
 
     const handleLinkProvider = (provider) => {
         const response = auth.linkOtherProvider(provider)
-        console.log(response)
     };
 
     const handleVerifyEmail = async () => {
