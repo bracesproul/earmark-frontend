@@ -7,6 +7,7 @@ import { makeStyles } from '@mui/styles';
 import { Button,
   Skeleton,
   Box,
+  Tooltip
  } from '@mui/material';
 import { PlaidLinkInstitution } from '../PlaidLink';
 import { useAuth } from '../../lib/hooks/useAuth';
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 }})
 
 const DatagridAccounts = ({ data }) => {
+  console.log(data);
   const theme = useTheme();
   const auth = useAuth();
   const skeleton = (
@@ -51,29 +53,39 @@ const DatagridAccounts = ({ data }) => {
     headerName: 'Transactions', 
     width: 150, 
     renderCell: (data) => (
+      <>
+      <Tooltip title="View transactions">
         <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => Router.push(`/dashboard/${data.row.ins_id}`)}
-          sx={{ padding: '0.25rem 0.5rem' }}
+        variant="contained"
+        color="primary"
+        size="small"
+        onClick={() => Router.push(`/dashboard/${data.row.ins_id}?account_id=${data.row.id}`)}
+        sx={{ padding: '0.25rem 0.5rem' }}
         >
           Transactions
         </Button>
+      </Tooltip>
+      </>
+
     )
     },
     { field: 'col8', 
     headerName: 'Remove Institution', 
     width: 150, 
     renderCell: (data) => (
+      <>
+      <Tooltip title="Remove institution">
         <Button
-          variant="contained"
-          color="error"
-          size="small"
-          onClick={() => handleRemoveInstitution(data.row.id)}
-        >
+        variant="contained"
+        color="error"
+        size="small"
+        onClick={() => handleRemoveInstitution(data.row.id)}
+          >
           Remove
         </Button>
+      </Tooltip>
+      </>
+
     )
     },
     { field: 'ins_id', headerName: 'Ins_id', width: 60, hide: true },

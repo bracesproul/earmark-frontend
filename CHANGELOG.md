@@ -135,8 +135,9 @@ Sign in with provider 1/3 working
 ## [0.0.9] - 2022-06-06
 
 ### Notes
-Plaid Link sidenav option removed because it was recalling everytime the page was loaded, or a new page was loaded. This was making excess api calls. Switched to link banks through the institutions page or when you first create an account.
 Commit [main 83f5618](https://github.com/bracesproul/earmark-backend/commit/83f5618)
+
+Plaid Link sidenav option removed because it was recalling everytime the page was loaded, or a new page was loaded. This was making excess api calls. Switched to link banks through the institutions page or when you first create an account.
 
 #### Added
 - Connected [Stacked Bar Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/StackedBarChart) & [Line Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/LineChartComponent) & [Pie Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/PieChartComponent) to backend, select date range working, categories not working
@@ -151,8 +152,9 @@ Commit [main 83f5618](https://github.com/bracesproul/earmark-backend/commit/83f5
 ## [0.0.10] - 2022-06-08
 
 ### Notes
-Dynamic transaction code inside pages file, not yet inside it's own component folder
 Commit [main 641de87](https://github.com/bracesproul/earmark-backend/commit/641de87)
+
+Dynamic transaction code inside pages file, not yet inside it's own component folder
 
 #### Added
 - Added funcationality to individual bank account transactions page at [/dashboard/[ins_id]](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/%5Bins_id%5D.tsx)
@@ -166,7 +168,8 @@ Commit [main 641de87](https://github.com/bracesproul/earmark-backend/commit/641d
 ## [0.0.11] - 2022-06-08
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+Commit [main 4830c83](https://github.com/bracesproul/earmark-backend/commit/4830c83)
+
 Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all other components which use mui datagrid*
 
 #### Added
@@ -180,3 +183,28 @@ Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all othe
 
 ### Changed
 - Removed unnecessary `console.log` statments
+- Buttons now use the mui light color as default
+
+
+## [0.0.12] - 2022-06-08
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+
+#### Added
+- Added button inside 'account balances' component on /dashboard page to link to individual account transactions page
+- Added tooltip to
+    - transactions button inside 'account balances'
+    - Account button options inside /dashboard/ins_id page (desktop only)
+    - transactions and remove buttons inside /dashboard/institutions page
+
+### Fixed
+- On page load for /dashboard/ins_id page, the query paramater `account_id` is checked, if it is not present, the first account is selected, else the account is selected based on the query paramater
+- Account details on /dashboard page is now connected to backend
+- Added keys to components which map through arrays and didn't have key, causing warning errors
+
+### Changed
+- When "Transactions" button is clicked on /dashboard/institutions page, it now pushes `?account_id=<ACCOUNT ID>` to the url as a query paramter
+- Disabled recurring, investments, transfers sidenav tabs because they're not setup yet
+- Made institution name on account balances bold
+- Removed connect bank from sidenav (excess api calls, moved to startup proccess and moved to /dashboard/institutions page)

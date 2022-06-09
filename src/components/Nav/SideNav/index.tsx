@@ -38,22 +38,22 @@ const drawerWidth = 240;
 type Anchor = 'left';
 
 const SIDENAV_OTHER_PAGES_AUTH = [
-    {pageName: "Account", pageLink: "/account"},
-    {pageName: "Sign Out", pageLink: "/auth/signIn"},
+    {pageName: "Account", pageLink: "/account", disabled: false},
+    {pageName: "Sign Out", pageLink: "/auth/signIn", disabled: false},
 ];
 
 const SIDENAV_OTHER_PAGES_NO_AUTH = [
-    {pageName: "Sign In", pageLink: "/auth/signIn"},
-    {pageName: "Sign Up", pageLink: "/auth/signUp"},
+    {pageName: "Sign In", pageLink: "/auth/signIn", disabled: false},
+    {pageName: "Sign Up", pageLink: "/auth/signUp", disabled: false},
 ];
 const SIDENAV_PAGES = [
-    {pageName: "Dashboard", pageLink: "/dashboard", isPlaidLink: false},
-    {pageName: "Transactions", pageLink: "/dashboard/transactions", isPlaidLink: false},
-    {pageName: "Visualize", pageLink: "/dashboard/visualize", isPlaidLink: false},
-    {pageName: "Recurring", pageLink: "/dashboard/recurring", isPlaidLink: false},
-    {pageName: "Investments", pageLink: "/dashboard/investments", isPlaidLink: false},
-    {pageName: "Transfers", pageLink: "/dashboard/transfers", isPlaidLink: false},
-    {pageName: "Institutions", pageLink: "/dashboard/institutions", isPlaidLink: false},
+    {pageName: "Dashboard", pageLink: "/dashboard", isPlaidLink: false, disabled: false},
+    {pageName: "Transactions", pageLink: "/dashboard/transactions", isPlaidLink: false, disabled: false},
+    {pageName: "Visualize", pageLink: "/dashboard/visualize", isPlaidLink: false, disabled: false},
+    {pageName: "Recurring", pageLink: "/dashboard/recurring", isPlaidLink: false, disabled: true},
+    {pageName: "Investments", pageLink: "/dashboard/investments", isPlaidLink: false, disabled: true},
+    {pageName: "Transfers", pageLink: "/dashboard/transfers", isPlaidLink: false, disabled: true},
+    {pageName: "Institutions", pageLink: "/dashboard/institutions", isPlaidLink: false, disabled: false},
 ];
 
 const SideNav = () => {
@@ -109,7 +109,7 @@ const SideNav = () => {
             {SIDENAV_PAGES.map((text, index) => (
             <a key={text.pageName} href={text.pageLink}>
             <ListItem onClick={index => handleButtonClick(text)} disablePadding>
-                <ListItemButton>
+                <ListItemButton disabled={text.disabled}>
                 <ListItemIcon>
                     { index === 0 ? <DashboardIcon /> : null}
                     { index === 1 ? <PaidIcon /> : null }
@@ -124,7 +124,6 @@ const SideNav = () => {
             </ListItem>
             </a>
             ))}
-            {/*<PlaidLink user_id={auth.user.uid} />*/}
         </List>
         <Divider />
         </>
@@ -134,7 +133,7 @@ const SideNav = () => {
             {otherPages.map((text, index) => (
                 <a key={text.pageName} href={text.pageLink}>
                 <ListItem onClick={index => handleButtonClick(text)} disablePadding>
-                    <ListItemButton>
+                    <ListItemButton disabled={text.disabled}>
                     <ListItemIcon>
                         { index === 0 ? <ManageAccountsIcon /> : null }
                         { index === 1 ? <LoginIcon /> : null }
@@ -223,7 +222,7 @@ const SideNav = () => {
                     {SIDENAV_PAGES.map((text, index) => (
                     <a key={text.pageName} href={text.pageLink}>
                     <ListItem onClick={index => handleButtonClick(text)} disablePadding>
-                        <ListItemButton>
+                        <ListItemButton disabled={text.disabled}>
                         <ListItemIcon>
                             { index === 0 ? <DashboardIcon /> : null}
                             { index === 1 ? <PaidIcon /> : null }
@@ -238,7 +237,6 @@ const SideNav = () => {
                     </ListItem>
                     </a>
                     ))}
-                    <PlaidLink user_id={auth.user.uid} />
                 </List>
                 <Divider />
                 </>
@@ -248,7 +246,7 @@ const SideNav = () => {
                     {otherPages.map((text, index) => (
                     <a key={text.pageName} href={text.pageLink}>
                     <ListItem onClick={index => handleButtonClick(text)} disablePadding>
-                        <ListItemButton>
+                        <ListItemButton disabled={text.disabled}>
                         <ListItemIcon>
                             { index === 0 ? <ManageAccountsIcon /> : null }
                             { index === 1 ? <LoginIcon /> : null }

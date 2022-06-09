@@ -31,6 +31,7 @@ const TotalSpending = (props) => {
                 'Content-Type': 'application/json',
             },
             url: '/api/dashboard',
+            method: 'GET'
         }
         const response = await axios(config)
         setTotalSpending(response.data.totalSpending)
@@ -55,11 +56,11 @@ const TotalSpending = (props) => {
           Total Spending
         </Typography>
         <Divider />
-        <Grid spacing={2}>
+        <Grid>
       { totalSpending.length == 3 ? (
         <>
-        {totalSpending.map((spending) => (
-          <React.Fragment key={spending.timeframe}>
+        {totalSpending.map((spending, index) => (
+          <React.Fragment key={index}>
             <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
               {spending.timeframe}
             </Typography>
