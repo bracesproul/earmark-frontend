@@ -67,7 +67,7 @@ const AccountBalance = (props) => {
           </Typography>
           <Button
           variant="contained" 
-          onClick={() => console.log('more clicked')}
+          onClick={() => Router.push('/dashboard/institutions')}
           sx={{ marginLeft: '15px', marginBottom: '15px', maxWidth: 'fitContent', maxHeight: 'fitContent', fontSize: '12px' }}
           >
             Detailed account information
@@ -95,7 +95,7 @@ const AccountBalance = (props) => {
               justifyContent: 'flex-end'
             }}>
               <IconButton
-              onClick={() => console.log('more clicked')}
+              onClick={() => Router.push('/dashboard/institutions')}
               >
                 <AccountBalanceIcon />
               </IconButton>

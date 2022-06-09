@@ -189,7 +189,7 @@ Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all othe
 ## [0.0.12] - 2022-06-08
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+Commit [main 5d81c60](https://github.com/bracesproul/earmark-backend/commit/5d81c60)
 
 #### Added
 - Added button inside 'account balances' component on /dashboard page to link to individual account transactions page
@@ -208,3 +208,17 @@ Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
 - Disabled recurring, investments, transfers sidenav tabs because they're not setup yet
 - Made institution name on account balances bold
 - Removed connect bank from sidenav (excess api calls, moved to startup proccess and moved to /dashboard/institutions page)
+
+
+## [0.0.13] - 2022-06-08
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+
+#### Added
+
+### Fixed
+- Button to go to /dashboard/institutions from account details on /dashboard now works
+- added `http://` to begining of url for backend server inside `globalVars` folder
+
+### Changed
