@@ -37,13 +37,16 @@ function createData(
 const TopMerchants = (props) => {
     const [dateSelection, setDateSelection] = useState('7 Days');
     const [topMerchants, setTopMerchants] = useState([]);
-    const [startDate, setStartDate] = useState('2022-04-28');
-    const [endDate, setEndDate] = useState('2022-06-05');
-    const [reCallData, setReCallData] = useState(false);
+    const [startDate, setStartDate] = useState(moment().subtract(7, 'days').format('YYYY-MM-DD'));
+    const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
     const [loading, setLoading] = useState(true);
+    const [reCallTimeFrame, setReCallTimeFrame] = useState('7days')
 
-    useEffect(() => {
-        const fetchData = async () => {
+    const fetchData = async () => {
+        console.log('fetch data running');
+        try {
+            const currentTime = Date.now();
+            const expTime = currentTime + 86400000;
             const config = {
                 params: {
                     user_id: props.cookie,
@@ -61,35 +64,54 @@ const TopMerchants = (props) => {
             const { data } = await axios(config)
             console.log('DATA RESPONSE TOP MERCHANTS', data);
             setTopMerchants(data.topMerchants);
+            localStorage.setItem(`topMerchantsCachedData${reCallTimeFrame}`, JSON.stringify(data.topMerchants));
+            localStorage.setItem(`topMerchantsCacheExpTime${reCallTimeFrame}`, expTime.toString());
             setLoading(false)
+        } catch (error) {
+            console.error(error)
         }
-        fetchData()
+    }
+
+    const cacheData = (reCallType) => {
+        if (typeof window == "undefined") return;
+        const currentTime = Date.now();
+        const cacheExpTime = parseInt(localStorage.getItem(`topMerchantsCacheExpTime${reCallType}`));
+        const cachedData = JSON.parse(localStorage.getItem(`topMerchantsCachedData${reCallType}`));
+        if (!cacheExpTime || !cachedData) {
+            fetchData();
+        } else if (cacheExpTime < currentTime) {
+            fetchData();
+        } else if (cacheExpTime > currentTime) {
+            setTopMerchants(cachedData);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (typeof window == "undefined") return;
+        cacheData(reCallTimeFrame);
     }, [startDate])
 
     const handleSelectChange = (event: SelectChangeEvent) => {
         if (event.target.value === '7 Days') {
-            let startDate = moment();
-            let endDate = moment();
-            setStartDate(startDate.subtract(7, 'days').format('YYYY-MM-DD'));
-            setEndDate(endDate.format('YYYY-MM-DD'));
+            let startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+            setStartDate(startDate);
+            setReCallTimeFrame('7days');
             setLoading(true);
         } else if (event.target.value === '2 Weeks') {
-            let startDate = moment();
-            let endDate = moment();
-            setStartDate(startDate.subtract(14, 'days').format('YYYY-MM-DD'));
-            setEndDate(endDate.format('YYYY-MM-DD'));
+            let startDate = moment().subtract(14, 'days').format('YYYY-MM-DD');
+            setStartDate(startDate);
+            setReCallTimeFrame('2weeks');
             setLoading(true);
         } else if (event.target.value === '30 Days') {
-            let startDate = moment();
-            let endDate = moment();
-            setStartDate(startDate.subtract(30, 'days').format('YYYY-MM-DD'));
-            setEndDate(endDate.format('YYYY-MM-DD'));
+            let startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+            setStartDate(startDate);
+            setReCallTimeFrame('30days');
             setLoading(true);
         } else if (event.target.value === '6 Months') {
-            let startDate = moment();
-            let endDate = moment();
-            setStartDate(startDate.subtract(6, 'months').format('YYYY-MM-DD'));
-            setEndDate(endDate.format('YYYY-MM-DD'));
+            let startDate = moment().subtract(6, 'months').format('YYYY-MM-DD');
+            setStartDate(startDate);
+            setReCallTimeFrame('6mo');
             setLoading(true);
         }
         setDateSelection(event.target.value as string);

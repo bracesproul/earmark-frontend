@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Link from "next/link";
-import styles from '../../../../styles/Misc/NotSignedIn.module.css'
+import styles from '../../../styles/Misc/NotSignedIn.module.css'
 
 const NotSignedIn = () => {
     return (

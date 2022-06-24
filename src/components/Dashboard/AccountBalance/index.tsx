@@ -32,12 +32,10 @@ const AccountBalance = (props) => {
   const auth = useAuth();
   const [accountDetails, setAccountDetails] = useState([]);
 
-  useEffect(() => {
-    if (!auth.user) {
-      console.error('no user logged in');
-      return;
-    }
-    const fetchData = async () => {
+  const fetchData = async () => {
+    try {
+      const currentTime = Date.now();
+      const expTime = currentTime + 2600000000;
       const config = {
         method: 'GET',
         headers: {
@@ -52,10 +50,32 @@ const AccountBalance = (props) => {
         }
       }
       const { data } = await axios(config);
+      const cachedAccountData = JSON.parse(localStorage.getItem(`accountBalanceCachedData`));
+      if (cachedAccountData == data.accountDetails) return;
       setAccountDetails(data.accountDetails);
+      localStorage.setItem(`accountBalanceCachedData`, JSON.stringify(data.accountDetails));
+      localStorage.setItem(`accountBalanceCacheExpTime`, expTime.toString());
       console.log('acc balance', data)
-    };
-    fetchData();
+    } catch (error) {console.error(error)}
+  };
+
+  const cacheData = () => {
+    if (typeof window == "undefined") return;
+    const currentTime = Date.now();
+    const cacheExpTime = parseInt(localStorage.getItem(`accountBalanceCacheExpTime`));
+    const cachedData = JSON.parse(localStorage.getItem(`accountBalanceCachedData`));
+    if (!cacheExpTime || !cachedData) {
+      fetchData();
+    } else if (cacheExpTime < currentTime) {
+      fetchData();
+    } else if (cacheExpTime > currentTime) {
+      setAccountDetails(cachedData);
+      fetchData();
+    }
+  };
+
+  useEffect(() => {
+    cacheData();
   }, []);
   
     const card = (

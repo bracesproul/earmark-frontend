@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Head from "next/head";
-import styles from '../../../styles/Dashboard/Transfers.module.css';
+import styles from '../../styles/Dashboard/Transfers.module.css';
 import SideNav from "../Nav/SideNav";
 import { useAuth } from "../../lib/hooks/useAuth";
 import NotSignedIn from "../Auth/NotSignedIn";
@@ -11,7 +11,6 @@ const HeadTemplate = ({ title, description, iconPath }) => {
         <Head>
             <title>{title}</title>
             <meta name="description" content={description} />
-            <link rel="icon" href={iconPath} />
         </Head>
     )
 };
@@ -23,7 +22,6 @@ const Template = (props) => {
         <Head>
             <title>{props.title}</title>
             <meta name="description" content={props.description} />
-            <link rel="icon" href={icon} />
         </Head>
         <main className={styles.main}>
             <SideNav />

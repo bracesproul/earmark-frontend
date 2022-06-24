@@ -7,7 +7,7 @@ import { DataGrid,
     GridRowsProp,
     GridColDef,
 } from '@mui/x-data-grid';
-import styles from '../../../../styles/Dashboard/Dashboard.module.css';
+import styles from '../../../styles/Dashboard/Dashboard.module.css';
 import DataGridComponent from '../Datagrid';
 import CreateCategoryPopup from '../CreateCategoryPopup'
 import { useFirestore } from '../../../lib/hooks/useFirestore';

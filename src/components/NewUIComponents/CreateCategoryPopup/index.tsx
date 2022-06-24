@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import styles from '../../../../styles/Dashboard/Dashboard.module.css';
+import styles from '../../../styles/Dashboard/Dashboard.module.css';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import { useFirestore } from '../../../lib/hooks/useFirestore'
 import { Select,

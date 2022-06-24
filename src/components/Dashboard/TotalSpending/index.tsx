@@ -14,29 +14,56 @@ import React, {
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import axios from 'axios';
+import moment from 'moment'
   
 const TotalSpending = (props) => {
   const [totalSpending, setTotalSpending] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-        const config = {
-            params: {
-                user_id: props.cookie,
-                startDate: '2022-02-28',
-                endDate: '2022-06-05',
-                queryType: 'totalSpending',
-            },
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            url: '/api/dashboard',
-            method: 'GET'
-        }
-        const response = await axios(config)
-        setTotalSpending(response.data.totalSpending)
+  const fetchData = async () => {
+    try {
+      const endDate = moment().format('YYYY-MM-DD');
+      const startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+      const currentTime = Date.now();
+      const expTime = currentTime + 86400000;
+      const config = {
+        params: {
+            user_id: props.cookie,
+            startDate: startDate,
+            endDate: endDate,
+            queryType: 'totalSpending',
+        },
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/dashboard',
+        method: 'GET'
     }
-    fetchData()
+    const response = await axios(config)
+    setTotalSpending(response.data.totalSpending)
+    localStorage.setItem(`totalSpendingCacheExpTime`, expTime.toString());
+    localStorage.setItem(`totalSpendingCachedData`, JSON.stringify(response.data.totalSpending));
+    } catch (error) {
+      console.error(error);
+    };
+  };
+
+  const cacheData = () => {
+    if (typeof window == "undefined") return;
+    console.log('TOTAL SPENDING CHECK CACHE RUNNING');
+    const currentTime = Date.now();
+    const cacheExpTime = parseInt(localStorage.getItem(`totalSpendingCacheExpTime`));
+    const cachedData = JSON.parse(localStorage.getItem(`totalSpendingCachedData`));
+    if (!cacheExpTime || !cachedData) {
+        fetchData();
+    } else if (cacheExpTime < currentTime) {
+        fetchData();
+    } else if (cacheExpTime > currentTime) {
+        setTotalSpending(cachedData);
+    }
+  };
+
+  useEffect(() => {
+    cacheData()
   }, [])
 
   const skeleton = (

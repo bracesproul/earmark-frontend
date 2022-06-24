@@ -26,62 +26,77 @@ import axios from 'axios';
 import moment from 'moment';
 
 const SpendingOverview = (props) => {
-  let firstStartDate = moment();
-  let firstEndDate = moment();
   const [dateSelection, setDateSelection] = useState('24 Hours');
-  const [dataRows, setdataRows] = useState(null);
   const [spendingOverview, setSpendingOverview] = useState([]);
-  const [startDate, setStartDate] = useState(firstStartDate.format('YYYY-MM-DD'));
-  const [endDate, setEndDate] = useState(firstEndDate.format('YYYY-MM-DD'));
+  const [startDate, setStartDate] = useState(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+  const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
   const [loading, setLoading] = useState(true);
+  const [reCallTimeFrame, setReCallTimeFrame] = useState('24hrs')
+
+  const fetchData = async () => {
+    try {
+      const currentTime = Date.now();
+      const expTime = currentTime + 86400000;
+      const config = {
+        params: {
+            user_id: props.cookie,
+            startDate: '2022-02-28',
+            endDate: '2022-06-05',
+            spendingStartDate: startDate,
+            spendingEndDate: moment().format('YYYY-MM-DD'),
+            queryType: 'spendingOverview',
+        },
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/dashboard',
+    }
+    const response = await axios(config)
+    setSpendingOverview(response.data.spendingOverview)
+    localStorage.setItem(`spendingOverviewCachedData${reCallTimeFrame}`, JSON.stringify(response.data.spendingOverview));
+    localStorage.setItem(`spendingOverviewCacheExpTime${reCallTimeFrame}`, expTime.toString());
+    setLoading(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const cacheData = (reCallType) => {
+    if (typeof window == "undefined") return;
+    const currentTime = Date.now();
+    const cacheExpTime = parseInt(localStorage.getItem(`spendingOverviewCacheExpTime${reCallType}`));
+    const cachedData = JSON.parse(localStorage.getItem(`spendingOverviewCachedData${reCallType}`));
+    if (!cacheExpTime || !cachedData) {
+        fetchData();
+    } else if (cacheExpTime < currentTime) {
+        fetchData();
+    } else if (cacheExpTime > currentTime) {
+        setSpendingOverview(cachedData);
+        setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-        const config = {
-            params: {
-                user_id: props.cookie,
-                startDate: '2022-02-28',
-                endDate: '2022-06-05',
-                spendingStartDate: startDate,
-                spendingEndDate: endDate,
-                queryType: 'spendingOverview',
-            },
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            url: '/api/dashboard',
-        }
-        const response = await axios(config)
-        setSpendingOverview(response.data.spendingOverview)
-        setLoading(false)
-    }
-    fetchData()
+    if (typeof window == "undefined") return;
+    cacheData(reCallTimeFrame);
   }, [startDate])
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     if (event.target.value === '24 Hours') {
-      let startDate = moment();
-      let endDate = moment();
-      setStartDate(startDate.format('YYYY-MM-DD'));
-      setEndDate(endDate.format('YYYY-MM-DD'));
+      setStartDate(moment().format('YYYY-MM-DD'));
+      setReCallTimeFrame('24hrs')
       setLoading(true);
     } else if (event.target.value === '7 Days') {
-      let startDate = moment();
-      let endDate = moment();
-      setStartDate(startDate.subtract(7, 'days').format('YYYY-MM-DD'));
-      setEndDate(endDate.format('YYYY-MM-DD'));
+      setStartDate(moment().subtract(7, 'days').format('YYYY-MM-DD'));
+      setReCallTimeFrame('7days')
       setLoading(true);
     } else if (event.target.value === '2 Weeks') {
-      let startDate = moment();
-      let endDate = moment();
-      setStartDate(startDate.subtract(14, 'days').format('YYYY-MM-DD'));
-      setEndDate(endDate.format('YYYY-MM-DD'));
+      setStartDate(moment().subtract(14, 'days').format('YYYY-MM-DD'));
+      setReCallTimeFrame('2weeks')
       setLoading(true);
     } else if (event.target.value === '1 Month') {
-      let startDate = moment();
-      let endDate = moment();
-      setStartDate(startDate.subtract(1, 'months').format('YYYY-MM-DD'));
-      setEndDate(endDate.format('YYYY-MM-DD'));
+      setStartDate(moment().subtract(1, 'months').format('YYYY-MM-DD'));
+      setReCallTimeFrame('1mo')
       setLoading(true);
     }
     setDateSelection(event.target.value as string);

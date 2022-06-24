@@ -53,30 +53,37 @@ const LineChartComponent = (props) => {
       return;
     };
     const fetchData = async () => {
+      // console.log('fetch data running')
+      try {
         const config = {
-            method: "GET",
-            url: '/api/visuals',
-            params: {
-                user_id: auth.user.uid,
-                queryType: 'lineChart',
-                startDate: startDate,
-                endDate: today,
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                'earmark-api-key': process.env.EARMARK_API_KEY,
-            },
-        };
-        const axiosResponse = await axios(config);
-        setLineChartData(axiosResponse.data.final);
-        setMonths(axiosResponse.data.months);
-        let keysArray = [];
-        elements.forEach((element) => {
-          if (axiosResponse.data.categories.includes(element.dataKey)) {
-            keysArray.push({ dataKey: element.dataKey, stackId: element.stackId, fill: element.fill })
-          }
-        });
-        setKey(keysArray);
+          method: "GET",
+          url: '/api/visuals',
+          params: {
+              user_id: auth.user.uid,
+              queryType: 'lineChart',
+              startDate: startDate,
+              endDate: today,
+          },
+          headers: {
+              'Content-Type': 'application/json',
+              'earmark-api-key': process.env.EARMARK_API_KEY,
+          },
+      };
+      const axiosResponse = await axios(config);
+      console.log('axiosres', axiosResponse.data)
+      setLineChartData(axiosResponse.data.final);
+      setMonths(axiosResponse.data.months);
+      let keysArray = [];
+      elements.forEach((element) => {
+        if (axiosResponse.data.categories.includes(element.dataKey)) {
+          keysArray.push({ dataKey: element.dataKey, stackId: element.stackId, fill: element.fill })
+        }
+      });
+      setKey(keysArray);
+      } catch (error) {
+        console.error(error)
+      }
+
     };
     fetchData();
   }, [startDate])

@@ -1,0 +1,58 @@
+.sideNavContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    position: relative;
+    left: 0;
+    max-width: fit-content;
+    min-width: 190px;
+    min-height: 100%;
+    background-color: rgb(63, 63, 63);
+}
+
+.accountDropdownContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.sideNavOption {
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    font-weight: 300;
+}
+
+.sideNavOption:hover {
+    text-decoration: underline;
+    font-weight: 400;
+}
+
+.accountDropdownList {
+    margin: 1rem;
+    color: white;
+    cursor: pointer;
+    padding-right: 10px;
+    font-weight: 300;
+}
+
+.accountDropdownList:hover {
+    font-weight: 400;
+    text-decoration: underline;
+}
+
+.sideNavAuthContainer {
+    position: fixed;
+    bottom: 0;
+    left: 10px;
+}
+
+.authOption {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+  
+.authOption:hover {
+    text-decoration: underline;
+}

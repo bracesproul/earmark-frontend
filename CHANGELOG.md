@@ -135,7 +135,7 @@ Sign in with provider 1/3 working
 ## [0.0.9] - 2022-06-06
 
 ### Notes
-Commit [main 83f5618](https://github.com/bracesproul/earmark-backend/commit/83f5618)
+Commit [main 83f5618](https://github.com/bracesproul/earmark-frontend/commit/83f5618)
 
 Plaid Link sidenav option removed because it was recalling everytime the page was loaded, or a new page was loaded. This was making excess api calls. Switched to link banks through the institutions page or when you first create an account.
 
@@ -152,7 +152,7 @@ Plaid Link sidenav option removed because it was recalling everytime the page wa
 ## [0.0.10] - 2022-06-08
 
 ### Notes
-Commit [main 641de87](https://github.com/bracesproul/earmark-backend/commit/641de87)
+Commit [main 641de87](https://github.com/bracesproul/earmark-frontend/commit/641de87)
 
 Dynamic transaction code inside pages file, not yet inside it's own component folder
 
@@ -168,7 +168,7 @@ Dynamic transaction code inside pages file, not yet inside it's own component fo
 ## [0.0.11] - 2022-06-08
 
 ### Notes
-Commit [main 4830c83](https://github.com/bracesproul/earmark-backend/commit/4830c83)
+Commit [main 4830c83](https://github.com/bracesproul/earmark-frontend/commit/4830c83)
 
 Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all other components which use mui datagrid*
 
@@ -189,7 +189,7 @@ Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all othe
 ## [0.0.12] - 2022-06-08
 
 ### Notes
-Commit [main 5d81c60](https://github.com/bracesproul/earmark-backend/commit/5d81c60)
+Commit [main 5d81c60](https://github.com/bracesproul/earmark-frontend/commit/5d81c60)
 
 #### Added
 - Added button inside 'account balances' component on /dashboard page to link to individual account transactions page
@@ -213,7 +213,7 @@ Commit [main 5d81c60](https://github.com/bracesproul/earmark-backend/commit/5d81
 ## [0.0.13] - 2022-06-08
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
+Commit [main e08ddd7](https://github.com/bracesproul/earmark-frontend/commit/e08ddd7)
 
 #### Added
 
@@ -222,3 +222,22 @@ Commit [main ](https://github.com/bracesproul/earmark-backend/commit/)
 - added `http://` to begining of url for backend server inside `globalVars` folder
 
 ### Changed
+
+
+## [0.0.14] - 2022-06-08
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+All `/dashboard` api calls are now cached for 24 hours*. Each call is cached, this means if a user never requests to see spending overview data from the past month and only looks at 24 hours and 7 days, the last month will not be cached and when that is requested it will make an api call.
+
+
+*account details are cached for a month, however on each page load the account details are pulled from cache and a new request is made to check if any account details have changed. If so the cache is updated.
+
+#### Added
+- Added caching to all api calls from `/dashboard`
+
+### Fixed
+
+### Changed
+- Changed the entire file structure to be more industry standard and follow best practice
+- Moved a lot of unused code to the `/archive` folder

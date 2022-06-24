@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select, SelectChangeEvent, FormControl, InputLabel, MenuItem, Paper, OutlinedInput, Checkbox, ListItemText, Button } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
-import styles from '../../../styles/Dashboard/Visualize.module.css';
+import styles from '../../styles/Dashboard/Visualize.module.css';
 import LineChartComponent from '../ReCharts/LineChartComponent';
 import BarChartComponent from '../ReCharts/StackedBarChart';
 import PieChartComponent from '../ReCharts/PieChartComponent';
@@ -60,8 +60,6 @@ const App = () => {
     const [buttonState, setButtonState] = useState("secondary");
     const [buttonText, setButtonText] = useState("Visualize");
     const auth = useAuth();
-
-
 
     const handleChangeVisuals = (e) => {
         setSelectedVisual(e.target.value);
