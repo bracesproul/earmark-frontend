@@ -59,6 +59,7 @@ const App = () => {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [buttonState, setButtonState] = useState("secondary");
     const [buttonText, setButtonText] = useState("Visualize");
+    const [dateName, setDateName] = useState('today')
     const auth = useAuth();
 
     const handleChangeVisuals = (e) => {
@@ -66,6 +67,19 @@ const App = () => {
     };
     const handleChangeDates = (e) => {
         setSelectedDates(e.target.value);
+        if (e.target.value == today) {
+            setDateName('today');
+        } else if (e.target.value == sevenDays) {
+            setDateName('sevenDays');
+        } else if (e.target.value == twoWeeks) {
+            setDateName('twoWeeks');
+        } else if (e.target.value == oneMonth) {
+            setDateName('oneMonth');
+        } else if (e.target.value == threeMonths) {
+            setDateName('threeMonths');
+        } else if (e.target.value == sixMonths) {
+            setDateName('sixMonths');
+        }
     };
 
     const handleChangeCategories = (event) => {
@@ -194,9 +208,9 @@ const App = () => {
                         </div>
 
                     <div className={styles.visualsContainer}>
-                        {selectedVisual === "Line Chart" && <LineChartComponent date={selectedDates} />}
-                        {selectedVisual === "Bar Chart" && <BarChartComponent date={selectedDates} />}
-                        {selectedVisual === "Pie Chart" && <PieChartComponent date={selectedDates} />}
+                        {selectedVisual === "Line Chart" && <LineChartComponent dateName={dateName} date={selectedDates} />}
+                        {selectedVisual === "Bar Chart" && <BarChartComponent dateName={dateName} date={selectedDates} />}
+                        {selectedVisual === "Pie Chart" && <PieChartComponent dateName={dateName} date={selectedDates} />}
                         {selectedVisual === "Treemap" && <TreemapComponent />}
                     </div>
                 </div>

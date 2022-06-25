@@ -3,16 +3,16 @@ import React, {
     useState,
     useEffect
 } from 'react';
-import { DataGrid, 
-    GridRowsProp,
-    GridColDef,
-} from '@mui/x-data-grid';
+import axios from 'axios';
+import moment from 'moment';
 import styles from '../../../styles/Dashboard/Dashboard.module.css';
 import DataGridComponent from '../Datagrid';
 import CreateCategoryPopup from '../CreateCategoryPopup'
 import { useFirestore } from '../../../lib/hooks/useFirestore';
+import { globalVars } from '../../../lib/globalVars';
 import { FormControl, InputLabel, Select, MenuItem, OutlinedInput, Button } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
+import { useAuth } from '../../../lib/hooks/useAuth'
 
 const categories = [
     "Income",
@@ -32,6 +32,8 @@ const categories = [
     "Travel",
     "Rent and Utilities"
 ];
+
+const API_URL = globalVars().API_URL;
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -53,30 +55,97 @@ function getStyles(name, selectedCategories, theme) {
     };
 }
 
-const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, transactionMetadata, identifier }) => {
+const allTransactionsColumns = [
+    { field: 'col1', headerName: 'Name', width: 150 },
+    { field: 'col2', headerName: 'Date', width: 150 },
+    { field: 'col3', headerName: 'Amount', width: 150 },
+    { field: 'col4', headerName: 'Category', width: 150 },
+];
+
+const DataGridTransactions = () => {
     const theme = useTheme();
-    //const rows = dataGridRows;
-    //const columns = dataGridColumns;
-    const [displayColumns, setDisplayColumns] = useState(dataGridColumns);
+    const auth = useAuth();
+    const [displayColumns, setDisplayColumns] = useState(allTransactionsColumns);
     const [selectionModel, setSelectionModel] = useState([]);
     const [newDataGrid, setNewDataGrid] = useState(<></>);
-    const [newCategory, setNewCategory] = useState(null);
-    const [disabled, setDisabled] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [buttonState, setButtonState] = useState("secondary");
     const [buttonText, setButtonText] = useState("Visualize");
-    const [categoriesToDisplay, setCategoriesToDisplay] = useState(dataGridRows);
+    const [categoriesToDisplay, setCategoriesToDisplay] = useState([]);
+    const [categoryRows, setCategoryRows] = useState([]);
     const dataGridPlaceholder = <DataGridComponent message="No transactions selected" rows={[]} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />;
     let selectedRowIds = new Array;
     // @ts-ignore
     const { success } = useFirestore();
+
+    const endDate = moment().format('YYYY-MM-DD');
+    const startDate = moment().subtract(2, 'years').format('YYYY-MM-DD');
+
+    const fetchData = async () => {
+        const currentTime = Date.now();
+        const expTime = currentTime + 86400000;
+        const byCategoryConfig = {
+            method: "GET",
+            url: '/api/allTransactionsByCategory',
+            params: {
+                user_id: auth.user.uid,
+                startDate: startDate,
+                endDate: endDate,
+            },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const categoryResponse = await axios(byCategoryConfig);
+    
+        const config = {
+            method: "GET",
+            url: '/api/getAllTransactions',
+            params: {
+                user_id: auth.user.uid,
+                startDate: startDate,
+                endDate: endDate,
+                queryType: 'datagrid',
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'earmark-api-key': process.env.EARMARK_API_KEY,
+            },
+        };
+        const { data } = await axios(config);
+        console.log('running')
+        setCategoriesToDisplay(data.dataGridTransactions);
+        setCategoryRows(categoryResponse.data.transactions);
+        localStorage.setItem(`allTransactionsCacheExpTime`, expTime.toString());
+        localStorage.setItem(`allTransactionsCacheRows`, JSON.stringify(data.dataGridTransactions));
+        localStorage.setItem(`allTransactionsCacheCategoryRows`, JSON.stringify(categoryResponse.data.transactions));
+    };
+
+    const cacheData = () => {
+        if (typeof window == "undefined") return;
+        const currentTime = Date.now();
+        const cacheExpTime = parseInt(localStorage.getItem(`allTransactionsCacheExpTime`));
+        const cachedData = JSON.parse(localStorage.getItem(`allTransactionsCacheRows`));
+        const cachedDataCategoryRows = JSON.parse(localStorage.getItem(`allTransactionsCacheCategoryRows`));
+        if (!cacheExpTime || !cachedData) {
+            fetchData();
+        } else if (cacheExpTime < currentTime) {
+            fetchData();
+        } else if (cacheExpTime > currentTime) {
+            setCategoriesToDisplay(cachedData);
+            setCategoryRows(cachedDataCategoryRows)
+        }
+      };
+    
+      useEffect(() => {
+        if (!auth.user) return;
+        cacheData()
+      }, [auth.user])
     
     useEffect(() => {
         if (success) {
             setSelectionModel([]);
             setNewDataGrid(dataGridPlaceholder);
-            setNewCategory(null);
-            setDisabled(true);
             selectedRowIds = new Array;
         }
     }, [success])
@@ -113,17 +182,14 @@ const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, tra
 
     const setRows = async () => {
         selectionModel.forEach(row => {
-            selectedRowIds.push(dataGridRows.find(item => item.id == row));
+            selectedRowIds.push(categoriesToDisplay.find(item => item.id == row));
         });
-        setDisabled(false);
-        setNewCategory(selectedRowIds)
     };
     
     useEffect(() => {
         if (!selectionModel || selectionModel.length == 0) {
             console.error("selectionModel is null");
             setNewDataGrid(<></>);
-            setDisabled(true);
             return;
         };
         setRows();
@@ -188,13 +254,8 @@ const DataGridTransactions = ({ categoryRows, dataGridColumns, dataGridRows, tra
         <>
         <SelectCategory />
         <section className={styles.datagridContainer}>
-            <DataGridComponent message="No transactions selected" rows={categoriesToDisplay} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
+            <DataGridComponent message="No transactions found" rows={categoriesToDisplay} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
             {!selectionModel || selectionModel.length == 0 ? dataGridPlaceholder : newDataGrid}
-        </section>
-        <section className={styles.createCategoryContainer}>
-            <a onClick={e => handleClick(e)}>
-                <CreateCategoryPopup disabled={disabled} transactions={newCategory} />
-            </a>
         </section>
         </>
       );

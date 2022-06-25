@@ -21,9 +21,10 @@ export default async function handler(req, res) {
     let finalStatus;
     return new Promise( async (resolve, reject)=> {
         try {
-            const user_id = req.headers["user-id"]
-            const startDate = req.query.startDate
-            const endDate = req.query.endDate
+            const user_id = req.query.user_id;
+            const startDate = req.query.startDate;
+            const endDate = req.query.endDate;
+            const queryType = req.query.queryType;
             const config = {
                 method: "GET",
                 url: API_URL + '/api/earmark/allTransactions',
@@ -31,6 +32,7 @@ export default async function handler(req, res) {
                     user_id: user_id,
                     startDate: startDate,
                     endDate: endDate,
+                    queryType: queryType,
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,6 +43,7 @@ export default async function handler(req, res) {
             finalResponse = {
                 dataGridTransactions: axiosResponse.data.dataGridTransactions,
                 transactionMetadata: axiosResponse.data.transactionMetadata,
+                categoriesAvail: axiosResponse.data.categoriesAvail,
                 statusCode: 200,
                 statusMessage: "Success",
                 metaData: axiosResponse.data.metaData,

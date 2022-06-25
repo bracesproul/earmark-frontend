@@ -17,7 +17,7 @@ import HeadTemplate from '../../components/Head';
 
 const API_URL = globalVars().API_URL;
 
-
+/*
 export async function getServerSideProps({ req, res }) {
     const cookie = parseCookies(req).user_id
     if (res) {
@@ -75,23 +75,9 @@ export async function getServerSideProps({ req, res }) {
        },
     }
 }
-
+*/
 
 const Dashboard = ({ categoryRows, dataGridColumns, dataGridRows, transactionMetadata, cookie }) => {
-    const auth = useAuth();
-    const router = useRouter();
-    
-    useEffect(() => {
-        // @ts-ignore
-        if (!auth.user) return;
-        // @ts-ignore
-        router.push(`?user_id=${auth.user.uid}`);
-        // @ts-ignore
-    }, [auth.user])
-    
-    /* @ts-ignore */
-    if (!auth.user) return <NeedAuth />;
-
     return (
         <div className={styles.dashboard}>
         <HeadTemplate title="Dashboard" description="Dashboard overview for Earmark" iconPath="/favicon.ico" />
@@ -100,7 +86,7 @@ const Dashboard = ({ categoryRows, dataGridColumns, dataGridRows, transactionMet
                 <SideNav />
             </section>
             <section className={styles.dashboardContainer}>
-                <DataGridTransactions categoryRows={categoryRows} dataGridColumns={dataGridColumns} dataGridRows={dataGridRows} transactionMetadata={transactionMetadata} identifier="test" />
+                <DataGridTransactions/>
             </section>
         </main>
         <footer></footer>

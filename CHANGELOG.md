@@ -224,10 +224,10 @@ Commit [main e08ddd7](https://github.com/bracesproul/earmark-frontend/commit/e08
 ### Changed
 
 
-## [0.0.14] - 2022-06-08
+## [0.0.14] - 2022-06-24
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main 11186e9](https://github.com/bracesproul/earmark-frontend/commit/11186e9)
 All `/dashboard` api calls are now cached for 24 hours*. Each call is cached, this means if a user never requests to see spending overview data from the past month and only looks at 24 hours and 7 days, the last month will not be cached and when that is requested it will make an api call.
 
 
@@ -241,3 +241,18 @@ All `/dashboard` api calls are now cached for 24 hours*. Each call is cached, th
 ### Changed
 - Changed the entire file structure to be more industry standard and follow best practice
 - Moved a lot of unused code to the `/archive` folder
+
+
+## [0.0.15] - 2022-06-24
+
+### Notes
+Commit [main 3aae147]](https://github.com/bracesproul/earmark-frontend/commit/3aae147])
+
+#### Added
+- Added caching to all api calls from `/visualize`
+- Added caching to all api calls from `/transactions`
+- Added new api route `api/getAllTransactionsByCategory`
+
+### Fixed
+
+### Changed

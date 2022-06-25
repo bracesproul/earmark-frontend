@@ -32,11 +32,63 @@ const StackedBarChart = (props) => {
   const today = moment().format("YYYY-MM-DD");
 
   const [barChartData, setBarChartData] = useState([]);
-  const [months, setMonths] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [key, setKey] = useState([]);
   const [first, setFirst] = useState(true);
-  const [startDate, setStartDate] = useState('2022-01-01');
+  const [startDate, setStartDate] = useState(moment().subtract(2, 'years').format("YYYY-MM-DD"));
+
+  const fetchData = async (dateName) => {
+    const user_id: string = auth.user.uid;
+    try {
+      const currentTime = Date.now();
+      const expTime = currentTime + 86400000;
+      const config = {
+          method: "GET",
+          url: '/api/visuals',
+          params: {
+              user_id: user_id,
+              queryType: 'barChart',
+              startDate: startDate,
+              endDate: today,
+          },
+          headers: {
+              'Content-Type': 'application/json',
+              'earmark-api-key': process.env.EARMARK_API_KEY,
+          },
+      };
+
+      const axiosResponse = await axios(config);
+      setBarChartData(axiosResponse.data.final);
+      let keysArray = [];
+      elements.forEach((element) => {
+        if (axiosResponse.data.categories.includes(element.dataKey)) {
+          keysArray.push({ dataKey: element.dataKey, stackId: element.stackId, fill: element.fill })
+        }
+      });
+      setKey(keysArray);
+      localStorage.setItem(`barChartCacheExpTime${dateName}`, expTime.toString());
+      localStorage.setItem(`barChartCachedData${dateName}`, JSON.stringify(axiosResponse.data.final));
+      localStorage.setItem(`barChartCachedKeysArr${dateName}`, JSON.stringify(keysArray));
+    } catch (error) {
+      console.error('bar chart error', error);
+    }
+  };
+
+  const cacheData = (dateName) => {
+    if (typeof window == "undefined") return;
+    console.log('TOTAL SPENDING CHECK CACHE RUNNING');
+    const currentTime = Date.now();
+    const cacheExpTime = parseInt(localStorage.getItem(`barChartCacheExpTime${dateName}`));
+    const cachedData = JSON.parse(localStorage.getItem(`barChartCachedData${dateName}`));
+    const cachedKeysArr = JSON.parse(localStorage.getItem(`barChartCachedKeysArr${dateName}`));
+    if (!cacheExpTime || !cachedData || !cachedKeysArr) {
+        fetchData(dateName);
+    } else if (cacheExpTime < currentTime) {
+        fetchData(dateName);
+    } else if (cacheExpTime > currentTime) {
+      setBarChartData(cachedData);
+      setKey(cachedKeysArr);
+    }
+  };
 
   useEffect(() => {
     if (first) return;
@@ -53,40 +105,8 @@ const StackedBarChart = (props) => {
       return;
     };
     
-    const fetchData = async () => {
-      const user_id: string = auth.user.uid;
-      try {
-        const config = {
-            method: "GET",
-            url: '/api/visuals',
-            params: {
-                user_id: user_id,
-                queryType: 'barChart',
-                startDate: startDate,
-                endDate: today,
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                'earmark-api-key': process.env.EARMARK_API_KEY,
-            },
-        };
 
-        const axiosResponse = await axios(config);
-        setBarChartData(axiosResponse.data.final);
-        setMonths(axiosResponse.data.months);
-        let keysArray = [];
-        elements.forEach((element) => {
-          if (axiosResponse.data.categories.includes(element.dataKey)) {
-            keysArray.push({ dataKey: element.dataKey, stackId: element.stackId, fill: element.fill })
-          }
-        });
-        setKey(keysArray);
-
-      } catch (error) {
-        console.error('bar chart error', error);
-      }
-    };
-    fetchData();
+    cacheData(props.dateName);
   }, [startDate])
   return (
       <ResponsiveContainer width="100%" height="100%">

@@ -15,7 +15,48 @@ const PieChartComponent = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [pieData, setPieData] = useState([]);
   const [first, setFirst] = useState(true);
-  const [startDate, setStartDate] = useState('2022-01-01');
+  const [startDate, setStartDate] = useState(moment().subtract(1, 'days').format("YYYY-MM-DD"));
+
+  const fetchData = async (dateName) => {
+    try {
+      const currentTime = Date.now();
+      const expTime = currentTime + 86400000;
+      const config = {
+          method: "GET",
+          url: '/api/visuals',
+          params: {
+              user_id: auth.user.uid,
+              queryType: 'pieChart',
+              startDate: startDate,
+              endDate: today,
+          },
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      };
+      const axiosResponse = await axios(config);
+      setPieData(axiosResponse.data.final);
+      localStorage.setItem(`pieChartCacheExpTime${dateName}`, expTime.toString());
+      localStorage.setItem(`pieChartCachedData${dateName}`, JSON.stringify(axiosResponse.data.final));  
+    } catch (error) {
+      console.error('error: ', error);
+    }
+  };
+
+  const cacheData = (dateName) => {
+    if (typeof window == "undefined") return;
+    console.log('TOTAL SPENDING CHECK CACHE RUNNING');
+    const currentTime = Date.now();
+    const cacheExpTime = parseInt(localStorage.getItem(`pieChartCacheExpTime${dateName}`));
+    const cachedData = JSON.parse(localStorage.getItem(`pieChartCachedData${dateName}`));
+    if (!cacheExpTime || !cachedData) {
+        fetchData(dateName);
+    } else if (cacheExpTime < currentTime) {
+        fetchData(dateName);
+    } else if (cacheExpTime > currentTime) {
+      setPieData(cachedData);
+    }
+  };
 
 
   useEffect(() => {
@@ -30,30 +71,9 @@ const PieChartComponent = (props) => {
       console.error('user is NOT logged in, inside the useEffect hook')
       return;
     };
-    const fetchData = async () => {
-      try {
-        const config = {
-            method: "GET",
-            url: '/api/visuals',
-            params: {
-                user_id: auth.user.uid,
-                queryType: 'pieChart',
-                startDate: startDate,
-                endDate: today,
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                'earmark-api-key': process.env.EARMARK_API_KEY,
-            },
-        };
-        const axiosResponse = await axios(config);
-        setPieData(axiosResponse.data.final);
-      } catch (error) {
-        console.error('error: ', error);
-      }
-    };
-    fetchData();
-  }, [startDate])
+
+    cacheData(props.dateName);
+  }, [props.dateName])
 
 
   const onPieEnter = (_, index) => {

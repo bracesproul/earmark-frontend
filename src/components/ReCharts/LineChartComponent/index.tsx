@@ -29,14 +29,65 @@ const elements = [
 
 const LineChartComponent = (props) => {
   const auth = useAuth();
-  const today = moment().format("YYYY-MM-DD");
 
   const [lineChartData, setLineChartData] = useState([]);
-  const [months, setMonths] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [key, setKey] = useState([]);
-  const [startDate, setStartDate] = useState('2022-01-01');
+  const [startDate, setStartDate] = useState(moment().subtract(2, 'years').format("YYYY-MM-DD"));
   const [first, setFirst] = useState(true);
+
+  const fetchData = async (dateName) => {
+    // console.log('fetch data running')
+    try {
+      const currentTime = Date.now();
+      const expTime = currentTime + 86400000;
+      const config = {
+        method: "GET",
+        url: '/api/visuals',
+        params: {
+            user_id: auth.user.uid,
+            queryType: 'lineChart',
+            startDate: startDate,
+            endDate: moment().format("YYYY-MM-DD"),
+        },
+        headers: {
+            'Content-Type': 'application/json',
+            'earmark-api-key': process.env.EARMARK_API_KEY,
+        },
+    };
+    const axiosResponse = await axios(config);
+    console.log('axiosres', axiosResponse.data)
+    setLineChartData(axiosResponse.data.final);
+    let keysArray = [];
+    elements.forEach((element) => {
+      if (axiosResponse.data.categories.includes(element.dataKey)) {
+        keysArray.push({ dataKey: element.dataKey, stackId: element.stackId, fill: element.fill })
+      }
+    });
+    setKey(keysArray);
+    localStorage.setItem(`lineChartCacheExpTime${dateName}`, expTime.toString());
+    localStorage.setItem(`lineChartCachedData${dateName}`, JSON.stringify(axiosResponse.data.final));
+    localStorage.setItem(`lineChartCachedKeysArr${dateName}`, JSON.stringify(keysArray));
+  } catch (error) {
+      console.error(error);
+    };
+  };
+
+  const cacheData = (dateName) => {
+    if (typeof window == "undefined") return;
+    console.log('TOTAL SPENDING CHECK CACHE RUNNING');
+    const currentTime = Date.now();
+    const cacheExpTime = parseInt(localStorage.getItem(`lineChartCacheExpTime${dateName}`));
+    const cachedData = JSON.parse(localStorage.getItem(`lineChartCachedData${dateName}`));
+    const cachedKeysArr = JSON.parse(localStorage.getItem(`lineChartCachedKeysArr${dateName}`));
+    if (!cacheExpTime || !cachedData || !cachedKeysArr) {
+        fetchData(dateName);
+    } else if (cacheExpTime < currentTime) {
+        fetchData(dateName);
+    } else if (cacheExpTime > currentTime) {
+      setLineChartData(cachedData);
+      setKey(cachedKeysArr);
+    }
+  };
 
   useEffect(() => {
     if (first) return;
@@ -52,41 +103,9 @@ const LineChartComponent = (props) => {
       console.error('user NOT logged in, inside the useEffect hook')
       return;
     };
-    const fetchData = async () => {
-      // console.log('fetch data running')
-      try {
-        const config = {
-          method: "GET",
-          url: '/api/visuals',
-          params: {
-              user_id: auth.user.uid,
-              queryType: 'lineChart',
-              startDate: startDate,
-              endDate: today,
-          },
-          headers: {
-              'Content-Type': 'application/json',
-              'earmark-api-key': process.env.EARMARK_API_KEY,
-          },
-      };
-      const axiosResponse = await axios(config);
-      console.log('axiosres', axiosResponse.data)
-      setLineChartData(axiosResponse.data.final);
-      setMonths(axiosResponse.data.months);
-      let keysArray = [];
-      elements.forEach((element) => {
-        if (axiosResponse.data.categories.includes(element.dataKey)) {
-          keysArray.push({ dataKey: element.dataKey, stackId: element.stackId, fill: element.fill })
-        }
-      });
-      setKey(keysArray);
-      } catch (error) {
-        console.error(error)
-      }
 
-    };
-    fetchData();
-  }, [startDate])
+    cacheData(props.dateName);
+  }, [props.dateName])
 
   return (
     <ResponsiveContainer width="100%" height="100%">
