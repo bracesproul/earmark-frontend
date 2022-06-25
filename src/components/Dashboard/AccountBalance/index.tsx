@@ -35,7 +35,7 @@ const AccountBalance = (props) => {
   const fetchData = async () => {
     try {
       const currentTime = Date.now();
-      const expTime = currentTime + 2600000000;
+      const expTime = currentTime + 86400000;
       const config = {
         method: 'GET',
         headers: {
@@ -50,8 +50,6 @@ const AccountBalance = (props) => {
         }
       }
       const { data } = await axios(config);
-      const cachedAccountData = JSON.parse(localStorage.getItem(`accountBalanceCachedData`));
-      if (cachedAccountData == data.accountDetails) return;
       setAccountDetails(data.accountDetails);
       localStorage.setItem(`accountBalanceCachedData`, JSON.stringify(data.accountDetails));
       localStorage.setItem(`accountBalanceCacheExpTime`, expTime.toString());
@@ -70,7 +68,6 @@ const AccountBalance = (props) => {
       fetchData();
     } else if (cacheExpTime > currentTime) {
       setAccountDetails(cachedData);
-      fetchData();
     }
   };
 

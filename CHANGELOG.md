@@ -246,7 +246,7 @@ All `/dashboard` api calls are now cached for 24 hours*. Each call is cached, th
 ## [0.0.15] - 2022-06-24
 
 ### Notes
-Commit [main 3aae147]](https://github.com/bracesproul/earmark-frontend/commit/3aae147])
+Commit [main 908bca0]](https://github.com/bracesproul/earmark-frontend/commit/908bca0])
 
 #### Added
 - Added caching to all api calls from `/visualize`
