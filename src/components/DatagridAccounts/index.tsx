@@ -1,5 +1,8 @@
 /* eslint-disable */
-import React from 'react';
+import React, {
+  useState,
+  useEffect
+} from 'react';
 import axios from 'axios';
 import Router from 'next/router';
 import { DataGrid } from '@mui/x-data-grid';
@@ -23,9 +26,54 @@ const useStyles = makeStyles({
 }})
 
 const DatagridAccounts = ({ data }) => {
-  console.log(data);
-  const theme = useTheme();
   const auth = useAuth();
+  const theme = useTheme();
+  const [accounts, setAccounts] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const currentTime = Date.now();
+      const expTime = currentTime + 86400000;
+      const config = {
+        method: "GET",
+        url: '/api/allAccountInfo',
+        params: {
+            user_id: auth.user.uid,
+        },
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axios(config);
+    const accounts = data.accounts
+    setAccounts(accounts)
+    localStorage.setItem(`accountsCacheExpTime`, expTime.toString());
+    localStorage.setItem(`accountsCachedData`, JSON.stringify(data.accounts));
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
+  const cacheData = () => {
+    if (typeof window == "undefined") return;
+    const currentTime = Date.now();
+    const cacheExpTime = parseInt(localStorage.getItem(`accountsCacheExpTime`));
+    const cachedData = JSON.parse(localStorage.getItem(`accountsCachedData`));
+    if (!cacheExpTime || !cachedData) {
+        fetchData();
+    } else if (cacheExpTime < currentTime) {
+        fetchData();
+    } else if (cacheExpTime > currentTime) {
+      setAccounts(cachedData)
+    }
+  };
+
+  useEffect(() => {
+    if (!auth.user) return
+    cacheData();
+  }, [auth.user])
+
+  console.log(data);
   const skeleton = (
     <>
     <Skeleton animation="wave" />
@@ -97,7 +145,7 @@ const DatagridAccounts = ({ data }) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: '15px'}}>
           <PlaidLinkInstitution user_id={auth.user.uid} />
         </Box>
-        <DataGrid autoHeight={true} rows={data} columns={columns} />
+        <DataGrid autoHeight={true} rows={accounts} columns={columns} />
       </div>
       
       </>

@@ -37,7 +37,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 
 
 
-const DataGridComponent = ({ rows, columns, selectionModel, setSelectionModel, message }) => {
+const DataGridComponent = ({ rows, columns, selectionModel, setSelectionModel, message, checkboxSelection }) => {
   const Placeholder = () => {
     return (
         <StyledGridOverlay>
@@ -89,7 +89,7 @@ const DataGridComponent = ({ rows, columns, selectionModel, setSelectionModel, m
         <DataGrid 
         rows={rows}
         columns={columns}
-        checkboxSelection
+        checkboxSelection={checkboxSelection}
         components={{
             NoRowsOverlay: Placeholder,
           }}

@@ -73,7 +73,7 @@ const DataGridTransactions = () => {
     const [buttonText, setButtonText] = useState("Visualize");
     const [categoriesToDisplay, setCategoriesToDisplay] = useState([]);
     const [categoryRows, setCategoryRows] = useState([]);
-    const dataGridPlaceholder = <DataGridComponent message="No transactions selected" rows={[]} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />;
+    const dataGridPlaceholder = <DataGridComponent checkboxSelection={true} message="No transactions selected" rows={[]} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />;
     let selectedRowIds = new Array;
     // @ts-ignore
     const { success } = useFirestore();
@@ -196,7 +196,7 @@ const DataGridTransactions = () => {
 
         if (selectedRowIds.length > 0) {
             setNewDataGrid(
-                <DataGridComponent message="No transactions selected" rows={categoriesToDisplay} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
+                <DataGridComponent checkboxSelection={true} message="No transactions selected" rows={categoriesToDisplay} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
             )
         }
     }, [selectionModel])
@@ -254,7 +254,7 @@ const DataGridTransactions = () => {
         <>
         <SelectCategory />
         <section className={styles.datagridContainer}>
-            <DataGridComponent message="No transactions found" rows={categoriesToDisplay} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
+            <DataGridComponent checkboxSelection={true} message="No transactions found" rows={categoriesToDisplay} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />
             {!selectionModel || selectionModel.length == 0 ? dataGridPlaceholder : newDataGrid}
         </section>
         </>

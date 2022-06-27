@@ -50,7 +50,7 @@ const SIDENAV_PAGES = [
     {pageName: "Dashboard", pageLink: "/dashboard", isPlaidLink: false, disabled: false},
     {pageName: "Transactions", pageLink: "/dashboard/transactions", isPlaidLink: false, disabled: false},
     {pageName: "Visualize", pageLink: "/dashboard/visualize", isPlaidLink: false, disabled: false},
-    {pageName: "Recurring", pageLink: "/dashboard/recurring", isPlaidLink: false, disabled: true},
+    {pageName: "Recurring", pageLink: "/dashboard/recurring", isPlaidLink: false, disabled: false},
     {pageName: "Investments", pageLink: "/dashboard/investments", isPlaidLink: false, disabled: true},
     {pageName: "Transfers", pageLink: "/dashboard/transfers", isPlaidLink: false, disabled: true},
     {pageName: "Institutions", pageLink: "/dashboard/institutions", isPlaidLink: false, disabled: false},

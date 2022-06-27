@@ -246,7 +246,7 @@ All `/dashboard` api calls are now cached for 24 hours*. Each call is cached, th
 ## [0.0.15] - 2022-06-24
 
 ### Notes
-Commit [main 908bca0]](https://github.com/bracesproul/earmark-frontend/commit/908bca0])
+Commit [main 908bca0](https://github.com/bracesproul/earmark-frontend/commit/908bca0)
 
 #### Added
 - Added caching to all api calls from `/visualize`
@@ -256,3 +256,23 @@ Commit [main 908bca0]](https://github.com/bracesproul/earmark-frontend/commit/90
 ### Fixed
 
 ### Changed
+
+
+## [0.0.16] - 2022-06-26
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+#### Added
+- Added component for recurring transactions - `src/components/RecurringTransactions`
+- Added recurring api route `/api/recurring`
+- Added functionality to recurring page, calls backend, dialog with transaction summary, caches data, etc.
+- Added allAccountInfo  `/api/allAccountInfo`
+- Added caching to DatagridAccounts
+
+### Fixed
+- Fixed styling on recurring page inside `/styles/Dashboard/Investments.module.css`
+
+### Changed
+- Commented out captcha import inside `_app.tsx`
+- Undisabled Recurring nav button from sidenav

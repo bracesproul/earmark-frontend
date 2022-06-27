@@ -45,9 +45,10 @@ let theme = createTheme({
 function MyApp({ Component, pageProps }) {
   return (
     <ProvideAuth>
-      <GoogleReCaptchaProvider
+      {/*      <GoogleReCaptchaProvider
       reCaptchaKey="6LcMGSggAAAAAIgdzhS4NVFFq4_qaOKIJZ_Mfwvj"
-      >
+      > */}
+
       <CookiesProvider>
         <ProvideFirestore>
           <ThemeProvider theme={theme}>
@@ -55,7 +56,8 @@ function MyApp({ Component, pageProps }) {
           </ThemeProvider>
         </ProvideFirestore>
       </CookiesProvider>
-      </GoogleReCaptchaProvider>
+      
+      {/*</GoogleReCaptchaProvider> */}
     </ProvideAuth>
   );
 }

@@ -8,8 +8,10 @@ import NotSignedIn from '../../components/Auth/NotSignedIn';
 import styles from '../../styles/Dashboard/Investments.module.css';
 import { useAuth } from '../../lib/hooks/useAuth';
 import HeadTemplate from '../../components/Head';
+import RecurringTransactions from '../../components/RecurringTransactions';
+import PageTemplate from '../../components/PageTemplate';
 
-export default function Home() {
+function Home() {
     const auth = useAuth();
 
     return (
@@ -19,12 +21,21 @@ export default function Home() {
             <section className={styles.sidenavContainer}>
                 <SideNav />
             </section>
-            <section className={styles.body}>
+            <section className={styles.recurringBody}>
                 {/* @ts-ignore */}
-                { !auth.user ? <NotSignedIn /> : <h1>Recurring Payments</h1> }
+                { !auth.user ? <NotSignedIn /> : <RecurringTransactions /> }
             </section>
         </main>
         <footer></footer>
         </div>
     )
 };
+
+export default function NewHome() {
+    return (
+        <PageTemplate title="Recurring" description="Recurring transactions">
+            <RecurringTransactions />
+        </PageTemplate>
+    )
+
+}

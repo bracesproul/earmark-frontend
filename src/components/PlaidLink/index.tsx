@@ -18,6 +18,14 @@ const PlaidLink = ({ user_id }) => {
     if (user_id === null || user_id === "Unauthorized") return <></>;
     const [linkToken, setLinkToken] = useState(null);
 
+    const clearAccountCache = () => {
+        // if (typeof window == 'undefined') return;
+        localStorage.removeItem('accountBalanceCachedData');
+        localStorage.removeItem('accountBalanceCacheExpTime');
+        localStorage.removeItem('accountsCachedData');
+        localStorage.removeItem('accountsCacheExpTime');
+    }
+
     const fetchToken = useCallback(async () => {
         try {
             const config = {
@@ -56,7 +64,8 @@ const PlaidLink = ({ user_id }) => {
         };
         try {
             const response = await axios(config);
-            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
+            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data);
+            clearAccountCache();
         } catch (error) {
             console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
