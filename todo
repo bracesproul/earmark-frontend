@@ -62,3 +62,19 @@ phone after and link all to the users account
 
 - add option to link facebook/google/apple/twitter as sign in methods 
 after account already created (in account settings page <Connect third party authentication method to your account> )
+
+
+
+
+
+--------------------------------
+hook to remove old caches
+add caching to dynamic transaction page
+figure out how to clear cache on new account link
+redo account settings page
+add functionailty to custom time ranges on all pages
+check if data is null on pages where timeframe can change, if so recall data until timeframe with data is responded with
+figure out why dynamic txns on prodcution is broken (only when clicked on from dashboard page, displaying wrong acc_id)
+fix "sign in" link on sign up page
+line chart 7 days in production broken
+add try catch to all api calls and cache methods

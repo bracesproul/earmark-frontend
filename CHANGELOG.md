@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1] - 2022-05-31
 
-#### Added
+### Added
 
 ### Fixed
 
@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.2] - 2022-06-01
 
-#### Added
+### Added
 - Added "Authentication" section to [account settings](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Account/Account)
     - Added list with options to connect your: Google, Twitter, Facebook or Apple account for 3rd party auth to Earmark (just ui, not functional yet)
     - Added list with options to confirm your phone number and email address (just ui, not functional yet)
@@ -33,7 +33,7 @@ All notable changes to this project will be documented in this file.
 ### Notes
 New dashboard components only have static data, not hooked up to backend yet
 
-#### Added
+### Added
 - Added new [/Dashboard](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Dashboard) folder inside [/src/components](https://github.com/bracesproul/earmark-frontend/tree/main/src/components)
 - Added to [dashboard](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/index.tsx)
     - Account Balance
@@ -56,7 +56,7 @@ New dashboard components only have static data, not hooked up to backend yet
 ### Notes
 Added verify email functionality
 
-#### Added
+### Added
 - Added base Firebase analytics to Earmark
 - Added app (from firebase initialize app) as custom hook from useFirestore (will change to useFirebase in future)
 - Success/Error/Warning alerts for verify email
@@ -74,7 +74,7 @@ Added verify email functionality
 ### Notes
 Sign in with provider 1/3 working
 
-#### Added
+### Added
 - Button to sign in with google/facebook/twitter **FACEBOOK/TWITTER STILL GIVING UNKNOWN ERRORS**
 - Added error/warning alerts for sign in with google/facebook/twitter
 - Added sign in with google/facebook/twitter code to [useAuth](https://github.com/bracesproul/earmark-frontend/tree/main/src/lib/hooks/useAuth) hook
@@ -88,7 +88,7 @@ Sign in with provider 1/3 working
 
 ### Notes
 
-#### Added
+### Added
 - Icons to buttons for sign in with provider (google/facebook/twitter)
 - /api/dashboard route to fetch data for the main /dashboard page
 - "Skeleton" placeholder animation for dashboard page when data is still loading
@@ -103,7 +103,7 @@ Sign in with provider 1/3 working
 
 ### Notes
 
-#### Added
+### Added
 - Code to change date range in api paramaters
 
 ### Fixed
@@ -117,7 +117,7 @@ Sign in with provider 1/3 working
 
 ### Notes
 
-#### Added
+### Added
 - New Plaid Link export from [PlaidLink component folder](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/PlaidLink) for connect bank through institutions page
 - Connect bank through Plaid Link button on institutions page (code in [datagrid accounts](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/DatagridAccounts)folder)
 - Added step in [sign up](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/Auth/SignUp) to link bank account to Earmark account
@@ -139,7 +139,7 @@ Commit [main 83f5618](https://github.com/bracesproul/earmark-frontend/commit/83f
 
 Plaid Link sidenav option removed because it was recalling everytime the page was loaded, or a new page was loaded. This was making excess api calls. Switched to link banks through the institutions page or when you first create an account.
 
-#### Added
+### Added
 - Connected [Stacked Bar Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/StackedBarChart) & [Line Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/LineChartComponent) & [Pie Chart](https://github.com/bracesproul/earmark-frontend/tree/main/src/components/ReCharts/PieChartComponent) to backend, select date range working, categories not working
 - Added [/api/visuals](https://github.com/bracesproul/earmark-frontend/blob/main/pages/api/visuals.ts) route for fetching data for visualizations 
 
@@ -156,7 +156,7 @@ Commit [main 641de87](https://github.com/bracesproul/earmark-frontend/commit/641
 
 Dynamic transaction code inside pages file, not yet inside it's own component folder
 
-#### Added
+### Added
 - Added funcationality to individual bank account transactions page at [/dashboard/[ins_id]](https://github.com/bracesproul/earmark-frontend/blob/main/pages/dashboard/%5Bins_id%5D.tsx)
 - Added [/api/dynamicTransactions](https://github.com/bracesproul/earmark-frontend/blob/main/pages/api/dynamicTransactions.ts) for fetching data to populate the dynamic transactions page
 
@@ -172,7 +172,7 @@ Commit [main 4830c83](https://github.com/bracesproul/earmark-frontend/commit/483
 
 Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all other components which use mui datagrid*
 
-#### Added
+### Added
 - Added global ThemeProvider to _app.tsx for global standardization of colors
 - Added DynamicTransactions folder to components to hold code for /dashboard/ins_id page
 - Selected account button on /dashboard/ins_id page now is contained if that account is selected, outlined if not selected
@@ -191,7 +191,7 @@ Todo - *Apply responsive code for datagrid in /dashboard/ins_id page to all othe
 ### Notes
 Commit [main 5d81c60](https://github.com/bracesproul/earmark-frontend/commit/5d81c60)
 
-#### Added
+### Added
 - Added button inside 'account balances' component on /dashboard page to link to individual account transactions page
 - Added tooltip to
     - transactions button inside 'account balances'
@@ -215,7 +215,7 @@ Commit [main 5d81c60](https://github.com/bracesproul/earmark-frontend/commit/5d8
 ### Notes
 Commit [main e08ddd7](https://github.com/bracesproul/earmark-frontend/commit/e08ddd7)
 
-#### Added
+### Added
 
 ### Fixed
 - Button to go to /dashboard/institutions from account details on /dashboard now works
@@ -233,7 +233,7 @@ All `/dashboard` api calls are now cached for 24 hours*. Each call is cached, th
 
 *account details are cached for a month, however on each page load the account details are pulled from cache and a new request is made to check if any account details have changed. If so the cache is updated.
 
-#### Added
+### Added
 - Added caching to all api calls from `/dashboard`
 
 ### Fixed
@@ -248,7 +248,7 @@ All `/dashboard` api calls are now cached for 24 hours*. Each call is cached, th
 ### Notes
 Commit [main 908bca0](https://github.com/bracesproul/earmark-frontend/commit/908bca0)
 
-#### Added
+### Added
 - Added caching to all api calls from `/visualize`
 - Added caching to all api calls from `/transactions`
 - Added new api route `api/getAllTransactionsByCategory`
@@ -261,9 +261,9 @@ Commit [main 908bca0](https://github.com/bracesproul/earmark-frontend/commit/908
 ## [0.0.16] - 2022-06-26
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main 1bbd901](https://github.com/bracesproul/earmark-frontend/commit/1bbd901)
 
-#### Added
+### Added
 - Added component for recurring transactions - `src/components/RecurringTransactions`
 - Added recurring api route `/api/recurring`
 - Added functionality to recurring page, calls backend, dialog with transaction summary, caches data, etc.
@@ -276,3 +276,21 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 ### Changed
 - Commented out captcha import inside `_app.tsx`
 - Undisabled Recurring nav button from sidenav
+
+
+## [0.0.17] - 2022-06-26
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+*Now checks for undefined responses, if so it displays a seprate datagrid component with a message **
+
+### Added
+
+### Fixed
+- Added proper error handling to `/recurring` tab*
+- Changed font size for added, fixed, changed (added removed)
+
+### Changed
+
+### Removed
