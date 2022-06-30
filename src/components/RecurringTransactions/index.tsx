@@ -66,6 +66,7 @@ const RecurringTransactions = () => {
 
     const fetchData = async () => {
         try {
+            console.log('fetch data running')
             const currentTime = Date.now();
             const expTime = currentTime + 86400000;
             const config = {
@@ -75,7 +76,6 @@ const RecurringTransactions = () => {
                     user_id: auth.user.uid,
                     startDate: startDate,
                     endDate: endDate,
-                    queryType: 'datagrid',
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,6 +83,7 @@ const RecurringTransactions = () => {
                 },
             };
             const { data } = await axios(config);
+            console.log(data.recurring_transactions)
             if (!data.recurring_transactions) {
                 setFetchDataRan(fetchDataRan + 1);
                 setIsDataNull(true);

@@ -13,18 +13,11 @@ import { ListItem,
     Button,
 } from '@mui/material';
 import { usePlaidLink } from 'react-plaid-link';
+import { useRemoveCache } from '../../lib/hooks/useRemoveCache';
 
 const PlaidLink = ({ user_id }) => {
     if (user_id === null || user_id === "Unauthorized") return <></>;
     const [linkToken, setLinkToken] = useState(null);
-
-    const clearAccountCache = () => {
-        // if (typeof window == 'undefined') return;
-        localStorage.removeItem('accountBalanceCachedData');
-        localStorage.removeItem('accountBalanceCacheExpTime');
-        localStorage.removeItem('accountsCachedData');
-        localStorage.removeItem('accountsCacheExpTime');
-    }
 
     const fetchToken = useCallback(async () => {
         try {
@@ -65,7 +58,6 @@ const PlaidLink = ({ user_id }) => {
         try {
             const response = await axios(config);
             console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data);
-            clearAccountCache();
         } catch (error) {
             console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
@@ -92,6 +84,7 @@ const PlaidLink = ({ user_id }) => {
 export const PlaidLinkInstitution = (props) => {
     if (props.user_id === null || props.user_id === "Unauthorized") return <></>;
     const [linkToken, setLinkToken] = useState(null);
+    const removeCache = useRemoveCache();
 
     const fetchToken = useCallback(async () => {
         try {
@@ -132,6 +125,8 @@ export const PlaidLinkInstitution = (props) => {
         try {
             const response = await axios(config);
             console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
+            removeCache.removeOldCache();
+            
         } catch (error) {
             console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }

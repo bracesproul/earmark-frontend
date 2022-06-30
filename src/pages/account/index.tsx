@@ -4,7 +4,7 @@ import React, {
     useState,
 } from 'react';
 import Head from 'next/head';
-
+import { useRemoveCache } from '../../lib/hooks/useRemoveCache';
 
 import styles from '../../styles/Account/Account.module.css';
 import { useAuth } from '../../lib/hooks/useAuth';
@@ -20,7 +20,6 @@ import SeeAccount from '../../components/Account'
 
 export default function Home() {
     const auth = useAuth();
-
     return (
         <div className="">
         <Head>

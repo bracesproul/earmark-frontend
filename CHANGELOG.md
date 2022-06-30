@@ -278,10 +278,10 @@ Commit [main 1bbd901](https://github.com/bracesproul/earmark-frontend/commit/1bb
 - Undisabled Recurring nav button from sidenav
 
 
-## [0.0.17] - 2022-06-26
+## [0.0.17] - 2022-06-27
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main 2c7fd64](https://github.com/bracesproul/earmark-frontend/commit/2c7fd64)
 
 *Now checks for undefined responses, if so it displays a seprate datagrid component with a message **
 
@@ -292,5 +292,21 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 - Changed font size for added, fixed, changed (added removed)
 
 ### Changed
+
+### Removed
+
+
+## [0.0.18] - 2022-06-29
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+### Added
+- Added useRemoveCache hook, currently has func to remove cache for accounts on new account link.
+
+### Fixed
+
+### Changed
+- Changed recurring api to call from global vars instead of from production server
 
 ### Removed

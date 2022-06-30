@@ -2,6 +2,7 @@
 import '../styles/globals.css';
 import { ProvideAuth } from '../lib/hooks/useAuth';
 import { ProvideFirestore } from '../lib/hooks/useFirestore';
+import { ProvideRemoveCache } from '../lib/hooks/useRemoveCache';
 import { CookiesProvider } from "react-cookie"
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
@@ -52,7 +53,9 @@ function MyApp({ Component, pageProps }) {
       <CookiesProvider>
         <ProvideFirestore>
           <ThemeProvider theme={theme}>
-            <Component {...pageProps} />
+            <ProvideRemoveCache>
+              <Component {...pageProps} />
+            </ProvideRemoveCache>
           </ThemeProvider>
         </ProvideFirestore>
       </CookiesProvider>
