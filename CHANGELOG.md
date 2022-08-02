@@ -299,7 +299,7 @@ Commit [main 2c7fd64](https://github.com/bracesproul/earmark-frontend/commit/2c7
 ## [0.0.18] - 2022-06-29
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main f77c616](https://github.com/bracesproul/earmark-frontend/commit/f77c616)
 
 ### Added
 - Added useRemoveCache hook, currently has func to remove cache for accounts on new account link.
@@ -321,6 +321,40 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 ### Added
 
 ### Fixed
+
+### Changed
+
+### Removed
+
+
+## [0.0.20] - 2022-08-02
+
+### Notes
+Commit [main f4ab1c1](https://github.com/bracesproul/earmark-frontend/commit/f4ab1c1)
+So many changes, some breaking changes that will need to be fixed
+
+### Added
+- Added useBackground fetch for all API calls -- inside custom hook now for easy access and debugging
+- Added _middleware.tsx to check auth before granting user access to a given page
+
+### Fixed
+
+### Changed
+- Changed how visualize works, uses url params for global state of dates and chart type
+- Changed every api call inside a component/page to call the hook instead of a function inside said component
+
+### Removed
+
+
+## [0.0.21] - 2022-08-02
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+### Added
+
+### Fixed
+- Fixed spacing and box sizing for dashboard, looks better on mobile and desktop now
 
 ### Changed
 

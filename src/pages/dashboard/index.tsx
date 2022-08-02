@@ -39,7 +39,9 @@ export async function getServerSideProps({ req, res }) {
 const Dashboard = ({ cookie }) => {
     return (
         <PageTemplate title="Dashboard" description="Dashboard overview for Earmark">
-            <Grid container spacing={3}>
+            <Grid container spacing={3} sx={{
+                marginTop: '1rem',
+            }}>
                 <Box sx={{ display: { xs: 'flex', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
                     <Grid item xs={12}>
                         <SpendingOverview cookie={cookie} />
@@ -51,10 +53,9 @@ const Dashboard = ({ cookie }) => {
                     </Grid>
                 </Box>
                 <Grid item xs={12}>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'row', margin: 'auto' }}>
                         <Goals />
                         <Budgets />
-                        <TotalSpending cookie={cookie} />
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
@@ -62,9 +63,11 @@ const Dashboard = ({ cookie }) => {
                         <Goals />
                         <Budgets />
                         <TotalSpending cookie={cookie} />
+                        <AccountBalance cookie={cookie} />
                     </Box>
                 </Grid>
-                <Grid item xs={12} sx={{ margin: 'auto'}}>
+                <Grid item xs={12} sx={{ margin: 'auto', display: {xs: 'none', md: 'flex'}, flexDirection: 'row' }}>
+                    <TotalSpending cookie={cookie} />
                     <AccountBalance cookie={cookie} />
                 </Grid>
             </Grid>

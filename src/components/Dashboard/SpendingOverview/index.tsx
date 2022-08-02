@@ -247,8 +247,16 @@ const SpendingOverview = (props) => {
   )
   
   return (
-      <Box sx={{ padding: '30px', minWidth: 275 }}>
-          <Card variant="outlined">{card}</Card>
+      <Box sx={{ padding: '30px' }}>
+          <Card
+              sx={{
+                minWidth: 650,
+                minHeight: 500,
+              }}
+              variant="outlined"
+          >
+            {card}
+          </Card>
       </Box>
   );
 }

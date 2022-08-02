@@ -251,9 +251,18 @@ const TopMerchants = (props) => {
 
     return (
         <>
-        <Box sx={{ padding: '30px', flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-            <Card variant="outlined">{card}</Card>
-        </Box>
+            <Box sx={{ padding: '30px' }}>
+                <Card
+                    sx={{
+                        minWidth: 650,
+                        minHeight: 500,
+                        maxHeight: 'fitContent'
+                    }}
+                    variant="outlined"
+                >
+                    {card}
+                </Card>
+            </Box>
         </>
     );
 }
