@@ -1,7 +1,7 @@
 /* eslint-disable */
-import React, { 
+import React, {
     useState,
-    useEffect,
+    useEffect, useRef,
 } from 'react';
 import { Paper,
     Box,
@@ -21,9 +21,13 @@ import { Paper,
     MenuItem,
     Skeleton,
 } from '@mui/material';
+import { useAuth } from '../../../lib/hooks/useAuth';
+import { useBackgroundFetch } from '../../../lib/hooks/useBackgroundFetch';
+import FatalErrorComponent from "../../FatalError";
 import { SelectChangeEvent } from '@mui/material/Select';
 import axios from 'axios';
 import moment from 'moment';
+import {bool} from "@inovua/reactdatagrid-community/filterTypes";
 
 function createData(
     name: string,
@@ -35,84 +39,73 @@ function createData(
 }
 
 const TopMerchants = (props) => {
+    const callApi = useBackgroundFetch();
+    const auth = useAuth();
     const [dateSelection, setDateSelection] = useState('7 Days');
     const [topMerchants, setTopMerchants] = useState([]);
-    const [startDate, setStartDate] = useState(moment().subtract(7, 'days').format('YYYY-MM-DD'));
-    const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
     const [loading, setLoading] = useState(true);
-    const [reCallTimeFrame, setReCallTimeFrame] = useState('7days')
+    const [fatalError, setFatalError] = useState(false);
+    const topMerchants7days = useRef(null);
+    const topMerchants2weeks = useRef(null);
+    const topMerchants30days = useRef(null);
+    const topMerchants6mo = useRef(null);
 
-    const fetchData = async () => {
-        console.log('fetch data running');
-        try {
-            const currentTime = Date.now();
-            const expTime = currentTime + 86400000;
-            const config = {
-                params: {
-                    user_id: props.cookie,
-                    startDate: '2022-02-28',
-                    endDate: '2022-06-05',
-                    queryType: 'topMerchants',
-                    merchantsStartDate: startDate,
-                    merchantsEndDate: endDate,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                url: '/api/dashboard',
-            }
-            const { data } = await axios(config)
-            console.log('DATA RESPONSE TOP MERCHANTS', data);
-            setTopMerchants(data.topMerchants);
-            localStorage.setItem(`topMerchantsCachedData${reCallTimeFrame}`, JSON.stringify(data.topMerchants));
-            localStorage.setItem(`topMerchantsCacheExpTime${reCallTimeFrame}`, expTime.toString());
-            setLoading(false)
-        } catch (error) {
-            console.error(error)
+
+    const fetchData = async (forceRetry:boolean) => {
+        const apiCall = await callApi.fetchTopMerchants(forceRetry);
+        if (apiCall.fatalError) {
+            setFatalError(apiCall.fatalError);
+            setLoading(false);
+            console.error('fatal error, inside spendingOverview component')
+            return;
         }
+        if (apiCall.topMerchants7daysRes[0].startDate) {
+            setDateSelection('7 Days');
+            setTopMerchants(apiCall.topMerchants7daysRes);
+        }
+        if (apiCall.topMerchants2weeksRes[0].startDate && !apiCall.topMerchants7daysRes[0].startDate) {
+            setDateSelection('2 Weeks');
+            setTopMerchants(apiCall.topMerchants2weeksRes);
+        }
+        if (apiCall.topMerchants30daysRes[0].startDate && !apiCall.topMerchants2weeksRes[0].startDate && !apiCall.topMerchants7daysRes[0].startDate) {
+            setDateSelection('30 Days');
+            setTopMerchants(apiCall.topMerchants30daysRes);
+        }
+        if (apiCall.topMerchants6moRes[0].startDate && !apiCall.topMerchants30daysRes[0].startDate && !apiCall.topMerchants2weeksRes[0].startDate && !apiCall.topMerchants7daysRes[0].startDate) {
+            setDateSelection('6 Months');
+            setTopMerchants(apiCall.topMerchants6moRes);
+        }
+        topMerchants7days.current = apiCall.topMerchants7daysRes
+        topMerchants2weeks.current = apiCall.topMerchants2weeksRes
+        topMerchants30days.current = apiCall.topMerchants30daysRes
+        topMerchants6mo.current = apiCall.topMerchants6moRes
+        setFatalError(apiCall.fatalError);
+        setLoading(false);
     }
 
-    const cacheData = (reCallType) => {
-        if (typeof window == "undefined") return;
-        const currentTime = Date.now();
-        const cacheExpTime = parseInt(localStorage.getItem(`topMerchantsCacheExpTime${reCallType}`));
-        const cachedData = JSON.parse(localStorage.getItem(`topMerchantsCachedData${reCallType}`));
-        if (!cacheExpTime || !cachedData) {
-            fetchData();
-        } else if (cacheExpTime < currentTime) {
-            fetchData();
-        } else if (cacheExpTime > currentTime) {
-            setTopMerchants(cachedData);
-            setLoading(false);
-        }
-    };
 
     useEffect(() => {
         if (typeof window == "undefined") return;
-        cacheData(reCallTimeFrame);
-    }, [startDate])
+        if (!auth.user) return
+        fetchData(false);
+    }, [auth.user])
+
+    const handleForceRetry = () => {
+        setFatalError(false);
+        setLoading(true);
+        fetchData(true);
+    }
 
     const handleSelectChange = (event: SelectChangeEvent) => {
+        console.log('yer im runnin')
         if (event.target.value === '7 Days') {
-            let startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
-            setStartDate(startDate);
-            setReCallTimeFrame('7days');
-            setLoading(true);
+            setTopMerchants(topMerchants7days.current);
         } else if (event.target.value === '2 Weeks') {
-            let startDate = moment().subtract(14, 'days').format('YYYY-MM-DD');
-            setStartDate(startDate);
-            setReCallTimeFrame('2weeks');
-            setLoading(true);
+            setTopMerchants(topMerchants2weeks.current);
         } else if (event.target.value === '30 Days') {
-            let startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
-            setStartDate(startDate);
-            setReCallTimeFrame('30days');
-            setLoading(true);
+            setTopMerchants(topMerchants30days.current);
         } else if (event.target.value === '6 Months') {
-            let startDate = moment().subtract(6, 'months').format('YYYY-MM-DD');
-            setStartDate(startDate);
-            setReCallTimeFrame('6mo');
-            setLoading(true);
+            setTopMerchants(topMerchants6mo.current);
         }
         setDateSelection(event.target.value as string);
     }
@@ -222,6 +215,28 @@ const TopMerchants = (props) => {
         );
     }
 
+    const topMerchantsComponent = (
+      <>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              {spendingTimeframe[dateSelection]}
+          </Typography>
+          <CardActions>
+              {select}
+          </CardActions>
+          <BasicTable />
+      </>
+    )
+
+    const ContentToDisplay = () => {
+        if (!loading && fatalError) {
+            return <FatalErrorComponent handleForceRetry={handleForceRetry} />
+        } else if (!loading && !fatalError) {
+            return topMerchantsComponent
+        } else if (!fatalError && loading) {
+            return skeleton;
+        }
+    }
+
 
     const card = (
         <>
@@ -229,13 +244,7 @@ const TopMerchants = (props) => {
             <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
                 Top Merchants
             </Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                {spendingTimeframe[dateSelection]}
-            </Typography>
-            <CardActions>
-                {select}
-            </CardActions>
-            <BasicTable />
+            <ContentToDisplay />
         </CardContent>
     </>
     )

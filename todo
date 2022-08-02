@@ -78,3 +78,8 @@ figure out why dynamic txns on prodcution is broken (only when clicked on from d
 fix "sign in" link on sign up page
 line chart 7 days in production broken
 add try catch to all api calls and cache methods
+
+
+add backend route which fetches account data, cache it, add check where if data is edited it removes and updates cache. Each element should be cached, ex: first name, last name, phone number etc.
+
+add auth and personal to address tab

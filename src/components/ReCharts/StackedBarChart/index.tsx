@@ -52,7 +52,6 @@ const StackedBarChart = (props) => {
           },
           headers: {
               'Content-Type': 'application/json',
-              'earmark-api-key': process.env.EARMARK_API_KEY,
           },
       };
 

@@ -1,13 +1,12 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
-import { Select, SelectChangeEvent, FormControl, InputLabel, MenuItem, Paper, OutlinedInput, Checkbox, ListItemText, Button } from '@mui/material';
-import { Theme, useTheme } from '@mui/material/styles';
+import React, { useState } from 'react';
+import { Select, FormControl, InputLabel, MenuItem, Paper, OutlinedInput, Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import styles from '../../styles/Dashboard/Visualize.module.css';
 import LineChartComponent from '../ReCharts/LineChartComponent';
 import BarChartComponent from '../ReCharts/StackedBarChart';
 import PieChartComponent from '../ReCharts/PieChartComponent';
 import TreemapComponent from '../ReCharts/TreeMapComponent';
-import { useAuth } from '../../lib/hooks/useAuth';
 import moment from 'moment';
 
 const categories = [
@@ -44,41 +43,42 @@ const MenuProps = {
 
 const App = () => {
     const theme = useTheme();
-    const today = moment().format("YYYY-MM-DD");
-    const todayMonth = moment().format("M");
-    const todayYear = moment().format("YYYY");
-    const sevenDays = moment().subtract(7, 'days').format("YYYY-MM-DD");
-    const twoWeeks = moment().subtract(14, 'days').format("YYYY-MM-DD");
-    const oneMonth = moment().subtract(30, 'days').format("YYYY-MM-DD");
-    const threeMonths = moment().subtract(90, 'days').format("YYYY-MM-DD");
-    const sixMonths = moment().subtract(180, 'days').format("YYYY-MM-DD");
+    const sevenDays = moment().subtract(1, 'weeks').format("YYYY-MM-DD");
+    const oneMonth = moment().subtract(1, 'months').format("YYYY-MM-DD");
+    const threeMonths = moment().subtract(3, 'months').format("YYYY-MM-DD");
+    const sixMonths = moment().subtract(6, 'months').format("YYYY-MM-DD");
     const oneYear = moment().subtract(1, 'years').format("YYYY-MM-DD");
     const twoYears = moment().subtract(2, 'years').format("YYYY-MM-DD");
     const [selectedVisual, setSelectedVisual] = useState("Line Chart");
-    const [selectedDates, setSelectedDates] = useState(today);
+    const [selectedDates, setSelectedDates] = useState(sevenDays);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [buttonState, setButtonState] = useState("secondary");
     const [buttonText, setButtonText] = useState("Visualize");
-    const [dateName, setDateName] = useState('today')
-    const auth = useAuth();
+    const [dateName, setDateName] = useState('SevenDays')
 
     const handleChangeVisuals = (e) => {
         setSelectedVisual(e.target.value);
     };
+
     const handleChangeDates = (e) => {
         setSelectedDates(e.target.value);
-        if (e.target.value == today) {
-            setDateName('today');
-        } else if (e.target.value == sevenDays) {
-            setDateName('sevenDays');
-        } else if (e.target.value == twoWeeks) {
-            setDateName('twoWeeks');
+        if (e.target.value == sevenDays) {
+            setDateName('SevenDays');
+
         } else if (e.target.value == oneMonth) {
-            setDateName('oneMonth');
+            setDateName('OneMonth');
+
         } else if (e.target.value == threeMonths) {
-            setDateName('threeMonths');
+            setDateName('ThreeMonths');
+
         } else if (e.target.value == sixMonths) {
-            setDateName('sixMonths');
+            setDateName('SixMonths');
+
+        } else if (e.target.value == oneYear) {
+            setDateName('OneYear');
+
+        } else if (e.target.value == twoYears) {
+            setDateName('TwoYears');
         }
     };
 
@@ -87,7 +87,6 @@ const App = () => {
             target: { value },
           } = event;
           setSelectedCategories(
-            // On autofill we get a stringified value.
             typeof value === 'string' ? value.split(',') : value,
           );
     };
@@ -154,20 +153,19 @@ const App = () => {
                                         minWidth: 150,
                                     }}
                                 >
-                                    <MenuItem value={today}>Today</MenuItem>
-                                    <MenuItem value={sevenDays}>7 Days</MenuItem>
-                                    <MenuItem value={twoWeeks}>2 Weeks</MenuItem>
-                                    <MenuItem value={oneMonth}>30 Days</MenuItem>
-                                    <MenuItem value={threeMonths}>3 Months (90 days)</MenuItem>
-                                    <MenuItem value={sixMonths}>6 Months (180 days)</MenuItem>
-                                    <MenuItem value="Custom">Custom</MenuItem>
+                                    <MenuItem value={sevenDays}>1 week</MenuItem>
+                                    <MenuItem value={oneMonth}>1 month</MenuItem>
+                                    <MenuItem value={threeMonths}>3 Months</MenuItem>
+                                    <MenuItem value={sixMonths}>6 Months</MenuItem>
+                                    <MenuItem value={oneYear}>1 year</MenuItem>
+                                    <MenuItem value={twoYears}>2 years</MenuItem>
                                 </Select>
                             </FormControl>
 
                             <FormControl sx={{ m: 1, width: 300 }}>
-                                <InputLabel id="demultiple-categories-label">Categories</InputLabel>
+                                <InputLabel id="categories-label">Categories</InputLabel>
                                 <Select
-                                labelId="demultiple-categories-label"
+                                labelId="categories-label"
                                 id="multiple-categories"
                                 multiple
                                 value={selectedCategories}

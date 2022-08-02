@@ -9,7 +9,7 @@ import { useAuth } from '../../lib/hooks/useAuth';
 import { globalVars } from '../../lib/globalVars';
 import { parseCookies } from '../../lib/parseCookies';
 
-import PageTemplate, {PageTemplateResponsive} from '../../components/PageTemplate';
+import PageTemplate from '../../components/PageTemplate';
 import { Box, Grid } from '@mui/material';
 import SpendingOverview from '../../components/Dashboard/SpendingOverview';
 import TopMerchants from '../../components/Dashboard/TopMerchants';
@@ -38,7 +38,7 @@ export async function getServerSideProps({ req, res }) {
 
 const Dashboard = ({ cookie }) => {
     return (
-        <PageTemplateResponsive title="Dashboard" description="Dashboard overview for Earmark">
+        <PageTemplate title="Dashboard" description="Dashboard overview for Earmark">
             <Grid container spacing={3}>
                 <Box sx={{ display: { xs: 'flex', md: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
                     <Grid item xs={12}>
@@ -68,7 +68,7 @@ const Dashboard = ({ cookie }) => {
                     <AccountBalance cookie={cookie} />
                 </Grid>
             </Grid>
-        </PageTemplateResponsive>
+        </PageTemplate>
     )
 }
 

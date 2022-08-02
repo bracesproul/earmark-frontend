@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import Head from 'next/head';
 import { useRemoveCache } from '../../lib/hooks/useRemoveCache';
-
+import PageTemplate from '../../components/PageTemplate';
 import styles from '../../styles/Account/Account.module.css';
 import { useAuth } from '../../lib/hooks/useAuth';
 import { initializeApp } from "firebase/app";
@@ -18,7 +18,7 @@ import NotSignedIn from '../../components/Auth/NotSignedIn'
 import SideNav from '../../components/Nav/SideNav';
 import SeeAccount from '../../components/Account'
 
-export default function Home() {
+function Home() {
     const auth = useAuth();
     return (
         <div className="">
@@ -45,3 +45,15 @@ export default function Home() {
         </div>
     )
 };
+
+const AccountPage = () => {
+    return (
+        <>
+        <PageTemplate title="Account" description="Account overview for Earmark">
+            <SeeAccount />
+        </PageTemplate>
+        </>
+    )
+}
+
+export default AccountPage;

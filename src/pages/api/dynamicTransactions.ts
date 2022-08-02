@@ -42,6 +42,7 @@ export default async function handler(req, res) {
             finalResponse = data;
             finalStatus = 200;
         } catch (error) {
+            console.error(error);
             finalResponse = error;
             finalStatus = 400;
         }

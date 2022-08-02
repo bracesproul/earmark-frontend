@@ -8,7 +8,6 @@ import axios from 'axios';
 import { useAuth } from '../../lib/hooks/useAuth';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box,
-    Paper,
     ButtonGroup,
     Button,
     Tooltip,
@@ -16,15 +15,19 @@ import { Box,
     Menu,
     MenuItem
 } from '@mui/material';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'; 
+import { useBackgroundFetch } from "../../lib/hooks/useBackgroundFetch";
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+
 export default function dynamicTransactions(props) {
     const auth = useAuth();
+    const callApi = useBackgroundFetch();
     const [accountTypes, setAccountTypes] = useState([]);
     const [currentAccountType, setCurrentAccountType] = useState('');
     const [transactions, setTransactions] = useState([]);
     const [rawData, setRawData] = useState([]);
     const [selected, setSelected] = useState('outlined');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [loading, setLoading] = useState(true);
 
     const ITEM_HEIGHT = 48;
     const open = Boolean(anchorEl);
@@ -43,7 +46,9 @@ export default function dynamicTransactions(props) {
                 setSelected(transaction.account.account_id);
             }
         })
-    }, [currentAccountType])
+    }, [currentAccountType]);
+
+
 
     useEffect(() => {
         if (!auth.user) {
@@ -51,34 +56,16 @@ export default function dynamicTransactions(props) {
             return;
         }
         const fetchData = async () => {
-            const config = {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                url: '/api/dynamicTransactions',
-                params: {
-                    user_id: auth.user.uid,
-                    page_id: props.query.ins_id,
-                    startDate: '2022-01-01',
-                    endDate: '2022-06-07',
-                }
-            };
-            const { data } = await axios(config);
-            const accounts = data.map((data) => {
-                console.log(data)
-                return { ins_name: data.account.subtype, ins_id: data.account.account_id, account_name: data.account.account_name }
-            })
-            setAccountTypes(accounts);
-            setRawData(data);
+            const apiCall = await callApi.fetchDynamicTransactions(props.query.ins_id)
+            setAccountTypes(apiCall.accountTypes);
+            setRawData(apiCall.rawData);
             if (props.query.account_id) {
                 setCurrentAccountType(props.query.account_id);
-
-                return;
             }
-            setTransactions(data[0].account.transactions);
-            setSelected(data[0].account.account_id);
-        };
+            setTransactions(apiCall.transactions);
+            setSelected(apiCall.selectedData);
+            setLoading(false);
+        }
         fetchData();
     }, [auth.user])
 
@@ -93,42 +80,78 @@ export default function dynamicTransactions(props) {
         setCurrentAccountType(accId);
     }
 
+    const MobileDropDown = () => {
+        return (
+            <>
+                <IconButton
+                    aria-label="more"
+                    id="long-button"
+                    aria-controls={open ? 'long-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                >
+                    <AccountBalanceIcon />
+                </IconButton>
+                <Menu
+                    id="long-menu"
+                    MenuListProps={{
+                        'aria-labelledby': 'long-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                        style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: '20ch',
+                        },
+                    }}
+                >
+                    { loading ? (
+                        <MenuItem key={10000000000}>
+                            Loading...
+                        </MenuItem>
+                    ) : mobileDropdownList }
+                </Menu>
+            </>
+        )
+    }
+
     const mobileDropdownList = (
         <>
-        <IconButton
-        aria-label="more"
-        id="long-button"
-        aria-controls={open ? 'long-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-        >
-            <AccountBalanceIcon />
-        </IconButton>
-        <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: '20ch',
-          },
-        }}
-        >
             {accountTypes.map((account, index) => (
-            <MenuItem key={index} onClick={() => handleClose(account)}>
-                {account.account_name}
-            </MenuItem>
+                <MenuItem key={index} onClick={() => handleClose(account)}>
+                    {account.account_name}
+                </MenuItem>
             ))}
-        </Menu>
         </>
-
     )
+
+    const ButtonGroup = () => {
+        let buttonStyle: string = "outlined";
+        return (
+            <>
+                { loading ? (
+                        <Tooltip title={'Loading...'} key={1000000}>
+                            <Button variant='outlined' id='100000000' key={10000000}>Loading...</Button>
+                        </Tooltip>
+                ) : (
+                    <>
+                        {accountTypes.map((account, index) => {
+                            if (account.ins_id === selected) buttonStyle = "contained";
+                            return (
+                                <Tooltip title={`${account.account_name} transactions`} key={index}>
+                                    {/* @ts-ignore */}
+                                    <Button variant={buttonStyle} onClick={() => handleButtonClick(account.ins_id)} id={account.ins_id} key={index}>{account.account_name}</Button>
+                                </Tooltip>
+                            )
+                        })}
+                    </>
+                )}
+            </>
+        )
+    }
 
     const MuiDatagrid = (props) => {
         return (
@@ -144,22 +167,14 @@ export default function dynamicTransactions(props) {
                 marginRight: '2rem',
             }}>
                 <Box textAlign='center' sx={{ paddingBottom: '2rem'}}>
+                    {/* @ts-ignore */}
                     <ButtonGroup>
-                        {accountTypes.map((account, index) => {
-                            let buttonStyle: string = "outlined";
-                            if (account.ins_id === selected) buttonStyle = "contained";
-                            return (
-                                <Tooltip title={`${account.account_name} transactions`} key={index}>
-                                    {/* @ts-ignore */}
-                                    <Button variant={buttonStyle} onClick={() => handleButtonClick(account.ins_id)} id={account.ins_id} key={index}>{account.account_name}</Button>
-                                </Tooltip>
-                            ) 
-                        })}
+                        <ButtonGroup />
                     </ButtonGroup>
                 </Box>
                 <div style={{ display: 'flex', height: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
-                        <DataGrid rows={props.rows} columns={columns} />
+                        <DataGrid autoHeight rows={props.rows} columns={columns} />
                     </div>
                 </div>
             </Box>
@@ -174,11 +189,11 @@ export default function dynamicTransactions(props) {
                 marginRight: '10px',
             }}>
                 <Box textAlign='center' sx={{ paddingBottom: '2rem', margin: 'auto'}}>
-                {mobileDropdownList}
+                    <MobileDropDown />
                 </Box>
                 <div style={{ display: 'flex', height: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
-                        <DataGrid rows={props.rows} columns={columns} />
+                        <DataGrid autoHeight rows={props.rows} columns={columns} />
                     </div>
                 </div>
             </Box>

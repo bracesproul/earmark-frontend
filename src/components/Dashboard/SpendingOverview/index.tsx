@@ -1,7 +1,8 @@
 /* eslint-disable */
-import React, { 
+import React, {
   useState,
   useEffect,
+  useRef,
 } from 'react';
 import { Paper,
   Box,
@@ -21,83 +22,84 @@ import { Paper,
   MenuItem,
   Skeleton,
 } from '@mui/material';
+import { useAuth } from '../../../lib/hooks/useAuth';
+import FatalErrorComponent from "../../FatalError";
+import { useBackgroundFetch } from "../../../lib/hooks/useBackgroundFetch";
 import { SelectChangeEvent } from '@mui/material/Select';
-import axios from 'axios';
-import moment from 'moment';
 
 const SpendingOverview = (props) => {
+  const callApi = useBackgroundFetch();
+  const auth = useAuth();
   const [dateSelection, setDateSelection] = useState('24 Hours');
   const [spendingOverview, setSpendingOverview] = useState([]);
-  const [startDate, setStartDate] = useState(moment().subtract(1, 'days').format('YYYY-MM-DD'));
-  const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
+  const [fatalError, setFatalError] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [reCallTimeFrame, setReCallTimeFrame] = useState('24hrs')
+  const overview24hrs = useRef(null);
+  const overview7days = useRef(null);
+  const overview2weeks = useRef(null);
+  const overview1mo = useRef(null);
 
-  const fetchData = async () => {
-    try {
-      const currentTime = Date.now();
-      const expTime = currentTime + 86400000;
-      const config = {
-        params: {
-            user_id: props.cookie,
-            startDate: '2022-02-28',
-            endDate: '2022-06-05',
-            spendingStartDate: startDate,
-            spendingEndDate: moment().format('YYYY-MM-DD'),
-            queryType: 'spendingOverview',
-        },
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        url: '/api/dashboard',
+
+  const fetchData = async (forceRetry:boolean) => {
+    const apiCall = await callApi.fetchSpendingOverview(forceRetry)
+    if (apiCall.fatalError) {
+      setFatalError(apiCall.fatalError);
+      setLoading(false);
+      console.error('fatal error, inside spendingOverview component')
+      return;
     }
-    const response = await axios(config)
-    setSpendingOverview(response.data.spendingOverview)
-    localStorage.setItem(`spendingOverviewCachedData${reCallTimeFrame}`, JSON.stringify(response.data.spendingOverview));
-    localStorage.setItem(`spendingOverviewCacheExpTime${reCallTimeFrame}`, expTime.toString());
-    setLoading(false)
-    } catch (error) {
-      console.error(error)
+    if (apiCall.spendingOverview24hrs[0].account_id) {
+      console.log('24 hrs')
+      setSpendingOverview(apiCall.spendingOverview24hrs);
+      setDateSelection('24 Hours');
     }
+    if (apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
+      console.log('7 days')
+      setSpendingOverview(apiCall.spendingOverview7days);
+      setDateSelection('7 Days');
+    }
+    if (apiCall.spendingOverview2weeks[0].account_id && !apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
+      console.log('2 weeks')
+      setSpendingOverview(apiCall.spendingOverview2weeks);
+      setDateSelection('2 Weeks');
+    }
+    if (apiCall.spendingOverview1mo[0].account_id && !apiCall.spendingOverview2weeks[0].account_id && !apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
+      console.log('1 mo')
+      setSpendingOverview(apiCall.spendingOverview1mo);
+      setDateSelection('1 Month');
+    } else if (!apiCall.spendingOverview1mo[0].account_id && !apiCall.spendingOverview2weeks[0].account_id && !apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
+      console.log('else?')
+      setLoading(false);
+      setSpendingOverview([]);
+    }
+    overview24hrs.current = apiCall.spendingOverview24hrs;
+    overview7days.current = apiCall.spendingOverview7days;
+    overview2weeks.current = apiCall.spendingOverview2weeks;
+    overview1mo.current = apiCall.spendingOverview1mo;
+    setLoading(false);
+    setFatalError(apiCall.fatalError);
   }
 
-  const cacheData = (reCallType) => {
-    if (typeof window == "undefined") return;
-    const currentTime = Date.now();
-    const cacheExpTime = parseInt(localStorage.getItem(`spendingOverviewCacheExpTime${reCallType}`));
-    const cachedData = JSON.parse(localStorage.getItem(`spendingOverviewCachedData${reCallType}`));
-    if (!cacheExpTime || !cachedData) {
-        fetchData();
-    } else if (cacheExpTime < currentTime) {
-        fetchData();
-    } else if (cacheExpTime > currentTime) {
-        setSpendingOverview(cachedData);
-        setLoading(false);
-    }
-  };
+  const handleForceRetry = () => {
+    fetchData(true);
+  }
 
   useEffect(() => {
     if (typeof window == "undefined") return;
-    cacheData(reCallTimeFrame);
-  }, [startDate])
+    if (!auth.user) return;
+    fetchData(false);
+  }, [auth.user]);
+
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     if (event.target.value === '24 Hours') {
-      setStartDate(moment().format('YYYY-MM-DD'));
-      setReCallTimeFrame('24hrs')
-      setLoading(true);
+      setSpendingOverview(overview24hrs.current);
     } else if (event.target.value === '7 Days') {
-      setStartDate(moment().subtract(7, 'days').format('YYYY-MM-DD'));
-      setReCallTimeFrame('7days')
-      setLoading(true);
+      setSpendingOverview(overview7days.current);
     } else if (event.target.value === '2 Weeks') {
-      setStartDate(moment().subtract(14, 'days').format('YYYY-MM-DD'));
-      setReCallTimeFrame('2weeks')
-      setLoading(true);
+      setSpendingOverview(overview2weeks.current);
     } else if (event.target.value === '1 Month') {
-      setStartDate(moment().subtract(1, 'months').format('YYYY-MM-DD'));
-      setReCallTimeFrame('1mo')
-      setLoading(true);
+      setSpendingOverview(overview1mo.current);
     }
     setDateSelection(event.target.value as string);
   }
@@ -137,12 +139,6 @@ const SpendingOverview = (props) => {
     <Skeleton animation="wave" />
     <Skeleton animation="wave" />
     <Skeleton animation="wave" />
-    </>
-  )
-
-  const noData = (
-    <>
-    <Typography variant="h6">No Data</Typography>
     </>
   )
 
@@ -216,7 +212,28 @@ const SpendingOverview = (props) => {
     </>
     );
   }
-  
+
+  const spendingOverviewComponent = (
+    <>
+      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        {spendingTimeframe[dateSelection]}
+      </Typography>
+      <CardActions>
+        {select}
+      </CardActions>
+      <BasicTable />
+    </>
+  )
+
+  const ContentToDisplay = () => {
+    if (!loading && fatalError) {
+      return <FatalErrorComponent handleForceRetry={handleForceRetry} />
+    } else if (!loading && !fatalError) {
+      return spendingOverviewComponent
+    } else if (!fatalError && loading) {
+      return skeleton;
+    }
+  }
   
   const card = (
     <>
@@ -224,13 +241,7 @@ const SpendingOverview = (props) => {
       <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
         Spending Overview
       </Typography>
-      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {spendingTimeframe[dateSelection]}
-      </Typography>
-      <CardActions>
-        {select}
-      </CardActions>
-      <BasicTable />
+      <ContentToDisplay />
     </CardContent>
   </>
   )

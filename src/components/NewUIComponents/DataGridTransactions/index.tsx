@@ -12,7 +12,8 @@ import { useFirestore } from '../../../lib/hooks/useFirestore';
 import { globalVars } from '../../../lib/globalVars';
 import { FormControl, InputLabel, Select, MenuItem, OutlinedInput, Button } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
-import { useAuth } from '../../../lib/hooks/useAuth'
+import { useAuth } from '../../../lib/hooks/useAuth';
+import { useBackgroundFetch } from '../../../lib/hooks/useBackgroundFetch';
 
 const categories = [
     "Income",
@@ -64,6 +65,7 @@ const allTransactionsColumns = [
 
 const DataGridTransactions = () => {
     const theme = useTheme();
+    const callApi = useBackgroundFetch();
     const auth = useAuth();
     const [displayColumns, setDisplayColumns] = useState(allTransactionsColumns);
     const [selectionModel, setSelectionModel] = useState([]);
@@ -73,15 +75,14 @@ const DataGridTransactions = () => {
     const [buttonText, setButtonText] = useState("Visualize");
     const [categoriesToDisplay, setCategoriesToDisplay] = useState([]);
     const [categoryRows, setCategoryRows] = useState([]);
+    const [fatalError, setFatalError] = useState(false);
+    const [loading, setLoading] = useState(true);
     const dataGridPlaceholder = <DataGridComponent checkboxSelection={true} message="No transactions selected" rows={[]} columns={displayColumns} selectionModel={selectionModel} setSelectionModel={setSelectionModel} />;
     let selectedRowIds = new Array;
     // @ts-ignore
     const { success } = useFirestore();
 
-    const endDate = moment().format('YYYY-MM-DD');
-    const startDate = moment().subtract(2, 'years').format('YYYY-MM-DD');
-
-    const fetchData = async () => {
+/*    const fetchData = async () => {
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
         const byCategoryConfig = {
@@ -135,12 +136,25 @@ const DataGridTransactions = () => {
             setCategoriesToDisplay(cachedData);
             setCategoryRows(cachedDataCategoryRows)
         }
-      };
-    
-      useEffect(() => {
+      };*/
+
+    const fetchData = async (forceRefresh:boolean) => {
+        return await callApi.fetchAllTransactions(forceRefresh);
+    }
+
+    useEffect(() => {
         if (!auth.user) return;
-        cacheData()
-      }, [auth.user])
+        fetchData(false)
+            .then((res) => {
+                setCategoriesToDisplay(res.categoriesToDisplay);
+                setCategoryRows(res.categoryRows);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error(error);
+                setFatalError(true)
+            })
+    }, [auth.user])
     
     useEffect(() => {
         if (success) {

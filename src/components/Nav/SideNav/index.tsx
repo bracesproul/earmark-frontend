@@ -197,13 +197,13 @@ const SideNav = () => {
         };
     
         return (
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <Drawer
                 sx={{
-                    width: drawerWidth,
+                    width: '240px',
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                    width: drawerWidth,
+                    width: '240px',
                     boxSizing: 'border-box',
                     },
                 }}
@@ -264,14 +264,14 @@ const SideNav = () => {
     }
 
     return (
-        <div>
+        <>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <ExpandedPageSideNav />
         </Box>
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <SmallPageSideNav />
         </Box>
-        </div>
+        </>
     )
 };
 

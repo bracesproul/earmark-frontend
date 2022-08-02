@@ -52,7 +52,6 @@ const RecurringTransactions = () => {
     const auth = useAuth();
     const endDate = moment().format('YYYY-MM-DD');
     const startDate = moment().subtract(2, 'years').format('YYYY-MM-DD');
-    const theme = useTheme();
     const fullScreen = true;
 
     const handleDialogOpen = (acc_id) => {
@@ -102,21 +101,6 @@ const RecurringTransactions = () => {
             console.error(error)
         }
     };
-
-    useEffect(() => {
-        if (isDataNull) {
-            console.log('false');
-            return;
-        };
-        console.log('before loop run');
-        allSummaryData.forEach((element) => {
-            if (element[0].acc_id == selectedSummaryAccount) {
-                setSummaryData(element);
-                setOpen(true);
-            }
-        })
-    }, [selectedSummaryAccount])
-
     const cacheData = () => {
         if (typeof window == "undefined") return;
         try {
@@ -135,7 +119,23 @@ const RecurringTransactions = () => {
             console.error(error)
         }
     };
-    
+
+
+    useEffect(() => {
+        if (isDataNull) {
+            console.log('false');
+            return;
+        };
+        console.log('before loop run');
+        allSummaryData.forEach((element) => {
+            if (element[0].acc_id == selectedSummaryAccount) {
+                setSummaryData(element);
+                setOpen(true);
+            }
+        })
+    }, [selectedSummaryAccount])
+
+
     useEffect(() => {
     if (!auth.user) return;
     cacheData()
@@ -268,14 +268,14 @@ const RecurringTransactions = () => {
                 </DialogTitle>
                 <DialogContent>
                     { isDataNull ? (
-                    <DataGrid autoPageSize={true} rows={undefined} columns={datagridColumns} sx={{
+                    <DataGrid autoHeight rows={undefined} columns={datagridColumns} sx={{
                         height: '100%',
                         width: { xs: '100%', md: '600px' },
                         display: 'flex',
                         margin: 'auto'
                     }} />
                     ) : (
-                    <DataGrid autoPageSize={true} rows={summaryData} columns={datagridColumns} sx={{
+                    <DataGrid autoHeight rows={summaryData} columns={datagridColumns} sx={{
                         height: '100%',
                         width: { xs: '100%', md: '600px' },
                         display: 'flex',

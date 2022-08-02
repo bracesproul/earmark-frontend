@@ -310,3 +310,18 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 - Changed recurring api to call from global vars instead of from production server
 
 ### Removed
+
+
+## [0.0.19] - 2022-07-15
+
+### Notes
+Commit to move code from laptop to desktop
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+### Added
+
+### Fixed
+
+### Changed
+
+### Removed

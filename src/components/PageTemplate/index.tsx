@@ -7,55 +7,31 @@ import NotSignedIn from "../Auth/NotSignedIn";
 import newStyles from './style.module.css'
 import { Box } from "@mui/material"
 const icon = "/favicon.ico";
+import SideNavCopy from '../Nav/SideNavCopy';
 
 const PageTemplate = (props) => {
-    const auth = useAuth();
     return (
-        <div className={styles.page}>
-        <Head>
-            <title>{props.title}</title>
-            <meta name="description" content={props.description} />
-        </Head>
-        <main className={styles.main}>
-            <SideNav />
-            <section className={styles.body}>
-                { !auth.user ? <NotSignedIn /> : props.children }
-            </section>
-        </main>
-        <footer></footer>
-        </div>
+        <>
+        <Box>
+            <Head>
+            <title>
+                    {props.title}
+                </title>
+                <meta name="description" content={props.description} /> 
+            </Head>
+            <Box>
+                <Box sx={{
+                    display: 'flex',
+                }}>
+                    <SideNavCopy />
+                </Box>
+                <Box sx={{ display: 'flex', width: { md: '80%', xl: '90%' }, marginLeft: 'auto' }}>
+                    {props.children}
+                </Box>
+            </Box>
+        </Box>
+        </>
     )
 }
-
-export const PageTemplateResponsive = (props) => {
-    const auth = useAuth();
-    return (
-        <div className={newStyles.page}>
-        <Head>
-            <title>{props.title}</title>
-            <meta name="description" content={props.description} />
-            
-        </Head>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        <main className={newStyles.mainDesktop}>
-            <SideNav />
-            <section className={newStyles.bodyDesktop}>
-                { !auth.user ? <NotSignedIn /> : props.children }
-            </section>
-        </main>
-        </Box>
-        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-        <main className={newStyles.mainMobile}>
-            <SideNav />
-            <section className={newStyles.bodyMobile}>
-                { !auth.user ? <NotSignedIn /> : props.children }
-            </section>
-        </main>
-        </Box>
-        <footer></footer>
-        </div>
-    )
-}
-
 
 export default PageTemplate;
