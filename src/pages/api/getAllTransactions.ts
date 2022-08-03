@@ -41,6 +41,7 @@ export default async function handler(req, res) {
             };
             const axiosResponse = await axios(config);
             finalResponse = {
+                transactions: axiosResponse.data,
                 dataGridTransactions: axiosResponse.data.dataGridTransactions,
                 transactionMetadata: axiosResponse.data.transactionMetadata,
                 categoriesAvail: axiosResponse.data.categoriesAvail,

@@ -349,7 +349,7 @@ So many changes, some breaking changes that will need to be fixed
 ## [0.0.21] - 2022-08-02
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main 1156698](https://github.com/bracesproul/earmark-frontend/commit/1156698)
 
 ### Added
 
@@ -357,5 +357,20 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 - Fixed spacing and box sizing for dashboard, looks better on mobile and desktop now
 
 ### Changed
+
+### Removed
+
+
+## [0.0.22] - 2022-08-02
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+### Added
+
+### Fixed
+
+### Changed
+- changed how the all transactions page works, now displays all transactions, but each account has its own datagrid
 
 ### Removed

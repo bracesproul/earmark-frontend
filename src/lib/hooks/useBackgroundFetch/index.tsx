@@ -36,22 +36,22 @@ interface ICheckAccounts {
 
 // Global variables
 const CHART_ELEMENTS = [
-    { dataKey: 'Income', stackId: 'a', fill: '#00FFFF' },
-    { dataKey: 'Transfer In', stackId: 'a', fill: '#000000' },
-    { dataKey: 'Transfer Out', stackId: 'a', fill: '#0000FF' },
-    { dataKey: 'Loan Payments', stackId: 'a', fill: '#FF00FF' },
-    { dataKey: 'Bank Fees', stackId: 'a', fill: '#808080' },
-    { dataKey: 'Entertainment', stackId: 'a', fill: '#008000' },
+    { dataKey: 'Income', stackId: 'a', fill: '#607d8b' },
+    { dataKey: 'Transfer In', stackId: 'a', fill: '#ff5722' },
+    { dataKey: 'Transfer Out', stackId: 'a', fill: '#795548' },
+    { dataKey: 'Loan Payments', stackId: 'a', fill: '#9e9e9e' },
+    { dataKey: 'Bank Fees', stackId: 'a', fill: '#ffeb3b' },
+    { dataKey: 'Entertainment', stackId: 'a', fill: '#ffc107' },
     { dataKey: 'Food And Drink', stackId: 'a', fill: '#00FF00' },
-    { dataKey: 'General Merchandise', stackId: 'a', fill: '#800000' },
-    { dataKey: 'Home Improvement', stackId: 'a', fill: '#000080' },
-    { dataKey: 'Medical', stackId: 'a', fill: '#808000' },
-    { dataKey: 'Personal Care', stackId: 'a', fill: '#800080' },
-    { dataKey: 'General Services', stackId: 'a', fill: '#FF0000' },
-    { dataKey: 'Government And Non-Profit', stackId: 'a', fill: '#C0C0C0' },
-    { dataKey: 'Transportation', stackId: 'a', fill: '#008080' },
-    { dataKey: 'Travel', stackId: 'a', fill: '#804000' },
-    { dataKey: 'Rent And Utilities', stackId: 'a', fill: '#AAFFC3' },
+    { dataKey: 'General Merchandise', stackId: 'a', fill: '#ff9800' },
+    { dataKey: 'Home Improvement', stackId: 'a', fill: '#4caf50' },
+    { dataKey: 'Medical', stackId: 'a', fill: '#8bc34a' },
+    { dataKey: 'Personal Care', stackId: 'a', fill: '#cddc39' },
+    { dataKey: 'General Services', stackId: 'a', fill: '#009688' },
+    { dataKey: 'Government And Non-Profit', stackId: 'a', fill: '#00bcd4' },
+    { dataKey: 'Transportation', stackId: 'a', fill: '#03a9f4' },
+    { dataKey: 'Travel', stackId: 'a', fill: '#673ab7' },
+    { dataKey: 'Rent And Utilities', stackId: 'a', fill: '#3f51b5' },
 ]
 
 // util functions
@@ -768,8 +768,8 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
     return toBeReturned;
 }
 
-/*done*/const checkAllDataIsPresent = (categoryResponse, data) => {
-    if (!categoryResponse.data.transactions || data.dataGridTransactions) {
+/*done*/const checkAllDataIsPresent = (data) => {
+/*    if (!categoryResponse.data.transactions || data.dataGridTransactions) {
         // cache check
         localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__false`);
         return {
@@ -807,31 +807,43 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
             cacheSet: false,
             fatalError: true,
         }
+    }*/
+    try {
+        let fatalError = false;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].no_transactions) fatalError = true;
+        }
+        return { fatalError: fatalError }
+    } catch (error) {
+        console.error('error occurred checking allTransactions');
+        console.error(error);
+        return { fatalError: true }
     }
+
 }
-/*done*/const setLocalStorageAllTransactions = (expTime, categoryResponse, data) => {
+/*done*/const setLocalStorageAllTransactions = (expTime, data) => {
     try {
         // cache check
         localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__true`);
 
         localStorage.setItem(`allTransactionsCacheExpTime`, expTime.toString());
-        localStorage.setItem(`allTransactionsCacheRows`, JSON.stringify(data.dataGridTransactions));
-        localStorage.setItem(`allTransactionsCacheCategoryRows`, JSON.stringify(categoryResponse.data.transactions));
+        localStorage.setItem(`allTransactionsDataCache`, JSON.stringify(data.transactions));
+        console.log(data.transactions)
+        // localStorage.setItem(`allTransactionsCacheCategoryRows`, JSON.stringify(categoryResponse.data.transactions));
         return {
-            categoriesToDisplay: data.dataGridTransactions,
-            categoryRows: categoryResponse.data.transactions,
+            transactions: data.transactions,
             cacheSet: true,
             fatalError: false,
         }
     } catch (error) {
         // cache check
         localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__false`);
+        console.error('error occurred setting local storage for allTransactions');
         console.error(error);
         return {
-            categoriesToDisplay: null,
-            categoryRows: null,
-            cacheSet: true,
-            fatalError: false,
+            transactions: data.transactions,
+            cacheSet: false,
+            fatalError: true,
         }
     }
 }
@@ -1067,12 +1079,12 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
 /*done*/const getAllTransactionsCachedData = () => {
     try {
         return {
-            categoriesToDisplay: JSON.parse(localStorage.getItem(`allTransactionsCacheRows`)),
-            categoryRows: JSON.parse(localStorage.getItem(`allTransactionsCacheCategoryRows`)),
+            transactions: JSON.parse(localStorage.getItem(`allTransactionsDataCache`)),
             cacheSet: true,
             fatalError: false,
         }
     } catch (error) {
+        console.error('error occurred inside getAllTransactionsCachedData');
         console.error(error);
         return {
             fatalError: true,
@@ -1940,7 +1952,7 @@ const useProvideBackgroundFetch = () => {
         try {
             const currentTime = Date.now();
             const expTime = currentTime + 86400000;
-            const byCategoryConfig = {
+            /*const byCategoryConfig = {
                 method: "GET",
                 url: '/api/allTransactionsByCategory',
                 params: {
@@ -1952,7 +1964,7 @@ const useProvideBackgroundFetch = () => {
                     'Content-Type': 'application/json',
                 },
             };
-            const categoryResponse = await axios(byCategoryConfig);
+            const categoryResponse = await axios(byCategoryConfig);*/
 
             const config = {
                 method: "GET",
@@ -1970,18 +1982,17 @@ const useProvideBackgroundFetch = () => {
             };
             const { data } = await axios(config);
 
-            if (checkAllDataIsPresent(categoryResponse, data).fatalError) {
-                console.error(checkAllDataIsPresent(categoryResponse, data).message)
-                return checkAllDataIsPresent(categoryResponse, data);
+            if (checkAllDataIsPresent(data).fatalError) {
+                return checkAllDataIsPresent(data);
             }
-            return setLocalStorageAllTransactions(expTime, categoryResponse, data);
+            return setLocalStorageAllTransactions(expTime, data);
         } catch (error) {
+            console.error('error occurred inside main allTransactions fetch');
             console.error(error);
             // cache check
             localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__false`);
             return {
-                categoriesToDisplay: null,
-                categoryRows: null,
+                transactions: null,
                 cacheSet: false,
                 fatalError: true,
             }
