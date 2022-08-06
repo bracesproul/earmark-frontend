@@ -10,8 +10,7 @@ import { useBackgroundFetch } from '../../lib/hooks/useBackgroundFetch';
 import { useRouter } from "next/router";
 import PageTemplate from "../../components/PageTemplate";
 import LineChartComponent from '../../components/v2/LineChartComponent';
-import { DataGrid } from '@mui/x-data-grid';
-import LoadingSkeleton from "../../components/LoadingSkeleton";
+import CssBaseline from "@mui/material/CssBaseline";
 import PieChartComponent from "../../components/v2/PieChartComponent";
 import TreeMapComponent from "../../components/v2/TreeMapComponent";
 import BarChartComponent from '../../components/v2/BarChartComponent';
@@ -62,7 +61,7 @@ const chartObj = [
     }
 ];
 
-export default function Home() {
+function Home() {
     const router = useRouter();
     const callApi = useBackgroundFetch();
     const auth = useAuth();
@@ -231,17 +230,172 @@ export default function Home() {
     )
 }
 
-function MUIDatGrid(props) {
+export default function Visualize() {
+    const router = useRouter();
+    const callApi = useBackgroundFetch();
+    const auth = useAuth();
+    const [loading, setLoading] = useState(true);
+    const [lineBarData, setLineBarData] = useState<any | null>([]);
+    const [pieData, setPieData] = useState<any | null>([]);
+    const [lineChartKeys, setLineChartKeys] = useState([]);
+    const [windowDimensions, setWindowDimensions] = useState({ height: 900, width: 1440 });
+    const lineChartData = useRef(null);
+    const pieChartData = useRef(null);
+    const isFirstRender = useRef(true);
+    router.query.chart = router.query.chart || 'lineChart';
+    useEffect(() => {
+        if (!router) return;
+        router.push(`?chart=lineChart&timeframe=2years`)
+    }, [])
+
+    useEffect(() => {
+        console.log(window.innerHeight)
+        setWindowDimensions({ height: Math.round(window.innerHeight * .8), width: Math.round(window.innerWidth  * .8) });
+    }, []);
+
+
+    const fetchDataLineBarChart = async (forceRetry:boolean) => {
+        return await callApi.fetchLineOrBarChart()
+    }
+
+    const fetchDataPieChart = async (forceRetry:boolean) => {
+        return await callApi.fetchPieChart();
+    }
+
+    useEffect(() => {
+        if (!auth.user) return;
+        fetchDataLineBarChart(false).then(res => {
+            lineChartData.current = {
+                chartSevenDaysRes: res.chartSevenDaysRes,
+                sevenDaysKeysArray: res.sevenDaysKeysArray,
+                chartOneMonthRes: res.chartOneMonthRes,
+                oneMonthKeysArray: res.oneMonthKeysArray,
+                chartThreeMonthsRes: res.chartThreeMonthsRes,
+                threeMonthsKeysArray: res.threeMonthsKeysArray,
+                chartSixMonthsRes: res.chartSixMonthsRes,
+                sixMonthsKeysArray: res.sixMonthsKeysArray,
+                chart1yrRes: res.chart1yrRes,
+                oneYrKeysArray: res.oneYrKeysArray,
+                chart2yrRes: res.chart2yrRes,
+                twoYrKeysArray: res.twoYrKeysArray,
+            }
+            setLineBarData(res.chart2yrRes.reverse());
+            setLineChartKeys(res.twoYrKeysArray.reverse());
+        })
+        fetchDataPieChart(false).then(res => {
+            pieChartData.current = {
+                pieChartSevenDaysRes: res.pieChartSevenDaysRes,
+                pieChartOneMonthRes: res.pieChartOneMonthRes,
+                pieChartThreeMonthsRes: res.pieChartThreeMonthsRes,
+                pieChartSixMonthsRes: res.pieChartSixMonthsRes,
+                pieChart1yrRes: res.pieChart1yrRes,
+                pieChart2yrRes: res.pieChart2yrRes,
+            }
+            setPieData(res.pieChart2yrRes);
+        })
+        setLoading(false);
+    }, [auth.user])
+
+    useLayoutEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        if (!auth.user) return;
+        if (!router.query.timeframe) return;
+        if (!lineChartData.current) {
+            fetchDataLineBarChart(false).then(res => {
+                lineChartData.current = {
+                    chartSevenDaysRes: res.chartSevenDaysRes,
+                    sevenDaysKeysArray: res.sevenDaysKeysArray,
+                    chartOneMonthRes: res.chartOneMonthRes,
+                    oneMonthKeysArray: res.oneMonthKeysArray,
+                    chartThreeMonthsRes: res.chartThreeMonthsRes,
+                    threeMonthsKeysArray: res.threeMonthsKeysArray,
+                    chartSixMonthsRes: res.chartSixMonthsRes,
+                    sixMonthsKeysArray: res.sixMonthsKeysArray,
+                    chart1yrRes: res.chart1yrRes,
+                    oneYrKeysArray: res.oneYrKeysArray,
+                    chart2yrRes: res.chart2yrRes,
+                    twoYrKeysArray: res.twoYrKeysArray,
+                }
+            })
+        }
+        if (!pieChartData.current) {
+            fetchDataPieChart(false).then(res => {
+                pieChartData.current = {
+                    pieChartSevenDaysRes: res.pieChartSevenDaysRes,
+                    pieChartOneMonthRes: res.pieChartOneMonthRes,
+                    pieChartThreeMonthsRes: res.pieChartThreeMonthsRes,
+                    pieChartSixMonthsRes: res.pieChartSixMonthsRes,
+                    pieChart1yrRes: res.pieChart1yrRes,
+                    pieChart2yrRes: res.pieChart2yrRes,
+                }
+            })
+        }
+        if (router.query.timeframe === '1week') {
+            setLineBarData(lineChartData.current.chartSevenDaysRes.reverse());
+            setLineChartKeys(lineChartData.current.sevenDaysKeysArray.reverse());
+
+            setPieData(pieChartData.current.pieChartSevenDaysRes);
+        }
+        if (router.query.timeframe === '1month') {
+            setLineBarData(lineChartData.current.chartOneMonthRes.reverse());
+            setLineChartKeys(lineChartData.current.oneMonthKeysArray.reverse());
+
+            setPieData(pieChartData.current.pieChartOneMonthRes);
+        }
+        if (router.query.timeframe === '3months') {
+            setLineBarData(lineChartData.current.chartThreeMonthsRes.reverse());
+            setLineChartKeys(lineChartData.current.threeMonthsKeysArray.reverse());
+
+            setPieData(pieChartData.current.pieChartThreeMonthsRes);
+        }
+        if (router.query.timeframe === '6months') {
+            setLineBarData(lineChartData.current.chartSixMonthsRes.reverse());
+            setLineChartKeys(lineChartData.current.sixMonthsKeysArray.reverse());
+
+            setPieData(pieChartData.current.pieChartSixMonthsRes);
+        }
+        if (router.query.timeframe === '1year') {
+            setLineBarData(lineChartData.current.chart1yrRes.reverse());
+            setLineChartKeys(lineChartData.current.oneYrKeysArray.reverse());
+
+            setPieData(pieChartData.current.pieChart1yrRes);
+        }
+        if (router.query.timeframe === '2years') {
+            setLineBarData(lineChartData.current.chart2yrRes.reverse());
+            setLineChartKeys(lineChartData.current.twoYrKeysArray.reverse());
+
+            setPieData(pieChartData.current.pieChart2yrRes);
+        }
+    }, [router.query.timeframe])
+
     return (
-        <DataGrid
-            autoHeight={true}
-            rows={props.rows}
-            columns={props.columns}
-            loading={props.loading}
-            checkboxSelection={props.checkbox}
-            components={{
-                LoadingOverlay: LoadingSkeleton
-            }}
-        />
+        <>
+            <CssBaseline />
+            {!router.query.chart || router.query.chart === 'lineChart' &&
+                <LineChartComponent
+                    loading={loading}
+                    windowDimensions={windowDimensions}
+                    data={lineBarData}
+                    keys={lineChartKeys}
+                /> }
+            {router.query.chart === 'barChart' &&
+                <BarChartComponent
+                    loading={loading}
+                    windowDimensions={windowDimensions}
+                    data={lineBarData}
+                    keys={lineChartKeys}
+                /> }
+            {router.query.chart === 'pieChart' &&
+                <PieChartComponent
+                    data={pieData}
+                    windowDimensions={windowDimensions}
+                    chartOptions={chartObj}
+                    timeframe={timeframeObj}
+                /> }
+            {router.query.chart === 'treeMap' && <TreeMapComponent /> }
+        </>
     )
 }

@@ -162,11 +162,13 @@ const TotalSpending = (props) => {
     )
     
     return (
-        <Box sx={{ padding: '30px', }}>
+        <Box sx={{ padding: '30px', margin: 'auto' }}>
           <Card
               sx={{
-                minWidth: 600,
-                minHeight: 'fitContent'
+                  width: {sm: '95%', md: 'none'},
+                  minWidth: {sm: 'none', md: 350},
+                  maxWidth: {sm: 'none', md: 550},
+                  minHeight: 350,
               }}
               variant="outlined"
           >

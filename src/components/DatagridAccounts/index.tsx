@@ -5,10 +5,11 @@ import React, {
 } from 'react';
 import Router from 'next/router';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button,
+import {
+  Button,
   Box,
-  Tooltip
- } from '@mui/material';
+  Tooltip, Typography
+} from '@mui/material';
 import { PlaidLinkInstitution } from '../PlaidLink';
 import { useAuth } from '../../lib/hooks/useAuth';
 import { useBackgroundFetch } from '../../lib/hooks/useBackgroundFetch';
@@ -21,7 +22,6 @@ const DatagridAccounts = () => {
   const [loading, setLoading] = useState(true);
   const [fatalError, setFatalError] = useState(false);
   const callApi = useBackgroundFetch();
-
 
   const fetchData = async () => {
     return await callApi.fetchInstitutions();
@@ -65,7 +65,6 @@ const DatagridAccounts = () => {
     headerName: 'Transactions', 
     width: 150, 
     renderCell: (data) => (
-      <>
       <Tooltip title="View transactions">
         <Button
         variant="contained"
@@ -77,15 +76,12 @@ const DatagridAccounts = () => {
           Transactions
         </Button>
       </Tooltip>
-      </>
-
     )
     },
     { field: 'col8', 
     headerName: 'Remove Institution', 
     width: 150, 
     renderCell: (data) => (
-      <>
       <Tooltip title="Remove institution">
         <Button
         variant="contained"
@@ -96,8 +92,6 @@ const DatagridAccounts = () => {
           Remove
         </Button>
       </Tooltip>
-      </>
-
     )
     },
     { field: 'ins_id', headerName: 'Ins_id', width: 60, hide: true },
@@ -105,15 +99,35 @@ const DatagridAccounts = () => {
 
 
     return (
-      <>
-        <div style={{ padding: '2rem', height: 600, minWidth: "100%", margin: "auto", }}>
-          <h1 style={{ textAlign: "center"}}>Connected Institutions</h1>
-          <Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: '15px'}}>
-            <PlaidLinkInstitution user_id={auth.user.uid} />
+        <Box sx={{
+          padding: '2rem',
+          height: 600,
+          minWidth: "100%",
+          margin: "auto"
+        }}>
+          <Typography
+              variant='h4'
+              sx={{
+                textAlign: "center",
+                fontWeight: '700',
+                fontSize: '33px'
+          }}
+          >
+            Connected Institutions
+          </Typography>
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingBottom: '15px'
+          }}>
+            <PlaidLinkInstitution />
           </Box>
           <DataGrid
               autoHeight={true}
-              sx={{ minHeight: '300px'}}
+              sx={{
+                  minHeight: '300px',
+                  boxShadow: 1,
+              }}
               rows={accounts}
               columns={columns}
               loading={loading}
@@ -121,8 +135,7 @@ const DatagridAccounts = () => {
                 LoadingOverlay: LoadingSkeleton
               }}
           />
-        </div>
-      </>
+        </Box>
     );
 }
 

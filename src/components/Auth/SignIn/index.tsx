@@ -50,10 +50,6 @@ function Copyright(props) {
   );
 }
 
-
-
-const theme = createTheme();
-
 function SignIn() {
   const firestore = useFirestore();
   const auth = useAuth();
@@ -198,7 +194,7 @@ function SignIn() {
 )
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -298,7 +294,7 @@ function SignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
+    </>
   );
 }
 

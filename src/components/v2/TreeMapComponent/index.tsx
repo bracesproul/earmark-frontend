@@ -161,10 +161,8 @@ const TreeMapComponent = (props) => {
                     <LinearWithValueLabel stop={!props.loading} />
                 </Card>
             ) : (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height={windowDimensions.height}>
                     <Treemap
-                        width={400}
-                        height={200}
                         data={data}
                         dataKey="size"
                         /* @ts-ignore */

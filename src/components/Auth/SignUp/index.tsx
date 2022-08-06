@@ -17,7 +17,6 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import StarIcon from '@mui/icons-material/StarBorder';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import { GlobalStyles,
@@ -110,7 +109,6 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
 
 export default function App() {
   const auth = useAuth();
@@ -245,7 +243,7 @@ export default function App() {
     }, [createPassword]);
 
     return (
-      <ThemeProvider theme={theme}>
+      <>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -353,7 +351,7 @@ export default function App() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-    </ThemeProvider>
+    </>
     )
   }
 
@@ -382,7 +380,7 @@ export default function App() {
     };
 
     return (
-    <ThemeProvider theme={theme}>
+    <>
         <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -518,7 +516,7 @@ export default function App() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
         </Container>
-    </ThemeProvider>
+    </>
     );
   }
 
@@ -546,12 +544,6 @@ export default function App() {
                     action={tier.title === 'Pro' ? <StarIcon /> : null}
                     subheaderTypographyProps={{
                       align: 'center',
-                    }}
-                    sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === 'light'
-                          ? theme.palette.grey[200]
-                          : theme.palette.grey[700],
                     }}
                   />
                   <CardContent>
@@ -625,7 +617,7 @@ export default function App() {
               </Typography>
             </CardHeader>
             <CardContent>
-                <PlaidLinkInstitution user_id={auth.user.uid} />
+                <PlaidLinkInstitution />
               <Button onClick={() => Router.push('/dashboard')}>Finish</Button>
             </CardContent>
           </Card>

@@ -14,9 +14,11 @@ import { ListItem,
 } from '@mui/material';
 import { usePlaidLink } from 'react-plaid-link';
 import { useRemoveCache } from '../../lib/hooks/useRemoveCache';
+import { useAuth } from '../../lib/hooks/useAuth';
 
 const PlaidLink = ({ user_id }) => {
-    if (user_id === null || user_id === "Unauthorized") return <></>;
+    const auth = useAuth();
+    if (auth.user.uid === null || auth.user.uid === "Unauthorized") return <></>;
     const [linkToken, setLinkToken] = useState(null);
 
     const fetchToken = useCallback(async () => {
@@ -27,7 +29,7 @@ const PlaidLink = ({ user_id }) => {
                     'earmark-api-key': process.env.EARMARK_API_KEY,
                 },
                 params: {
-                    user_id: user_id
+                    user_id: auth.user.uid
                 },
                 url:'/api/createLinkToken',
             }
@@ -50,7 +52,7 @@ const PlaidLink = ({ user_id }) => {
                 'earmark-api-key': process.env.EARMARK_API_KEY,
             },
             params: {
-                user_id: user_id,
+                user_id: auth.user.uid,
                 publicToken: publicToken,
             },
             url: '/api/exchangeLinkToken',
@@ -81,8 +83,10 @@ const PlaidLink = ({ user_id }) => {
     )
 }
 
-export const PlaidLinkInstitution = (props) => {
-    if (props.user_id === null || props.user_id === "Unauthorized") return <></>;
+export const PlaidLinkInstitution = () => {
+    const auth = useAuth();
+    if (auth.user === null || auth.user.uid === "Unauthorized") return <></>;
+
     const [linkToken, setLinkToken] = useState(null);
     const removeCache = useRemoveCache();
 
@@ -94,7 +98,7 @@ export const PlaidLinkInstitution = (props) => {
                     'earmark-api-key': process.env.EARMARK_API_KEY,
                 },
                 params: {
-                    user_id: props.user_id
+                    user_id: auth.user.uid
                 },
                 url:'/api/createLinkToken',
             }
@@ -117,7 +121,7 @@ export const PlaidLinkInstitution = (props) => {
                 'earmark-api-key': process.env.EARMARK_API_KEY,
             },
             params: {
-                user_id: props.user_id,
+                user_id: auth.user.uid,
                 publicToken: publicToken,
             },
             url: '/api/exchangeLinkToken',

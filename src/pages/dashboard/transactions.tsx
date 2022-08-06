@@ -2,8 +2,7 @@ import React, {
     useEffect,
     useRef, useState
 } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import LoadingSkeleton from "../../components/LoadingSkeleton";
+import CssBaseline from '@mui/material/CssBaseline';
 import { useBackgroundFetch } from "../../lib/hooks/useBackgroundFetch";
 import { useAuth } from "../../lib/hooks/useAuth";
 import TransactionsComponent from "../../components/v2/AllTransactions";
@@ -46,46 +45,33 @@ function AllTransactions() {
     ];
 
     return (
-        <PageTemplate>
-            {!loading ? (
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    margin: 'auto'
-                }}>
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "700",
-                            fontSize: '39px',
-                            paddingTop: "1rem",
-                            paddingBottom: '1rem',
-                            margin: "auto",
-                        }}
-                    >
-                        All Transactions
-                    </Typography>
-                    <TransactionsComponent
-                        transactions={transactions.current}
-                        width={windowDimensions.width}
-                        columns={columns}
-                        loading={loading}
-                    />
-                </Box>
-            ) : (
-                <DataGrid
-                    autoHeight={true}
-                    rows={null}
+        <>
+            <CssBaseline />
+            <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                margin: 'auto',
+                width: '100%',
+            }}>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: "700",
+                        fontSize: '39px',
+                        paddingTop: "1rem",
+                        margin: "auto",
+                    }}
+                >
+                    All Transactions
+                </Typography>
+                <TransactionsComponent
+                    transactions={transactions.current}
+                    width={windowDimensions.width}
                     columns={columns}
                     loading={loading}
-                    checkboxSelection={false}
-                    components={{
-                        LoadingOverlay: LoadingSkeleton
-                    }}
                 />
-            )}
-        </PageTemplate>
-
+            </Box>
+        </>
     )
 }
 

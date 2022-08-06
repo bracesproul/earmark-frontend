@@ -75,7 +75,6 @@
     transition: .05s;
     border: 1px solid blue;
     color: rgb(32, 32, 253);
-    background-color: #f5f5f5;
     cursor: pointer;
 }
 
@@ -162,7 +161,6 @@
     transition: .05s;
     border: 1px solid blue;
     color: rgb(32, 32, 253);
-    background-color: #f5f5f5;
     cursor: pointer;
 }
 

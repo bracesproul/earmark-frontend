@@ -3,7 +3,7 @@ import React, { useContext, createContext } from "react";
 
 const baseContext = createContext({});
 
-export function ProvideAuth({ children }) {
+export function ProvideBase({ children }) {
     const base = useProvideBase();
     return <baseContext.Provider value={base}>{children}</baseContext.Provider>;
 }

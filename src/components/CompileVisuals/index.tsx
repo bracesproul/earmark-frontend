@@ -125,7 +125,6 @@ const App = () => {
                                     label="Chart Type"
                                     onChange={(e) => handleChangeVisuals(e)}
                                     sx={{
-                                        bgcolor: 'background.paper',
                                         boxShadow: 1,
                                         borderRadius: 2,
                                         minWidth: 150,
@@ -147,7 +146,6 @@ const App = () => {
                                     label="Chart Type"
                                     onChange={(e) => handleChangeDates(e)}
                                     sx={{
-                                        bgcolor: 'background.paper',
                                         boxShadow: 1,
                                         borderRadius: 2,
                                         minWidth: 150,
@@ -173,7 +171,6 @@ const App = () => {
                                 input={<OutlinedInput label="Categories" />}
                                 MenuProps={MenuProps}
                                 sx={{
-                                    bgcolor: 'background.paper',
                                     boxShadow: 1,
                                     borderRadius: 2,
                                     minWidth: 150,

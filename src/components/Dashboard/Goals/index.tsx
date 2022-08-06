@@ -104,7 +104,7 @@ const Goals = () => {
     const card = (
       <>
       <CardContent>
-        <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold'}}>
           Goals
         </Typography>
         <Divider />
@@ -114,11 +114,13 @@ const Goals = () => {
     )
     
     return (
-        <Box sx={{ padding: '30px' }}>
+        <Box sx={{ padding: '30px', margin: 'auto' }}>
             <Card
                 sx={{
-                    minWidth: 600,
-                    minHeight: 300,
+                    width: {sm: '95%', md: 'none'},
+                    minWidth: {sm: 'none', md: 350},
+                    maxWidth: {sm: 'none', md: 550},
+                    minHeight: 350,
                 }}
                 variant="outlined"
             >

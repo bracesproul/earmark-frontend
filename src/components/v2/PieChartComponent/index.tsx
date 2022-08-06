@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, {
+    useEffect,
     useState,
 } from 'react';
 import {
@@ -17,6 +18,11 @@ import LinearWithValueLabel from "../../ProgressBar";
 
 const PieChartComponent = (props) => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [chartHeight, setChartHeight] = useState(700);
+
+    useEffect(() => {
+        setChartHeight(props.windowDimensions.height);
+    }, [props.windowDimensions])
 
     const onPieEnter = (_, index) => {
         setActiveIndex(index)
@@ -99,8 +105,8 @@ const PieChartComponent = (props) => {
                 <LinearWithValueLabel stop={!props.loading} />
             </Card>
         ) : (
-            <ResponsiveContainer width="100%" height="100%">
-                <PieChart width={600} height={600}>
+            <ResponsiveContainer width="100%" height={chartHeight}>
+                <PieChart>
                     <Pie
                         activeIndex={activeIndex}
                         activeShape={renderActiveShape}

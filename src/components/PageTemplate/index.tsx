@@ -8,10 +8,9 @@ import newStyles from './style.module.css'
 import { Box } from "@mui/material"
 const icon = "/favicon.ico";
 import SideNavCopy from '../Nav/SideNavCopy';
-
+//fafafa
 const PageTemplate = (props) => {
     return (
-        <>
         <Box>
             <Head>
             <title>
@@ -19,18 +18,25 @@ const PageTemplate = (props) => {
                 </title>
                 <meta name="description" content={props.description} /> 
             </Head>
-            <Box>
+            <Box sx={{
+                minWidth: '100vh',
+                minHeight: '100vh',
+            }}>
                 <Box sx={{
                     display: 'flex',
                 }}>
                     <SideNavCopy />
                 </Box>
-                <Box sx={{ display: 'flex', width: { md: '80%', xl: '90%' }, marginLeft: 'auto' }}>
+                <Box sx={{
+                    display: 'flex',
+                    width: { md: '80%', xl: '90%' },
+                    marginLeft: 'auto',
+                    minHeight: '100vh'
+                }}>
                     {props.children}
                 </Box>
             </Box>
         </Box>
-        </>
     )
 }
 

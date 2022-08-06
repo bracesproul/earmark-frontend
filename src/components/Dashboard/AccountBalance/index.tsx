@@ -4,6 +4,10 @@ import React, {
   useState,
 } from 'react';
 import Router from 'next/router';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance'; // for institutions link
+import { useAuth } from '../../../lib/hooks/useAuth';
+import { useBackgroundFetch } from "../../../lib/hooks/useBackgroundFetch";
+import FatalErrorComponent from '../../FatalError';
 import { Box,
     Card,
     CardContent,
@@ -20,16 +24,8 @@ import { Box,
     ListItemIcon,
     Tooltip,
     IconButton,
-    Alert,
-    AlertTitle
 } from '@mui/material';
-import FatalErrorComponent from '../../FatalError';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'; // for institutions link
-import { useAuth } from '../../../lib/hooks/useAuth';
-import { useBackgroundFetch } from "../../../lib/hooks/useBackgroundFetch";
-import axios from 'axios';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import PaidIcon from '@mui/icons-material/Paid';
 
 const AccountBalance = (props) => {
@@ -38,60 +34,6 @@ const AccountBalance = (props) => {
   const [accountDetails, setAccountDetails] = useState([]);
   const [fatalError, setFatalError] = useState(false);
   const [loading, setLoading] = useState(true);
-
-/*  const fetchData = async () => {
-    try {
-      const currentTime = Date.now();
-      const expTime = currentTime + 86400000;
-      const config = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        url: '/api/dashboard',
-        params: {
-          user_id: props.cookie,
-          queryType: 'accountDetails',
-          startDate: '2021-01-01',
-          endDate: '2022-01-01',
-        }
-      }
-      const { data } = await axios(config);
-      if (data.accountDetails) {
-        setAccountDetails(data.accountDetails);
-        setLoading(false)
-        localStorage.setItem(`accountBalanceCachedData`, JSON.stringify(data.accountDetails));
-        localStorage.setItem(`accountBalanceCacheExpTime`, expTime.toString());
-        return;
-      } else {
-        setFatalError(true);
-        setLoading(false)
-        return;
-      }
-    } catch (error) {
-      setFatalError(true);
-      setLoading(false)
-      console.error(error)
-    }
-  };
-
-  const cacheData = () => {
-    if (typeof window == "undefined") return;
-    try {
-      const currentTime = Date.now();
-      const cacheExpTime = parseInt(localStorage.getItem(`accountBalanceCacheExpTime`));
-      if (!cacheExpTime || cacheExpTime < currentTime) {
-        fetchData();
-      } else if (cacheExpTime > currentTime) {
-        const cachedData = JSON.parse(localStorage.getItem(`accountBalanceCachedData`));
-        setAccountDetails(cachedData);
-      }
-    } catch (error) {
-      setFatalError(true);
-      console.error('the below error occurred in `components/Dashboard/SpendingOverview` - line 67 - method: cachedData()')
-      console.error(error)
-    }
-  };*/
 
   const fetchData = async (forceRefresh:boolean) => {
     const apiCall = await callApi.fetchAccountBalance(forceRefresh);
@@ -219,10 +161,12 @@ const AccountBalance = (props) => {
     )
     
     return (
-        <Box sx={{ padding: '30px' }}>
+        <Box sx={{ padding: '30px', margin: 'auto' }}>
             <Card
                 sx={{
-                    minWidth: 600,
+                    width: {sm: '95%', md: 'none'},
+                    minWidth: {sm: 'none', md: 350},
+                    maxWidth: {sm: 'none', md: 550},
                     minHeight: 'fitContent'
                 }}
                 variant="outlined"

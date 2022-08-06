@@ -364,7 +364,7 @@ Commit [main 1156698](https://github.com/bracesproul/earmark-frontend/commit/115
 ## [0.0.22] - 2022-08-02
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main a9dc42b](https://github.com/bracesproul/earmark-frontend/commit/a9dc42b)
 
 ### Added
 
@@ -374,3 +374,28 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 - changed how the all transactions page works, now displays all transactions, but each account has its own datagrid
 
 ### Removed
+
+
+## [0.0.23] - 2022-08-05
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+* Global theme will flicker on reload if theme !== default theme, unable to fix (next simply can't do it, from my understanding)
+* uses cookies to store selected theme ['earmark-theme'] will either be 'light' or 'dark'
+
+### Added
+- Custom _document and _app, now _app.tsx automatically includes sidenav and color mode switch to all pages
+  - This means I can get rid of my PageTemplate component, all pages can just include components
+- Added global MUI theme in _app.tsx for changing theme to light/dark *
+- Added custom theme switch to change app theme (light/dark mode)
+- Added custom hook for app theme (light/dark mode)
+
+### Fixed
+- Fixed _middleware.tsx to check auth before granting user access to a given page
+- Fixed sizing responsiveness on dashboard
+- Fixed sizing responsiveness on all visualizations, will actually show up on mobile now
+
+### Changed
+
+### Removed
+- Removed PageTemplate component from all pages, or other templates/page skeletons

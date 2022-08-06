@@ -4,13 +4,14 @@ import React, {
     useState,
 } from 'react';
 import RecurringTransactions from '../../components/RecurringTransactions';
-import PageTemplate from '../../components/PageTemplate';
+import CssBaseline from '@mui/material/CssBaseline';
 
 export default function NewHome() {
     return (
-        <PageTemplate title="Recurring" description="Recurring transactions">
+        <>
+            <CssBaseline />
             <RecurringTransactions />
-        </PageTemplate>
+        </>
     )
 
 }

@@ -27,12 +27,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'; // for acco
 import LoginIcon from '@mui/icons-material/Login'; // for sign in tab
 import LogoutIcon from '@mui/icons-material/Logout'; // for sign out tab
 import CachedIcon from '@mui/icons-material/Cached';
-import CableIcon from '@mui/icons-material/Cable';
-import axios from 'axios';
-import { usePlaidLink } from 'react-plaid-link';
-import PlaidLink from '../../PlaidLink'
 import MenuIcon from '@mui/icons-material/Menu';
-import Button from '@mui/material/Button';
 import { IconButton } from '@mui/material';
 const drawerWidth = '20%';
 
@@ -156,7 +151,7 @@ const SideNav = () => {
             sx={{ position: 'fixed' }}
             onClick={toggleDrawer('left', true)}
             >
-                <MenuIcon sx={{ color: 'black', fontSize: 30 }} />
+                <MenuIcon sx={{ fontSize: 30 }} />
             </IconButton>
             <Drawer
             anchor={'left'}
@@ -171,7 +166,6 @@ const SideNav = () => {
 
     const ExpandedPageSideNav = () => {
         const auth = useAuth();
-    
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
     
         useEffect(() => {
@@ -205,7 +199,7 @@ const SideNav = () => {
             <Box sx={{ display: { xs: 'none', md: 'flex', xl: 'none' } }}>
                 <Drawer
                 sx={{
-                    width: '20%',
+                    width: '10%',
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
                     width: '20%',
@@ -383,3 +377,327 @@ const SideNav = () => {
 };
 
 export default SideNav;
+
+const SideNavV = () => {
+    const SmallPageSideNav = () => {
+        const auth = useAuth();
+        const [state, setState] = useState(false);
+
+        const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
+
+        useEffect(() => {
+            // @ts-ignore
+            if (!auth.user) {
+                setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
+                return;
+            }
+            else {
+                setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
+                return;
+            }
+        }, [auth]);
+
+        const toggleDrawer =
+            (anchor: Anchor, open: boolean) =>
+                (event: React.KeyboardEvent | React.MouseEvent) => {
+                    if (
+                        event.type === 'keydown' &&
+                        ((event as React.KeyboardEvent).key === 'Tab' ||
+                            (event as React.KeyboardEvent).key === 'Shift')
+                    ) {
+                        return;
+                    }
+                    setState(open);
+                };
+        const handleButtonClick = async (index) => {
+            if (index.pageName == "Sign Out") {
+                auth.signout();
+                Router.push('/auth/signIn');
+                return;
+            }
+            Router.push(index.pageLink);
+        };
+
+        const list = (anchor: Anchor) => (
+            <Box
+                sx={{ width: '100%' }}
+                role="presentation"
+                onClick={toggleDrawer(anchor, false)}
+                onKeyDown={toggleDrawer(anchor, false)}
+            >
+                { !auth.user ? null :
+                    <>
+                        <List>
+                            {SIDENAV_PAGES.map((text, index) => (
+                                <a key={text.pageName} href={text.pageLink}>
+                                    <ListItem onClick={index => handleButtonClick(text)} disablePadding>
+                                        <ListItemButton disabled={text.disabled}>
+                                            <ListItemIcon>
+                                                { index === 0 ? <DashboardIcon /> : null}
+                                                { index === 1 ? <PaidIcon /> : null }
+                                                { index === 2 ? <BarChartIcon /> : null }
+                                                { index === 3 ? <CachedIcon /> : null }
+                                                { index === 4 ? <ShowChartIcon /> : null }
+                                                { index === 5 ? <AttachMoneyIcon /> : null }
+                                                { index === 6 ? <AccountBalanceIcon /> : null }
+                                            </ListItemIcon>
+                                            <ListItemText primary={text.pageName} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                </a>
+                            ))}
+                        </List>
+                        <Divider />
+                    </>
+                }
+                <Divider />
+                <List>
+                    {otherPages.map((text, index) => (
+                        <a key={text.pageName} href={text.pageLink}>
+                            <ListItem onClick={index => handleButtonClick(text)} disablePadding>
+                                <ListItemButton disabled={text.disabled}>
+                                    <ListItemIcon>
+                                        { index === 0 ? <ManageAccountsIcon /> : null }
+                                        { index === 1 ? <LoginIcon /> : null }
+                                        { index === 2 ? <LogoutIcon /> : null }
+                                    </ListItemIcon>
+                                    <ListItemText primary={text.pageName} />
+                                </ListItemButton>
+                            </ListItem>
+                        </a>
+                    ))}
+                </List>
+            </Box>
+        );
+        // TODO: GET CSS FOR BRING ELEMENT TO FRONT
+        // SIDENAV ICON BEHIND TOP NAV BAR
+        return (
+            <Box>
+                <IconButton
+                    sx={{ position: 'fixed', color: 'orange' }}
+                    onClick={toggleDrawer('left', true)}
+                >
+                    <MenuIcon sx={{ fontSize: 30 }} />
+                </IconButton>
+                <Drawer
+                    anchor={'left'}
+                    open={state}
+                    onClose={toggleDrawer('left', false)}
+                >
+                    {list('left')}
+                </Drawer>
+            </Box>
+        );
+    }
+
+    const ExpandedPageSideNav = () => {
+        const auth = useAuth();
+        const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
+
+        useEffect(() => {
+            // @ts-ignore
+            if (!auth.user) {
+                setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
+                return;
+            }
+            else {
+                setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
+                return;
+            }
+        }, [auth]);
+
+        const handleLogoClick = () => {
+            Router.push('/');
+        }
+
+
+        const handleButtonClick = async (index) => {
+            if (index.pageName == "Sign Out") {
+                // @ts-ignore
+                auth.signout();
+                Router.push('/auth/signIn');
+                return;
+            }
+            Router.push(index.pageLink);
+        };
+
+        return (
+            <Box sx={{ display: { xs: 'none', md: 'flex', xl: 'none' } }}>
+                <Drawer
+                    sx={{
+                        width: '100%',
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: '200%',
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="permanent"
+                    anchor="left"
+                >
+                    <Toolbar>
+                        <Typography sx={{ display: { xs: 'none', md: 'flex', xl: 'none' } }} onClick={handleLogoClick} variant="h6" noWrap>
+                            Earmark
+                        </Typography>
+                    </Toolbar>
+                    <Divider />
+                    { !auth.user ? null :
+                        <>
+                            <List>
+                                {SIDENAV_PAGES.map((text, index) => (
+                                    <a key={text.pageName} href={text.pageLink}>
+                                        <ListItem onClick={index => handleButtonClick(text)} disablePadding>
+                                            <ListItemButton disabled={text.disabled}>
+                                                <ListItemIcon>
+                                                    { index === 0 ? <DashboardIcon /> : null}
+                                                    { index === 1 ? <PaidIcon /> : null }
+                                                    { index === 2 ? <BarChartIcon /> : null }
+                                                    { index === 3 ? <CachedIcon /> : null }
+                                                    { index === 4 ? <ShowChartIcon /> : null }
+                                                    { index === 5 ? <AttachMoneyIcon /> : null }
+                                                    { index === 6 ? <AccountBalanceIcon /> : null }
+                                                </ListItemIcon>
+                                                <ListItemText primary={text.pageName} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </a>
+                                ))}
+                            </List>
+                            <Divider />
+                        </>
+                    }
+
+                    <List>
+                        {otherPages.map((text, index) => (
+                            <a key={text.pageName} href={text.pageLink}>
+                                <ListItem onClick={index => handleButtonClick(text)} disablePadding>
+                                    <ListItemButton disabled={text.disabled}>
+                                        <ListItemIcon>
+                                            { index === 0 ? <ManageAccountsIcon /> : null }
+                                            { index === 1 ? <LoginIcon /> : null }
+                                            { index === 2 ? <LogoutIcon /> : null }
+                                        </ListItemIcon>
+                                        <ListItemText primary={text.pageName} />
+                                    </ListItemButton>
+                                </ListItem>
+                            </a>
+                        ))}
+                    </List>
+                </Drawer>
+            </Box>
+        );
+    }
+
+    const XLPageSideNav = () => {
+        const auth = useAuth();
+
+        const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
+
+        useEffect(() => {
+            // @ts-ignore
+            if (!auth.user) {
+                setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
+                return;
+            }
+            else {
+                setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
+                return;
+            }
+        }, [auth]);
+
+        const handleLogoClick = () => {
+            Router.push('/');
+        }
+
+
+        const handleButtonClick = async (index) => {
+            if (index.pageName == "Sign Out") {
+                // @ts-ignore
+                auth.signout();
+                Router.push('/auth/signIn');
+                return;
+            }
+            Router.push(index.pageLink);
+        };
+
+        return (
+            <Box sx={{ display: { xs: 'none', md: 'none', xl: 'flex' } }}>
+                <Drawer
+                    sx={{
+                        width: '100%',
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: '100%',
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="permanent"
+                    anchor="left"
+                >
+                    <Toolbar>
+                        <Typography sx={{ display: { xs: 'none', md: 'none', xl: 'flex' } }} onClick={handleLogoClick} variant="h6" noWrap>
+                            Earmark
+                        </Typography>
+                    </Toolbar>
+                    <Divider />
+                    { !auth.user ? null :
+                        <>
+                            <List>
+                                {SIDENAV_PAGES.map((text, index) => (
+                                    <a key={text.pageName} href={text.pageLink}>
+                                        <ListItem onClick={index => handleButtonClick(text)} disablePadding>
+                                            <ListItemButton disabled={text.disabled}>
+                                                <ListItemIcon>
+                                                    { index === 0 ? <DashboardIcon /> : null}
+                                                    { index === 1 ? <PaidIcon /> : null }
+                                                    { index === 2 ? <BarChartIcon /> : null }
+                                                    { index === 3 ? <CachedIcon /> : null }
+                                                    { index === 4 ? <ShowChartIcon /> : null }
+                                                    { index === 5 ? <AttachMoneyIcon /> : null }
+                                                    { index === 6 ? <AccountBalanceIcon /> : null }
+                                                </ListItemIcon>
+                                                <ListItemText primary={text.pageName} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </a>
+                                ))}
+                            </List>
+                            <Divider />
+                        </>
+                    }
+
+                    <List>
+                        {otherPages.map((text, index) => (
+                            <a key={text.pageName} href={text.pageLink}>
+                                <ListItem onClick={index => handleButtonClick(text)} disablePadding>
+                                    <ListItemButton disabled={text.disabled}>
+                                        <ListItemIcon>
+                                            { index === 0 ? <ManageAccountsIcon /> : null }
+                                            { index === 1 ? <LoginIcon /> : null }
+                                            { index === 2 ? <LogoutIcon /> : null }
+                                        </ListItemIcon>
+                                        <ListItemText primary={text.pageName} />
+                                    </ListItemButton>
+                                </ListItem>
+                            </a>
+                        ))}
+                    </List>
+                </Drawer>
+            </Box>
+        );
+    }
+
+    return (
+        <>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'none', xl: 'flex' }, width: '100%' }}>
+                <XLPageSideNav />
+            </Box>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', xl: 'none' }, width: '100%'  }}>
+                <ExpandedPageSideNav />
+            </Box>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', xl: 'none' }, width: '100%'  }}>
+                <SmallPageSideNav />
+            </Box>
+        </>
+    )
+};

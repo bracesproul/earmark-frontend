@@ -2,16 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import axios from 'axios';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -33,18 +28,12 @@ import { InputLabel,
     ListItemIcon,
     IconButton
  } from '@mui/material';
-
 import GoogleIcon from '@mui/icons-material/Google';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import AppleIcon from '@mui/icons-material/Apple';
 import PhoneIcon from '@mui/icons-material/Phone';
-import EmailIcon from '@mui/icons-material/Email';
-
 import { TransitionProps } from '@mui/material/transitions';
-import { makeStyles } from '@mui/styles';
 import { globalVars } from '../../lib/globalVars';
-
 import { initializeApp } from "firebase/app";
 import { getFirestore, 
     doc, 
@@ -654,7 +643,7 @@ export default function Account() {
                 </Container>
             </Paper>
 
-            <Paper sx={{ background: '#121212', display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={15}>
+            <Paper sx={{ display: 'flex', flexDirection: 'column', minWidth: '500px', maxWidth: '600px', padding: '20px', margin: '2rem auto'}} elevation={15}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box

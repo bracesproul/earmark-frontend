@@ -87,7 +87,6 @@ const TopNav = () => {
         sx={{ 
             display: { sx: 'none', md: 'flex' },
             width: '100%',
-            bgcolor: 'white'
         }}
         >
           {/* shows when page is small */}

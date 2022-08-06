@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Box,
     Card
@@ -64,6 +64,11 @@ const chartObj = [
 
 
 function LineChartComponent(props) {
+    const [chartHeight, setChartHeight] = useState(700);
+
+    useEffect(() => {
+        setChartHeight(props.windowDimensions.height);
+    }, [props.windowDimensions])
 
     return (
         <Box sx={{
@@ -97,10 +102,8 @@ function LineChartComponent(props) {
                     <LinearWithValueLabel stop={!props.loading} />
                 </Card>
             ) : (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height={chartHeight}>
                     <LineChart
-                        width={500}
-                        height={300}
                         data={props.data}
                         margin={{
                             top: 5,

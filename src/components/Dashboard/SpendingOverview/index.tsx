@@ -114,7 +114,7 @@ const SpendingOverview = (props) => {
   }
 
   const select = (
-    <FormControl sx={{ minWidth: '200px'}}>
+    <FormControl sx={{ minWidth: {sm: 140, md: 200} }}>
       <InputLabel sx={{ fontWeight: 'bold'}} id="select-date-label">Time Period</InputLabel>
       <Select
         labelId="select-date-label"
@@ -171,7 +171,7 @@ const SpendingOverview = (props) => {
       <>
       { !loading ? (
         <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: {sm: 'none', md: 650}, width: {sm: '100%', md: 'none'} }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold'}} align="left">Merchant</TableCell>
@@ -236,22 +236,22 @@ const SpendingOverview = (props) => {
   }
   
   const card = (
-    <>
     <CardContent>
-      <Typography variant="h5" component="div" sx={{ fontWeight: 'bold'}}>
+      <Typography variant="h5" sx={{ fontWeight: 'bold'}}>
         Spending Overview
       </Typography>
       <ContentToDisplay />
     </CardContent>
-  </>
   )
   
   return (
-      <Box sx={{ padding: '30px' }}>
+      <Box sx={{ padding: '30px', margin: 'auto' }}>
           <Card
               sx={{
-                minWidth: 650,
-                minHeight: 500,
+                minWidth: {sm: 'none', md: 650},
+                width: {sm: '100%', md: 'none'},
+                height: 500,
+                overflowY: 'scroll',
               }}
               variant="outlined"
           >

@@ -119,7 +119,7 @@ const TopMerchants = (props) => {
     }
 
     const select = (
-        <FormControl sx={{ minWidth: '200px'}}>
+        <FormControl sx={{ minWidth: {sm: 140, md: 200} }}>
         <InputLabel id="select-date-label" sx={{ fontWeight: 'bold'}}>Time Period</InputLabel>
         <Select
             labelId="select-date-label"
@@ -175,7 +175,7 @@ const TopMerchants = (props) => {
             <>
             {!loading ? (
                 <TableContainer component={Paper} sx={{ minWidth: '50%' }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{ minWidth: {sm: 'none', md: 650}, width: {sm: '95%', md: 'none'} }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                     <TableCell sx={{ fontWeight: 'bold'}} align="left">Merchant</TableCell>
@@ -251,12 +251,12 @@ const TopMerchants = (props) => {
 
     return (
         <>
-            <Box sx={{ padding: '30px' }}>
+            <Box sx={{ padding: '30px', margin: 'auto' }}>
                 <Card
                     sx={{
-                        minWidth: 650,
-                        minHeight: 500,
-                        maxHeight: 'fitContent'
+                        minWidth: {sm: 'none', md: 650},
+                        width: {sm: '95%', md: 'none'},
+                        height: 500,
                     }}
                     variant="outlined"
                 >

@@ -64,6 +64,12 @@ const chartObj = [
 
 
 function BarChartComponent(props) {
+    const [chartHeight, setChartHeight] = useState(700);
+
+    useEffect(() => {
+        setChartHeight(props.windowDimensions.height);
+    }, [props.windowDimensions])
+
     return (
         <>
             <Box sx={{
@@ -96,10 +102,8 @@ function BarChartComponent(props) {
                         <LinearWithValueLabel stop={!props.loading} />
                     </Card>
                 ) : (
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height={chartHeight}>
                         <BarChart
-                            width={500}
-                            height={300}
                             data={props.data}
                             margin={{
                                 top: 5,

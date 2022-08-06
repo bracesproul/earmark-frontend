@@ -231,7 +231,6 @@ const DataGridTransactions = () => {
             input={<OutlinedInput label="Categories" />}
             MenuProps={MenuProps}
             sx={{
-                bgcolor: 'background.paper',
                 boxShadow: 1,
                 borderRadius: 2,
                 minWidth: 150,
