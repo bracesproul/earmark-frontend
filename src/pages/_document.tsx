@@ -9,12 +9,10 @@ import { Html, Head, Main, NextScript } from 'next/document'
 
 export async function getServerSideProps({ req, res }) {
     const cookieTheme = req.cookies['earmark-theme'] || 'dark';
-    console.log('theme-cookieeee', cookieTheme);
     return { props: { cookieTheme } }
 }
 
 export default function Document({ cookieTheme }) {
-    console.log('cookieTheme', cookieTheme);
     return (
         <Html lang="en">
             <Head/>

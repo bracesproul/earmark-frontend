@@ -1143,7 +1143,7 @@ const useProvideBackgroundFetch = () => {
             }
         }
     }
-    /*not -- total spending backend broken*/const fetchTotalSpending = async (forceRefresh:boolean) => {
+    /*not*/const fetchTotalSpending = async (forceRefresh:boolean) => {
         if (!forceRefresh) {
             if (checkForCache('totalSpendingCacheCheck').success === true && checkForCache('totalSpendingCacheCheck').refresh === false) {
                 console.log('reading and returning cache');
@@ -1152,11 +1152,12 @@ const useProvideBackgroundFetch = () => {
         } else console.log('forcing refresh')
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
+        console.log('startDate', moment().subtract(1, 'years').format('YYYY-MM-DD'));
         try {
             const totalSpendingConfig = {
                 params: {
                     user_id: auth.user.uid,
-                    startDate: moment().subtract(30, 'days').format('YYYY-MM-DD'),
+                    startDate: moment().subtract(1, 'years').format('YYYY-MM-DD'),
                     endDate: moment().format('YYYY-MM-DD'),
                     queryType: 'totalSpending',
                 },

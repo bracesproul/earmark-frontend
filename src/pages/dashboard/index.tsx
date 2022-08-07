@@ -12,7 +12,7 @@ import TopMerchants from '../../components/Dashboard/TopMerchants';
 import AccountBalance from '../../components/Dashboard/AccountBalance';
 import Goals from '../../components/Dashboard/Goals';
 import Budgets from '../../components/Dashboard/Budgets';
-import TotalSpending from '../../components/Dashboard/TotalSpending';
+import TotalSpending from '../../components/v2/TotalSpending';
 
 export async function getServerSideProps({ req, res }) {
     const cookie = parseCookies(req).user_id
@@ -55,9 +55,9 @@ const Dashboard = ({ cookie }) => {
                         <Box sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, flexDirection: 'row', margin: 'auto' }}>
                             <Goals />
                             <Budgets />
-                            <TotalSpending cookie={cookie} />
                         </Box>
                         <Box sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, flexDirection: 'row', margin: 'auto' }}>
+                            <TotalSpending />
                             <AccountBalance cookie={cookie} />
                         </Box>
                     </Grid>
@@ -66,7 +66,7 @@ const Dashboard = ({ cookie }) => {
                         <Box sx={{ display: { xs: 'none', md: 'flex', lg: 'flex', xl: 'none' }, flexDirection: 'column', margin: 'auto' }}>
                             <Goals />
                             <Budgets />
-                            <TotalSpending cookie={cookie} />
+                            <TotalSpending />
                             <AccountBalance cookie={cookie} />
                         </Box>
                     </Grid>
@@ -75,7 +75,7 @@ const Dashboard = ({ cookie }) => {
                         <Box sx={{ display: { xs: 'flex', md: 'none', lg: 'none', xl: 'none' }, flexDirection: 'column', margin: 'auto'}}>
                             <Goals />
                             <Budgets />
-                            <TotalSpending cookie={cookie} />
+                            <TotalSpending />
                             <AccountBalance cookie={cookie} />
                         </Box>
                     </Grid>

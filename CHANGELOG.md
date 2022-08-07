@@ -379,7 +379,7 @@ Commit [main a9dc42b](https://github.com/bracesproul/earmark-frontend/commit/a9d
 ## [0.0.23] - 2022-08-05
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main a9dc42b](https://github.com/bracesproul/earmark-frontend/commit/a9dc42b)
 * Global theme will flicker on reload if theme !== default theme, unable to fix (next simply can't do it, from my understanding)
 * uses cookies to store selected theme ['earmark-theme'] will either be 'light' or 'dark'
 
@@ -399,3 +399,24 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 
 ### Removed
 - Removed PageTemplate component from all pages, or other templates/page skeletons
+
+
+## [0.0.24] - 2022-08-07
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+### Added
+- parseAmounts function for formatting currency amounts
+  - ex takes number and returns with 2 decimal points and a `$` sign in front
+  - `33.173888888` -> `$33.17`   ||   `-71.6` -> `-$71.60`
+- TotalSpendingAccordion component for total spending accordion
+- TotalSpendingDetails component for total spending details
+- TotalSpending new component inside /v2 folder for total spending
+
+### Fixed
+- Total Spending on /dashboard, now displays total spending for all accounts
+
+### Changed
+
+### Removed

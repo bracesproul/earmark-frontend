@@ -64,8 +64,8 @@ export default async function handler(req, res) {
                 config = {
                     params: {
                         user_id: user_id,
-                        startDate: '2022-02-28',
-                        endDate: '2022-06-05',
+                        startDate: req.query.startDate,
+                        endDate: req.query.endDate,
                         queryType: queryType,
                     },
                     headers: {

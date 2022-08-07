@@ -15,6 +15,7 @@ import {
 import FatalErrorComponent from '../../FatalError';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import { useBackgroundFetch } from '../../../lib/hooks/useBackgroundFetch';
   
@@ -24,64 +25,9 @@ const TotalSpending = (props) => {
   const [totalSpending, setTotalSpending] = useState([]);
   const [fatalError, setFatalError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-/*  const fetchData = async () => {
-    try {
-      const endDate = moment().format('YYYY-MM-DD');
-      const startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
-      const currentTime = Date.now();
-      const expTime = currentTime + 86400000;
-      const config = {
-        params: {
-            user_id: props.cookie,
-            startDate: startDate,
-            endDate: endDate,
-            queryType: 'totalSpending',
-        },
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        url: '/api/dashboard',
-        method: 'GET'
-      }
-      const { data } = await axios(config)
-      if (data.totalSpending) {
-        setTotalSpending(data.totalSpending)
-        setLoading(false);
-        localStorage.setItem(`totalSpendingCacheExpTime`, expTime.toString());
-        localStorage.setItem(`totalSpendingCachedData`, JSON.stringify(data.totalSpending));
-        return;
-      } else {
-        setLoading(false);
-        setFatalError(true);
-        return;
-      }
-    } catch (error) {
-      setLoading(false);
-      setFatalError(true);
-      console.error(error);
-    }
-  };
-
-  const cacheData = () => {
-    if (typeof window == "undefined") return;
-    try {
-      const currentTime = Date.now();
-      const cacheExpTime = parseInt(localStorage.getItem(`totalSpendingCacheExpTime`));
-      if (!cacheExpTime || cacheExpTime < currentTime) {
-        fetchData();
-      } else if (cacheExpTime > currentTime) {
-        const cachedData = JSON.parse(localStorage.getItem(`totalSpendingCachedData`));
-        setTotalSpending(cachedData);
-        setLoading(false);
-      }
-    } catch (error) {
-      setFatalError(true);
-      setLoading(false);
-      console.error('the below error occurred in `components/Dashboard/SpendingOverview` - line 67 - method: cachedData()')
-      console.error(error)
-    }
-  };*/
+  useEffect(() => !mounted ? setMounted(true) : null, [mounted]);
 
   const fetchData = async (forceRefresh:boolean) => {
     const apiCall = await callApi.fetchTotalSpending(forceRefresh);
@@ -106,6 +52,8 @@ const TotalSpending = (props) => {
     setFatalError(false);
   }
 
+  console.log(totalSpending)
+
   const skeleton = (
     <>
     <Skeleton animation="wave" />
@@ -120,17 +68,19 @@ const TotalSpending = (props) => {
     <>
       {totalSpending.map((spending, index) => (
         <React.Fragment key={index}>
-          <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-            {spending.timeframe}
+          <Typography sx={{ fontSize: '18px' }} variant="h6" component="div">
+            {spending.timeFrame}
           </Typography>
-          <Grid container direction='row' alignItems='center' key={spending.timeframe}>
+          <Grid container direction='row' alignItems='center' key={spending.timeFrame}>
             <Grid item>
               <Typography variant="body1" component="div">
-                {`${spending.text} - $${spending.amount}`}
+                  {spending.text} - ${spending.amount}
               </Typography>
             </Grid>
             <Grid item alignItems='right'>
-              { spending.change === 'more' ? <ArrowCircleUpIcon color='secondary' /> : <ArrowCircleDownIcon color='primary' /> }
+                { spending.change === 'more' && <ArrowCircleUpIcon color='secondary' /> }
+                { spending.change === 'less' && <ArrowCircleDownIcon color='primary' /> }
+                { spending.change === 'zero_spending' && <RemoveCircleOutlineIcon color='primary' />  }
             </Grid>
           </Grid>
           <Divider />

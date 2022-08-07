@@ -63,7 +63,6 @@ function ColorThemeSwitch() {
     const colorTheme = useColorTheme();
     const [isChecked, setIsChecked] = useState(true);
     const [nextMode, setNextMode] = useState('light');
-    console.log('mode from component', colorTheme.mode);
 
     useEffect(() => {
         if (colorTheme.mode === 'dark') {

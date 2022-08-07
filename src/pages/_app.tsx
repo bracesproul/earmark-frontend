@@ -56,7 +56,7 @@ const getDesignTokens = (mode: any) => ({
             paper: '#1f1f1f',
           },
           text: {
-            primary: '#fff',
+            primary: '#f2f2f2',
             secondary: 'rgba(255, 255, 255, 0.7)',
           },
         }),
@@ -66,7 +66,6 @@ const getDesignTokens = (mode: any) => ({
 function MyApp({ Component, pageProps }) {
   const appTheme = useColorTheme();
   const [ cookies ] = useCookies();
-  console.log('mode from cookies', cookies['earmark-theme']);
   const theme = React.useMemo(() => createTheme(getDesignTokens(appTheme.mode)), [appTheme.mode]);
 
 
@@ -125,41 +124,3 @@ const AppProviders = ({ Component, pageProps }) => {
 }
 
 export default AppProviders;
-
-
-// unused maybe need later
-/*
-interface ITheme {
-  buttonNormal: {
-    maxWidth: string,
-    minWidth: string,
-    fontSize: string,
-    color: string,
-  };
-}
-
-let themeV = createTheme({
-  palette: {
-    primary: {
-      main: '#42a5f5',
-      contrastText: "#fff",
-    },
-    secondary: {
-      main: '#ba68c8',
-      contrastText: "#fff",
-    },
-    error: {
-      main: '#c62828',
-      contrastText: "#fff",
-    },
-    warning: {
-      main: '#ff9800',
-      contrastText: "#fff",
-    },
-    success: {
-      main: '#4caf50',
-      contrastText: "#fff",
-    },
-  },
-});
-* */
