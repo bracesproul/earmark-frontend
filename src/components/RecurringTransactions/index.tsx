@@ -124,7 +124,7 @@ const RecurringTransactions = () => {
     useEffect(() => {
         if (isDataNull) {
             console.log('false');
-            return;
+            return undefined;
         };
         console.log('before loop run');
         allSummaryData.forEach((element) => {
@@ -137,7 +137,7 @@ const RecurringTransactions = () => {
 
 
     useEffect(() => {
-    if (!auth.user) return;
+    if (!auth.user) return undefined;
     cacheData()
     }, [auth.user])
 

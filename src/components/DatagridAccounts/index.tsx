@@ -30,7 +30,7 @@ const DatagridAccounts = () => {
   useEffect(() => {
     if (!auth.user || typeof window == "undefined") {
       setLoading(true);
-      return;
+        return undefined;
     }
     fetchData()
         .then(data => {

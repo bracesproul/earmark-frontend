@@ -14,18 +14,9 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 import axios from "axios";
 import updateFirestoreUser from "../../firestore/updateFirestoreUser"
 import { globalVars } from "../../globalVars";
+import { app } from '../../firebaseConfig';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
-    authDomain: "earmark-8d1d3.firebaseapp.com",
-    projectId: "earmark-8d1d3",
-    storageBucket: "earmark-8d1d3.appspot.com",
-    messagingSenderId: "46302537330",
-    appId: "1:46302537330:web:403eac7f28d2a4868944eb",
-    measurementId: "G-5474KY2MRV"
-};
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+const db = getFirestore(app);
 const API_URL = globalVars().API_URL;
 
 const firestoreContext = createContext({});
@@ -40,7 +31,6 @@ export function ProvideFirestore({ children }) {
 function useProvideFirestore() {
   const [success, setSuccess] = useState(false);
   const auth = useAuth();
-  const app = firebaseApp;
   let analytics;
 
   if (app.name && typeof window !== 'undefined') {

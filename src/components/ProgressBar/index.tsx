@@ -66,7 +66,7 @@ function LinearWithValueLabel(props) {
         console.log('endSec', endSec);
         console.log('duration in seconds', (endSec - startDate))
         clearInterval(timer);
-        return;
+        return undefined;
       }
     }, 200)
   }, []);

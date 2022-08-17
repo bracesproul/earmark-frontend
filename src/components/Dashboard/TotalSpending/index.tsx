@@ -27,7 +27,9 @@ const TotalSpending = (props) => {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => !mounted ? setMounted(true) : null, [mounted]);
+  useEffect(() => {
+      if (!mounted) setMounted(true);
+  }, [mounted]);
 
   const fetchData = async (forceRefresh:boolean) => {
     const apiCall = await callApi.fetchTotalSpending(forceRefresh);
@@ -41,8 +43,8 @@ const TotalSpending = (props) => {
   }
 
   useEffect(() => {
-    if (typeof window == "undefined") return;
-    if (!auth.user) return;
+    if (typeof window == "undefined") return undefined;
+    if (!auth.user) return undefined;
     fetchData(false)
   }, [auth.user])
 

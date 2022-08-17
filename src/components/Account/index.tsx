@@ -34,22 +34,12 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { TransitionProps } from '@mui/material/transitions';
 import { globalVars } from '../../lib/globalVars';
-import { initializeApp } from "firebase/app";
-import { getFirestore, 
+import { getFirestore,
     doc, 
     getDoc,
 } from "firebase/firestore";
+import { app } from '../../lib/firebaseConfig';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
-    authDomain: "earmark-8d1d3.firebaseapp.com",
-    projectId: "earmark-8d1d3",
-    storageBucket: "earmark-8d1d3.appspot.com",
-    messagingSenderId: "46302537330",
-    appId: "1:46302537330:web:403eac7f28d2a4868944eb",
-    measurementId: "G-5474KY2MRV"
-};
-const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const STATE_ARRAY = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
@@ -112,7 +102,7 @@ export default function Account() {
     };
 
     useEffect(() => {
-        if (!auth.user) return;
+        if (!auth.user) return undefined;
         getUserInfo();
     } , [auth.user]);
 

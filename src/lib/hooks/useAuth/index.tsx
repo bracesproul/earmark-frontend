@@ -68,7 +68,6 @@ const useProvideAuth = () => {
           sameSite: true,
         });
         console.log('cookie set');
-        // firestore.logSignIn('custom')
         return 'success';
       });
     } catch(error) {
@@ -158,6 +157,7 @@ const useProvideAuth = () => {
     return signOut(firebaseAuth)
       .then(() => {
         setUser(false);
+        console.log('removed cookie');
         removeCookie("user_id")
       });
   };

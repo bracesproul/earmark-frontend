@@ -9,9 +9,11 @@ import {
     FormGroup,
     FormControlLabel,
     Switch,
-    Tooltip,
+    Tooltip, Button,
 } from '@mui/material'
-
+import {Save} from "@mui/icons-material";
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
@@ -86,21 +88,68 @@ function ColorThemeSwitch() {
     }
 
     return (
-        <Box sx={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-        }}>
-            <FormGroup>
+        <>
+            <Box sx={{
+                display: { xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' },
+                position: 'absolute',
+                top: 0,
+                right: 0,
+            }}>
+                <FormGroup>
+                    <Tooltip title={`Switch to ${nextMode} mode`}>
+                        <FormControlLabel
+                            control={<MaterialUISwitch sx={{ m: 1 }} checked={isChecked} />}
+                            label=''
+                            onClick={() => handleClick()}
+                        />
+                    </Tooltip>
+                </FormGroup>
+            </Box>
+            <Box sx={{
+                display: { xs: 'flex', sm: 'flex', md: 'none', lg: 'none', xl: 'none' },
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                padding: 1,
+            }}>
                 <Tooltip title={`Switch to ${nextMode} mode`}>
-                    <FormControlLabel
-                        control={<MaterialUISwitch sx={{ m: 1 }} checked={isChecked} />}
-                        label=''
-                        onClick={() => handleClick()}
-                    />
+                    { colorTheme.mode == 'dark' ? (
+                        <Button
+                            aria-label="save"
+                            variant="contained"
+                            sx={{
+                                width: 10,
+                                height: 30,
+
+                                borderRadius: 10,
+                                border: "1px solid",
+                                borderColor: "primary.main",
+                                "& .MuiButton-startIcon": { margin: 0 }
+                            }}
+                            startIcon={<DarkModeIcon />}
+                            onClick={() => handleClick()}
+                        ></Button>
+                    ) : (
+                        <Button
+                            aria-label="save"
+                            variant="contained"
+                            sx={{
+                                width: 10,
+                                height: 30,
+
+                                borderRadius: 10,
+                                border: "1px solid",
+                                borderColor: "primary.main",
+                                "& .MuiButton-startIcon": { margin: 0 }
+                            }}
+                            startIcon={<LightModeIcon />}
+                            onClick={() => handleClick()}
+                        ></Button>
+                    )}
                 </Tooltip>
-            </FormGroup>
-        </Box>
+            </Box>
+        </>
+
     );
 }
 

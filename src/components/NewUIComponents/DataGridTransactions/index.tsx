@@ -143,7 +143,7 @@ const DataGridTransactions = () => {
     }
 
     useEffect(() => {
-        if (!auth.user) return;
+        if (!auth.user) return undefined;
         fetchData(false)
             .then((res) => {
                 setCategoriesToDisplay(res.categoriesToDisplay);
@@ -204,7 +204,7 @@ const DataGridTransactions = () => {
         if (!selectionModel || selectionModel.length == 0) {
             console.error("selectionModel is null");
             setNewDataGrid(<></>);
-            return;
+            return undefined;
         };
         setRows();
 

@@ -4,8 +4,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { parseCookies } from '../../lib/parseCookies';
 import PageTemplate from '../../components/PageTemplate';
 import {
-    Box,
-    Grid
+    Box, Divider,
+    Grid, Typography
 } from '@mui/material';
 import SpendingOverview from '../../components/Dashboard/SpendingOverview';
 import TopMerchants from '../../components/Dashboard/TopMerchants';
@@ -37,36 +37,71 @@ const Dashboard = ({ cookie }) => {
             <Box sx={{
                 width: '100%',
             }}>
-                <Grid container spacing={3} sx={{
-                    marginTop: '1rem',
+                <Typography sx={{
+                    fontSize: '2rem',
+                    fontWeight: 'bold',
+                    paddingTop: '1rem',
+                    paddingLeft: '4rem',
                 }}>
-                    <Box sx={{ display: { xs: 'flex', md: 'flex', lg: 'flex', xl: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
-                        <Grid item xs={12}>
+                    Dashboard
+                </Typography>
+                <Divider sx={{ width: '100%', margin: 'auto 0' }} />
+                <Grid container spacing={1}>
+                    <Box sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
+                        <Grid item xs={6}>
+                            <TopMerchants cookie={cookie} />
+                        </Grid>
+                        <Grid item xs={6}>
                             <SpendingOverview cookie={cookie} />
                         </Grid>
                     </Box>
-                    <Box sx={{ display: { xs: 'flex', md: 'flex', lg: 'flex', xl: 'flex' }, flexDirection: 'row', margin: 'auto'}}>
+
+                    <Divider sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, width: '90%', margin: 'auto' }} />
+
+                    <Box sx={{ display: { xs: 'flex', md: 'flex', lg: 'flex', xl: 'none' }, flexDirection: 'column', margin: 'auto'}}>
                         <Grid item xs={12}>
                             <TopMerchants cookie={cookie} />
                         </Grid>
                     </Box>
 
-                    <Grid item xs={12}>
-                        <Box sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, flexDirection: 'row', margin: 'auto' }}>
+                    <Divider sx={{ display: { xs: 'flex', md: 'flex', lg: 'flex', xl: 'none' }, width: '90%', margin: 'auto' }} />
+
+                    <Box sx={{ display: { xs: 'flex', md: 'flex', lg: 'flex', xl: 'none' }, flexDirection: 'column', margin: 'auto'}}>
+                        <Grid item xs={12}>
+                            <SpendingOverview cookie={cookie} />
+                        </Grid>
+                    </Box>
+
+                    <Divider sx={{ display: { xs: 'flex', md: 'flex', lg: 'flex', xl: 'none' }, width: '90%', margin: 'auto' }} />
+
+                    <Box sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, flexDirection: 'row', margin: 'auto' }}>
+                        <Grid item xs={6}>
                             <Goals />
+                        </Grid>
+                        <Grid item xs={6}>
                             <Budgets />
-                        </Box>
-                        <Box sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, flexDirection: 'row', margin: 'auto' }}>
+                        </Grid>
+                    </Box>
+
+                    <Divider sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, width: '90%', margin: 'auto' }} />
+
+                    <Box sx={{ display: { xs: 'none', md: 'none', lg: 'none', xl: 'flex' }, flexDirection: 'row', margin: 'auto' }}>
+                        <Grid item xs={6}>
                             <TotalSpending />
+                        </Grid>
+                        <Grid item xs={6}>
                             <AccountBalance cookie={cookie} />
-                        </Box>
-                    </Grid>
+                        </Grid>
+                    </Box>
 
                     <Grid item xs={12}>
                         <Box sx={{ display: { xs: 'none', md: 'flex', lg: 'flex', xl: 'none' }, flexDirection: 'column', margin: 'auto' }}>
                             <Goals />
+                            <Divider sx={{ width: '80%', margin: 'auto' }} />
                             <Budgets />
+                            <Divider sx={{ width: '80%', margin: 'auto' }} />
                             <TotalSpending />
+                            <Divider sx={{ width: '80%', margin: 'auto' }} />
                             <AccountBalance cookie={cookie} />
                         </Box>
                     </Grid>
@@ -74,8 +109,11 @@ const Dashboard = ({ cookie }) => {
                     <Grid item xs={12}>
                         <Box sx={{ display: { xs: 'flex', md: 'none', lg: 'none', xl: 'none' }, flexDirection: 'column', margin: 'auto'}}>
                             <Goals />
+                            <Divider sx={{ width: '90%', margin: 'auto' }} />
                             <Budgets />
+                            <Divider sx={{ width: '90%', margin: 'auto' }} />
                             <TotalSpending />
+                            <Divider sx={{ width: '90%', margin: 'auto' }} />
                             <AccountBalance cookie={cookie} />
                         </Box>
                     </Grid>

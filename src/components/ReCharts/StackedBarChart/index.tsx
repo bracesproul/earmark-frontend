@@ -90,7 +90,7 @@ const StackedBarChart = (props) => {
   };
 
   useEffect(() => {
-    if (first) return;
+    if (first) return undefined;
     setStartDate(props.date);
   }, [props.date]);
 
@@ -101,7 +101,7 @@ const StackedBarChart = (props) => {
   useEffect(() => {
     if (!auth.user) {
       console.error('user NOT logged in, inside the useEffect hook')
-      return;
+        return undefined;
     };
     
 

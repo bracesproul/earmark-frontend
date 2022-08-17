@@ -22,13 +22,11 @@ const useProvideColorTheme = () => {
     const [mode, setMode] = useState<PaletteMode>('dark');
     const firstLoad = useRef(true);
 
-    useEffect(() => console.log('mode inside hook', mode, 'first load', firstLoad.current), [mode]);
-
     useEffect(() => {
         if (firstLoad.current) {
             setMode(cookies['earmark-theme'] as PaletteMode || 'dark');
             firstLoad.current = false;
-            return;
+            return undefined;
         }
     }, [mode])
 

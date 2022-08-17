@@ -75,7 +75,7 @@ function Home() {
     const isFirstRender = useRef(true);
     router.query.chart = router.query.chart || 'lineChart';
     useEffect(() => {
-        if (!router) return;
+        if (!router) return undefined;
         router.push(`?chart=lineChart&timeframe=2years`)
     }, [])
 
@@ -94,7 +94,7 @@ function Home() {
     }
 
     useEffect(() => {
-        if (!auth.user) return;
+        if (!auth.user) return undefined;
         fetchDataLineBarChart(false).then(res => {
             lineChartData.current = {
                 chartSevenDaysRes: res.chartSevenDaysRes,
@@ -130,10 +130,10 @@ function Home() {
     useLayoutEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false;
-            return;
+            return undefined;
         }
-        if (!auth.user) return;
-        if (!router.query.timeframe) return;
+        if (!auth.user) return undefined;
+        if (!router.query.timeframe) return undefined;
         if (!lineChartData.current) {
             fetchDataLineBarChart(false).then(res => {
                 lineChartData.current = {
@@ -239,13 +239,21 @@ export default function Visualize() {
     const [pieData, setPieData] = useState<any | null>([]);
     const [lineChartKeys, setLineChartKeys] = useState([]);
     const [windowDimensions, setWindowDimensions] = useState({ height: 900, width: 1440 });
+    const [mounted, setMounted] = useState(false);
     const lineChartData = useRef(null);
     const pieChartData = useRef(null);
     const isFirstRender = useRef(true);
     router.query.chart = router.query.chart || 'lineChart';
+
     useEffect(() => {
-        if (!router) return;
+        if (!router) return undefined;
         router.push(`?chart=lineChart&timeframe=2years`)
+    }, [])
+
+    useEffect(() => {
+        if (!mounted) {
+            setMounted(true);
+        }
     }, [])
 
     useEffect(() => {
@@ -263,7 +271,8 @@ export default function Visualize() {
     }
 
     useEffect(() => {
-        if (!auth.user) return;
+        if (!auth.user) return undefined;
+        if (!mounted) return undefined;
         fetchDataLineBarChart(false).then(res => {
             lineChartData.current = {
                 chartSevenDaysRes: res.chartSevenDaysRes,
@@ -294,15 +303,16 @@ export default function Visualize() {
             setPieData(res.pieChart2yrRes);
         })
         setLoading(false);
-    }, [auth.user])
+    }, [auth.user, mounted])
 
     useLayoutEffect(() => {
+        if (!mounted) return undefined;
         if (isFirstRender.current) {
             isFirstRender.current = false;
-            return;
+            return undefined;
         }
-        if (!auth.user) return;
-        if (!router.query.timeframe) return;
+        if (!auth.user) return undefined;
+        if (!router.query.timeframe) return undefined;
         if (!lineChartData.current) {
             fetchDataLineBarChart(false).then(res => {
                 lineChartData.current = {
@@ -369,7 +379,9 @@ export default function Visualize() {
 
             setPieData(pieChartData.current.pieChart2yrRes);
         }
-    }, [router.query.timeframe])
+    }, [router.query.timeframe, mounted])
+
+    if (!mounted) return <></>
 
     return (
         <>

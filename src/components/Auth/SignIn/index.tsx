@@ -13,28 +13,15 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Alert, IconButton } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { useAuth } from '../../../lib/hooks/useAuth';
-import firebase, { initializeApp, } from "firebase/app";
-import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { useFirestore } from '../../../lib/hooks/useFirestore';
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import CloseIcon  from '@mui/icons-material/Close';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-
-const app = initializeApp({
-  apiKey: "AIzaSyCOnXDWQ369OM1lW0VC5FdYE19q1ug0_dc",
-  authDomain: "earmark-8d1d3.firebaseapp.com",
-  projectId: "earmark-8d1d3",
-  storageBucket: "earmark-8d1d3.appspot.com",
-  messagingSenderId: "46302537330",
-  appId: "1:46302537330:web:403eac7f28d2a4868944eb",
-  measurementId: "G-5474KY2MRV"
-});
 
 
 function Copyright(props) {

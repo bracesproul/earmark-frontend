@@ -404,7 +404,7 @@ Commit [main a9dc42b](https://github.com/bracesproul/earmark-frontend/commit/a9d
 ## [0.0.24] - 2022-08-07
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main a72fd81](https://github.com/bracesproul/earmark-frontend/commit/a72fd81)
 
 ### Added
 - parseAmounts function for formatting currency amounts
@@ -420,3 +420,23 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 ### Changed
 
 ### Removed
+
+
+## [0.0.25] - 2022-08-07
+
+### Notes
+Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+
+### Added
+- Added dividers in `/dashboard/transactions`
+- New account page, much better looking ui (settings nav bar not showing on mobile as of now)
+- new `firebaseConfig` that contains the firebase app variable and config object
+- password validation for change password on account page, note to self* add to signup page
+- fixed return statments inside useEffect for all incorrectly made return `null` / `<></>` statements, now returns `undefined` (is best practice)
+
+### Fixed
+
+### Changed
+
+### Removed
+- Removed old account page, some firebase config objects and firebase initialize app variables (replaced with exported app from `firebaseConfig` file)

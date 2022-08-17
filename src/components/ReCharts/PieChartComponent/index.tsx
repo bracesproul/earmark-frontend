@@ -60,7 +60,7 @@ const PieChartComponent = (props) => {
 
 
   useEffect(() => {
-    if (first) return;
+    if (first) return undefined;
     setStartDate(props.date);
   }, [props.date]);
 
@@ -69,7 +69,7 @@ const PieChartComponent = (props) => {
   useEffect(() => {
     if (!auth.user) {
       console.error('user is NOT logged in, inside the useEffect hook')
-      return;
+        return undefined;
     };
 
     cacheData(props.dateName);

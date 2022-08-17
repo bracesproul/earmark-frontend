@@ -1,0 +1,33 @@
+import {Box, Card, CardContent, Slide, Typography} from "@mui/material";
+import Grid from "@mui/material/Grid";
+import React from "react";
+
+export default function SettingsDemo() {
+    return (
+        <Box>
+            <Card sx={{
+                maxWidth: '600px',
+                padding: '1rem',
+                marginTop: '2rem',
+            }}>
+                <CardContent>
+                    <Typography sx={{
+                        fontSize: '1.5rem',
+                        paddingBottom: '15px',
+                    }}>
+                        Demo
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+                                <Typography>
+                                    A demo video will be added once all features are implemented.
+                                </Typography>
+                            </Slide>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </Box>
+    )
+}

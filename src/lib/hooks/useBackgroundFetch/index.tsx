@@ -1100,7 +1100,7 @@ const useProvideBackgroundFetch = () => {
     // runs on every first load, first checks to see if cache has already been set
     // if it hasn't, then it will run all api calls to pre-cache data.
 /*    useEffect(() => {
-        if (!auth.user) return;
+        if (!auth.user) return undefined;
         fetchData();
     }, [auth.user])*/
 

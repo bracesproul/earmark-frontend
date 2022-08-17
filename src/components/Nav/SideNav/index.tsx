@@ -64,14 +64,13 @@ const SideNav = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
         
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
         }, [auth]);
     
@@ -170,14 +169,13 @@ const SideNav = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
     
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
         }, [auth]);
     

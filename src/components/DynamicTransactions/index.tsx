@@ -53,7 +53,7 @@ export default function dynamicTransactions(props) {
     useEffect(() => {
         if (!auth.user) {
             console.error('no user logged in');
-            return;
+            return undefined;
         }
         const fetchData = async () => {
             const apiCall = await callApi.fetchDynamicTransactions(props.query.ins_id)

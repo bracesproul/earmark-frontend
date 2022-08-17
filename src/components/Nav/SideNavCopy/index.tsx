@@ -29,6 +29,7 @@ import LogoutIcon from '@mui/icons-material/Logout'; // for sign out tab
 import CachedIcon from '@mui/icons-material/Cached';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
+import ColorThemeSwitch from '../../../components/v2/ColorThemeSwitch';
 const drawerWidth = '20%';
 
 type Anchor = 'left';
@@ -60,14 +61,13 @@ const SideNav = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
         
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
         }, [auth]);
     
@@ -93,6 +93,7 @@ const SideNav = () => {
         };
 
         const list = (anchor: Anchor) => (
+            <>
         <Box
             sx={{ width: '20%' }}
             role="presentation"
@@ -141,12 +142,21 @@ const SideNav = () => {
                 </a>
             ))}
             </List>
+            <Box sx={{
+                position: 'fixed',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                margin: '0 auto',
+            }}>
+                <ColorThemeSwitch />
+            </Box>
         </Box>
+            </>
         );
-        // TODO: GET CSS FOR BRING ELEMENT TO FRONT
-        // SIDENAV ICON BEHIND TOP NAV BAR
+
+
         return (
-        <div>
+        <Box>
             <IconButton
             sx={{ position: 'fixed' }}
             onClick={toggleDrawer('left', true)}
@@ -160,7 +170,7 @@ const SideNav = () => {
             >
             {list('left')}
             </Drawer>
-        </div>
+        </Box>
         );
     }
 
@@ -169,16 +179,15 @@ const SideNav = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
     
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
-        }, [auth]);
+        }, [auth.user]);
     
         const handleLogoClick = () => {
             Router.push('/');
@@ -268,16 +277,15 @@ const SideNav = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
     
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
-        }, [auth]);
+        }, [auth.user]);
     
         const handleLogoClick = () => {
             Router.push('/');
@@ -363,13 +371,23 @@ const SideNav = () => {
 
     return (
         <>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'none', xl: 'flex' } }}>
+        <Box sx={{
+            flexGrow: 1,
+            display: { xs: 'none', md: 'none', xl: 'flex' }
+        }}>
             <XLPageSideNav />
         </Box>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', xl: 'none' } }}>
+        <Box sx={{
+            flexGrow: 1,
+            display: { xs: 'none', md: 'flex', xl: 'none' }
+        }}>
             <ExpandedPageSideNav />
         </Box>
-        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', xl: 'none' } }}>
+        <Box sx={{
+            flexGrow: 1,
+            display: { xs: 'flex', md: 'none', xl: 'none' },
+            position: 'absolute',
+        }}>
             <SmallPageSideNav />
         </Box>
         </>
@@ -386,16 +404,15 @@ const SideNavV = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
 
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
-        }, [auth]);
+        }, [auth.user]);
 
         const toggleDrawer =
             (anchor: Anchor, open: boolean) =>
@@ -495,16 +512,15 @@ const SideNavV = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
 
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
-        }, [auth]);
+        }, [auth.user]);
 
         const handleLogoClick = () => {
             Router.push('/');
@@ -594,16 +610,15 @@ const SideNavV = () => {
         const [otherPages, setOtherPages] = useState(SIDENAV_OTHER_PAGES_AUTH);
 
         useEffect(() => {
-            // @ts-ignore
             if (!auth.user) {
                 setOtherPages(SIDENAV_OTHER_PAGES_NO_AUTH);
-                return;
+                return undefined;
             }
             else {
                 setOtherPages(SIDENAV_OTHER_PAGES_AUTH);
-                return;
+                return undefined;
             }
-        }, [auth]);
+        }, [auth.user]);
 
         const handleLogoClick = () => {
             Router.push('/');

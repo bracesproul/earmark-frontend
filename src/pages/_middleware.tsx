@@ -14,10 +14,10 @@ export function middleware(req, res) {
     if (cookie != process.env.ADMIN_TOKEN && NO_AUTH_UNLESS_ADMIN.includes(req.page.name)) {
         console.error('non admin user trying to access admin page')
         return NextResponse.redirect(new URL(`/auth/unauthorized`, req.url))
-    } else if (cookie && NO_ACCESS_ON_AUTH.includes(req.page.name)) {
+    } /*else if (cookie && NO_ACCESS_ON_AUTH.includes(req.page.name)) {
         console.log('user is logged in, redirecting to /auth/unauthorized');
         return NextResponse.redirect(new URL('/auth/unauthorized', req.url))
-    } else if (!cookie && NO_ACCESS_ON_UNAUTH.includes(req.page.name)) {
+    }*/ else if (!cookie && NO_ACCESS_ON_UNAUTH.includes(req.page.name)) {
         console.log('user is logged in, redirecting to /auth/unauthorized');
         return NextResponse.redirect(new URL('/auth/unauthorized', req.url))
     }

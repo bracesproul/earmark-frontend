@@ -47,8 +47,8 @@ const AccountBalance = (props) => {
   }
 
   useEffect(() => {
-    if (typeof window == "undefined") return;
-    if (!auth.user) return;
+    if (typeof window == "undefined") return undefined;
+    if (!auth.user) return undefined;
     fetchData(false);
   }, [auth.user]);
 

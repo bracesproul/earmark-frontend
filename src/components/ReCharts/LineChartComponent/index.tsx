@@ -62,7 +62,7 @@ const LineChartComponent = (props) => {
   useEffect(() => {
     if (!auth.user) {
       console.error('user NOT logged in, inside the useEffect hook')
-      return;
+        return undefined;
     }
     fetchData(false)
         .then((res) => {
@@ -119,9 +119,9 @@ const LineChartComponent = (props) => {
   useEffect(() => {
     if (!auth.user) {
       console.error('user NOT logged in, inside the useEffect hook')
-      return;
+        return undefined;
     }
-    if (first) return;
+    if (first) return undefined;
     fetchData(false)
         .then((res) => {
             console.log('res', res)
@@ -160,7 +160,7 @@ const LineChartComponent = (props) => {
     console.log(key)
 
   useEffect(() => {
-    if (first) return;
+    if (first) return undefined;
     setStartDate(props.date);
   }, [props.date]);
 

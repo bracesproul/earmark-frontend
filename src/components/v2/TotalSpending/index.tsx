@@ -28,11 +28,15 @@ function TotalSpending() {
         return callApi.fetchTotalSpending(false);
     }
 
-    useEffect(() => !mounted ? setMounted(true) : null, [mounted]);
+    useEffect(() => {
+        if (!mounted) {
+            setMounted(true);
+        }
+    }, [mounted]);
 
     useEffect(() => {
-        if (!mounted) return;
-        if (!auth.user) return;
+        if (!mounted) return undefined;
+        if (!auth.user) return undefined;
         fetchData().then((res) => {
             totalSpending.current = res.totalSpending;
             console.log('done');
