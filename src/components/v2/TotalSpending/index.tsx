@@ -17,6 +17,14 @@ import {
     Typography
 } from "@mui/material";
 
+const skeleton = (
+    <>
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" />
+    </>
+)
+
 function TotalSpending() {
     const auth = useAuth();
     const callApi = useBackgroundFetch();
@@ -34,6 +42,32 @@ function TotalSpending() {
         }
     }, [mounted]);
 
+/*    if (mounted) {
+        return (
+            <Box sx={{ padding: '30px', margin: 'auto' }}>
+                <Card
+                    sx={{
+                        width: {sm: '95%', md: 'none'},
+                        minWidth: {sm: 'none', md: 350},
+                        maxWidth: {sm: 'none', md: 550},
+                        minHeight: 'fitContent',
+                    }}
+                    variant="outlined"
+                >
+                    <CardContent>
+                        <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', paddingBottom: '15px'}}>
+                            Total Spending
+                        </Typography>
+                        <Divider />
+                        <Grid>
+                            {skeleton}
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </Box>
+        )
+    }*/
+
     useEffect(() => {
         if (!mounted) return undefined;
         if (!auth.user) return undefined;
@@ -44,15 +78,6 @@ function TotalSpending() {
             setLoading(false);
         })
     }, [mounted, auth.user]);
-
-
-    const skeleton = (
-        <>
-            <Skeleton animation="wave" />
-            <Skeleton animation="wave" />
-            <Skeleton animation="wave" />
-        </>
-    )
 
     return (
         <Box sx={{ padding: '30px', margin: 'auto' }}>

@@ -7,13 +7,14 @@ import React, {
 import axios from 'axios';
 import { useAuth } from '../../lib/hooks/useAuth';
 import { DataGrid } from '@mui/x-data-grid';
-import { Box,
+import {
+    Box,
     ButtonGroup,
     Button,
     Tooltip,
     IconButton,
     Menu,
-    MenuItem
+    MenuItem, Typography, Divider
 } from '@mui/material';
 import { useBackgroundFetch } from "../../lib/hooks/useBackgroundFetch";
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
@@ -25,9 +26,10 @@ export default function dynamicTransactions(props) {
     const [currentAccountType, setCurrentAccountType] = useState('');
     const [transactions, setTransactions] = useState([]);
     const [rawData, setRawData] = useState([]);
-    const [selected, setSelected] = useState('outlined');
+    const [selected, setSelected] = useState('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedAccountName, setSelectedAccountName] = useState('')
 
     const ITEM_HEIGHT = 48;
     const open = Boolean(anchorEl);
@@ -44,6 +46,7 @@ export default function dynamicTransactions(props) {
             if (transaction.account.account_id === currentAccountType) {
                 setTransactions(transaction.account.transactions);
                 setSelected(transaction.account.account_id);
+                setSelectedAccountName(transaction.account.account_name)
             }
         })
     }, [currentAccountType]);
@@ -64,6 +67,11 @@ export default function dynamicTransactions(props) {
             }
             setTransactions(apiCall.transactions);
             setSelected(apiCall.selectedData);
+            apiCall.accountTypes.forEach((account) => {
+                if (account.ins_id === props.query.account_id) {
+                    setSelectedAccountName(account.account_name)
+                }
+            })
             setLoading(false);
         }
         fetchData();
@@ -143,7 +151,7 @@ export default function dynamicTransactions(props) {
                             return (
                                 <Tooltip title={`${account.account_name} transactions`} key={index}>
                                     {/* @ts-ignore */}
-                                    <Button variant={buttonStyle} onClick={() => handleButtonClick(account.ins_id)} id={account.ins_id} key={index}>{account.account_name}</Button>
+                                    <Button variant='contained' onClick={() => handleButtonClick(account.ins_id)} id={account.ins_id} key={index}>{account.account_name}</Button>
                                 </Tooltip>
                             )
                         })}
@@ -166,17 +174,26 @@ export default function dynamicTransactions(props) {
                 marginLeft: '2rem',
                 marginRight: '2rem',
             }}>
-                <Box textAlign='center' sx={{ paddingBottom: '2rem'}}>
+                <Typography sx={{
+                    fontSize: '2rem',
+                    fontWeight: 'bold',
+                    paddingTop: '1rem',
+                    paddingLeft: '4rem',
+                }}>
+                    {selectedAccountName}
+                </Typography>
+                <Divider sx={{ width: '100%', margin: 'auto 0' }} />
+                <Box textAlign='center' sx={{ paddingBottom: '2rem', paddingTop: '2rem'}}>
                     {/* @ts-ignore */}
                     <ButtonGroup>
                         <ButtonGroup />
                     </ButtonGroup>
                 </Box>
-                <div style={{ display: 'flex', height: '100%' }}>
-                    <div style={{ flexGrow: 1 }}>
-                        <DataGrid autoHeight rows={props.rows} columns={columns} />
-                    </div>
-                </div>
+                <Box sx={{ display: 'flex', height: '100%' }}>
+                    <Box sx={{ flexGrow: 1 }}>
+                        <DataGrid autoHeight sx={{ width: '80vw'}} rows={props.rows} columns={columns} />
+                    </Box>
+                </Box>
             </Box>
             {/* small devices */}
             <Box sx={{
@@ -193,7 +210,7 @@ export default function dynamicTransactions(props) {
                 </Box>
                 <div style={{ display: 'flex', height: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
-                        <DataGrid autoHeight rows={props.rows} columns={columns} />
+                        <DataGrid autoHeight sx={{ width: '98vw'}} rows={props.rows} columns={columns} />
                     </div>
                 </div>
             </Box>

@@ -860,9 +860,9 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
     try {
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
-        const recurringTransactionsSummaryData = data.recurring_transactions.map((txn) => txn.txn_metadata);
+        const recurringTransactionsSummaryData = data.map((txn) => txn);
         localStorage.setItem(`recurringTransactionsCacheExpTime`, expTime.toString());
-        localStorage.setItem(`recurringTransactionsCacheRows`, JSON.stringify(data.recurring_transactions));
+        localStorage.setItem(`recurringTransactionsCacheRows`, JSON.stringify(data));
         localStorage.setItem(`recurringTransactionsSummaryData`, JSON.stringify(recurringTransactionsSummaryData));
 
         // cache check
@@ -2020,8 +2020,13 @@ const useProvideBackgroundFetch = () => {
                 },
             };
             const { data } = await axios(config);
+            if (!data) return {
+                fatalError: false,
+                cacheSet: false,
+                noData: true,
+            }
 
-            if (checkForPartialResponseRecurring(data).fatalError) return checkForPartialResponseRecurring(data);
+            // if (checkForPartialResponseRecurring(data).fatalError) return checkForPartialResponseRecurring(data);
             return setLocalStorageRecurring(data);
         } catch (error) {
             console.error(error);

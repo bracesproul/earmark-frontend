@@ -422,10 +422,10 @@ Commit [main a72fd81](https://github.com/bracesproul/earmark-frontend/commit/a72
 ### Removed
 
 
-## [0.0.25] - 2022-08-07
+## [0.0.25] - 2022-08-16
 
 ### Notes
-Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
+Commit [main dd5c45d](https://github.com/bracesproul/earmark-frontend/commit/dd5c45d)
 
 ### Added
 - Added dividers in `/dashboard/transactions`
@@ -440,3 +440,38 @@ Commit [main ](https://github.com/bracesproul/earmark-frontend/commit/)
 
 ### Removed
 - Removed old account page, some firebase config objects and firebase initialize app variables (replaced with exported app from `firebaseConfig` file)
+
+
+## [0.0.26] - 2022-08-07
+
+### Notes
+Commits link [main](https://github.com/bracesproul/earmark-frontend/commits/main/)
+
+### Added
+- Added dividers in `/dashboard/transactions`
+- New account page, much better looking ui (settings nav bar not showing on mobile as of now)
+- new `firebaseConfig` that contains the firebase app variable and config object
+- password validation for change password on account page, note to self* add to signup page
+- fixed return statments inside useEffect for all incorrectly made return `null` / `<></>` statements, now returns `undefined` (is best practice)
+
+### Fixed
+
+### Changed
+
+### Removed
+- Removed old account page, some firebase config objects and firebase initialize app variables (replaced with exported app from `firebaseConfig` file)
+
+## [0.0.27] - 2022-09-05
+
+
+### Notes
+Commits link [main](https://github.com/bracesproul/earmark-frontend/commits/main/)
+
+### Added
+
+### Fixed
+
+### Changed
+- `_middleware.tsx` now redirects to `/dashboard` or `/auth/signIn` instead of `/auth/unauthorized` for better user experience
+
+### Removed

@@ -248,7 +248,7 @@ export default function Visualize() {
     useEffect(() => {
         if (!router) return undefined;
         router.push(`?chart=lineChart&timeframe=2years`)
-    }, [])
+    }, [mounted])
 
     useEffect(() => {
         if (!mounted) {
@@ -259,8 +259,7 @@ export default function Visualize() {
     useEffect(() => {
         console.log(window.innerHeight)
         setWindowDimensions({ height: Math.round(window.innerHeight * .8), width: Math.round(window.innerWidth  * .8) });
-    }, []);
-
+    }, [mounted]);
 
     const fetchDataLineBarChart = async (forceRetry:boolean) => {
         return await callApi.fetchLineOrBarChart()

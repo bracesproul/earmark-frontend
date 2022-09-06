@@ -82,8 +82,8 @@ const RecurringTransactions = () => {
                 },
             };
             const { data } = await axios(config);
-            console.log(data.recurring_transactions)
-            if (!data.recurring_transactions) {
+            console.log(data)
+            if (!data) {
                 setFetchDataRan(fetchDataRan + 1);
                 setIsDataNull(true);
                 setRowData(null);
@@ -240,9 +240,31 @@ const RecurringTransactions = () => {
             padding: {sx: '100%', md: '4rem'},
             margin: 'auto'
         }}>
+            <DataGrid
+                rows={[]}
+                autoPageSize={true}
+                sx={{
+                    height: '300px'
+                }}
+                columns={recurringColums}
+                components={{
+                    NoRowsOverlay: Placeholder,
+                }}
+            />
+        </Box>
+    )
+
+    return (
+        <Box sx={{
+            display: 'flex',
+            height: '100%',
+            width: {sx: '100%', md: '900px'},
+            padding: {sx: '100%', md: '4rem'},
+            margin: 'auto'
+        }}>
             { isDataNull ? (
                 <DataGrid 
-                rows={null}
+                rows={[]}
                 columns={recurringColums}
                 components={{
                     NoRowsOverlay: Placeholder,
@@ -251,6 +273,8 @@ const RecurringTransactions = () => {
             ) : (
                 <DataGrid 
                 rows={rowData}
+                autoPageSize={true}
+                autoHeight={true}
                 columns={recurringColums}
                 components={{
                     NoRowsOverlay: Placeholder,
@@ -268,14 +292,23 @@ const RecurringTransactions = () => {
                 </DialogTitle>
                 <DialogContent>
                     { isDataNull ? (
-                    <DataGrid autoHeight rows={undefined} columns={datagridColumns} sx={{
-                        height: '100%',
-                        width: { xs: '100%', md: '600px' },
-                        display: 'flex',
-                        margin: 'auto'
-                    }} />
+                    <DataGrid
+                        autoHeight
+                        autoPageSize={true}
+                        rows={[]}
+                        columns={datagridColumns}
+                        sx={{
+                            height: '100%',
+                            width: { xs: '100%', md: '600px' },
+                            display: 'flex',
+                            margin: 'auto'
+                        }}
+                        components={{
+                            NoRowsOverlay: Placeholder,
+                        }}
+                    />
                     ) : (
-                    <DataGrid autoHeight rows={summaryData} columns={datagridColumns} sx={{
+                    <DataGrid autoHeight autoPageSize={true} rows={summaryData} columns={datagridColumns} sx={{
                         height: '100%',
                         width: { xs: '100%', md: '600px' },
                         display: 'flex',
