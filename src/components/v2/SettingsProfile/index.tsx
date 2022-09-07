@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
+    Alert,
     Box,
     Button,
     Card,
@@ -8,7 +9,7 @@ import {
     InputLabel,
     MenuItem,
     Select,
-    Slide,
+    Slide, Snackbar,
     Typography
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
@@ -19,6 +20,8 @@ import TextField from "@mui/material/TextField";
 import {useBackgroundFetch} from "../../../lib/hooks/useBackgroundFetch";
 import {useAuth} from "../../../lib/hooks/useAuth";
 
+const vertical = 'bottom';
+const horizontal = 'right';
 const STATE_ARRAY = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
 
 export default function SettingsProfile() {
@@ -31,6 +34,8 @@ export default function SettingsProfile() {
     const [state, setState] = useState('');
     const [zip, setZip] = useState('');
     const [username, setUsername] = useState('');
+    const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+    const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
     const callApi = useBackgroundFetch();
     const auth = useAuth();
@@ -74,10 +79,21 @@ export default function SettingsProfile() {
             .then((res) => {
                 console.log('res', res)
                 if (res.status === 200) {
+                    setOpenSuccessSnackbar(true);
                     console.log('success updating profile')
+                } else if (res.status === 400) {
+                    setOpenErrorSnackbar(true);
+                    console.log('error updating profile')
                 }
             })
         console.log('form submitted');
+    }
+
+    function handleCloseSnackbar(closeType) {
+        switch (closeType) {
+            case 'success': setOpenSuccessSnackbar(false); break;
+            case 'error': setOpenErrorSnackbar(false); break;
+        }
     }
 
     const profileOptions = [
@@ -188,9 +204,30 @@ export default function SettingsProfile() {
                     </FormControl>
                 </CardContent>
             </Card>
+            <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                open={openSuccessSnackbar}
+                onClose={() => handleCloseSnackbar('success')}
+                key={'snackbar'}
+            >
+                <Alert onClose={() => handleCloseSnackbar('success')} severity="success" sx={{ width: '100%' }}>
+                    Profile updated.
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                open={openErrorSnackbar}
+                onClose={() => handleCloseSnackbar('error')}
+                key={'snackbar'}
+            >
+                <Alert onClose={() => handleCloseSnackbar('error')} severity="error" sx={{ width: '100%' }}>
+                    Error updating profile. Try again later
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }
+
 
 
 
