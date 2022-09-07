@@ -15,7 +15,6 @@ export default function ProfileTextFields(props) {
                     <Slide direction="left" in={true} mountOnEnter unmountOnExit>
                         <TextField
                             fullWidth
-                            autoFocus
                             autoComplete="off"
                             name={option.name}
                             value={option.value}

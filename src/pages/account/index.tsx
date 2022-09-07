@@ -49,11 +49,12 @@ export default function SettingsAppBar() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        if (!mounted) return undefined;
         if (!router.query.s) {
             console.log('no query', router.query)
             router.push('?s=profile');
         } else return undefined;
-    }, [])
+    }, [mounted])
 
     useEffect(() => {
         if (!mounted) {

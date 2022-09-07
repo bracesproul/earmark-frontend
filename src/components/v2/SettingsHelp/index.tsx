@@ -3,12 +3,14 @@ import {Box, Button, Card, CardContent, FormControl, Link, Slide, Typography} fr
 import Grid from "@mui/material/Grid";
 import HelpTextField from "../HelpTextField";
 import SendIcon from "@mui/icons-material/Send";
+import {useRouter} from "next/router";
 
 export default function SettingsHelp() {
     const [email, setEmail] = useState('');
     const [questionType, setQuestionType] = useState('');
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
+    const router = useRouter();
 
     const profileOptions = [
         {
@@ -92,7 +94,7 @@ export default function SettingsHelp() {
                             <Typography sx={{
                                 paddingBottom: '15px'
                             }}>
-                                Before submitting a help request, please look through our <Link href="/testing?s=faq">FAQ</Link> to see if your question has already been answered.
+                                Before submitting a help request, please look through our <Link sx={{ cursor: 'pointer' }} onClick={() => router.push('/account?s=faq')}>FAQ</Link> to see if your question has already been answered.
                             </Typography>
                         </Slide>
                         <Grid container spacing={2}>

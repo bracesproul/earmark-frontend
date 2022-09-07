@@ -7,7 +7,6 @@ export default function SecurityTextFields(props) {
         <Slide direction="left" in={true} mountOnEnter unmountOnExit>
             <TextField
                 fullWidth
-                autoFocus
                 autoComplete={props.option.autoComplete}
                 inputRef={props.option.ref}
                 name={props.option.name}

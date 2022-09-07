@@ -7,6 +7,8 @@ import PasswordRequirementsAlerts from "../PasswordRequirementsAlerts";
 import PasswordMatchErrorAlert from "../PasswordMatchErrorAlert";
 import MissingInitialPassword from "../MissingInitialPassword";
 import SendIcon from "@mui/icons-material/Send";
+import {useBackgroundFetch} from "../../../lib/hooks/useBackgroundFetch";
+import {useAuth} from "../../../lib/hooks/useAuth";
 
 export default function SettingsSecurity() {
     const [mounted, setMounted] = useState(false);
@@ -31,6 +33,22 @@ export default function SettingsSecurity() {
     const otherRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
+
+    const callApi = useBackgroundFetch();
+    const auth = useAuth();
+
+    const fetchData = async () => {
+        return await callApi.fetchSettingsInfo()
+    }
+
+    useEffect(() => {
+        if (!auth.user) return undefined;
+        fetchData()
+            .then(({ security }) => {
+                setEmail(security.email);
+                setBirthday(security.birthday);
+            })
+    }, [auth.user])
 
     useEffect(() => {
         if (!mounted) {
