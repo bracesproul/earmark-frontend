@@ -36,6 +36,7 @@ export default function SettingsProfile() {
     const auth = useAuth();
 
     const fetchData = async () => {
+        if (!auth.user) return;
         return await callApi.fetchSettingsInfo()
     }
 
@@ -57,8 +58,25 @@ export default function SettingsProfile() {
 
 
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
+        callApi.setSettingsInfo('profile', {
+            firstName,
+            lastName,
+            phone,
+            address1: street1,
+            address2: street2,
+            city,
+            state,
+            zip,
+            username
+        })
+            .then((res) => {
+                console.log('res', res)
+                if (res.status === 200) {
+                    console.log('success updating profile')
+                }
+            })
         console.log('form submitted');
     }
 
@@ -152,6 +170,7 @@ export default function SettingsProfile() {
                         </Grid>
                         <Slide direction="left" in={true} mountOnEnter unmountOnExit>
                             <Button
+                                onClick={(e) => handleSubmit(e)}
                                 variant="contained"
                                 endIcon={<SendIcon />}
                                 type="submit"

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import PasswordValidator from "password-validator";
-import {Box, Button, Card, CardContent, FormControl, Input, Slide, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, FormControl, Alert, Slide, Typography, Snackbar} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SecurityTextFields from "../SecurityTextFields";
 import PasswordRequirementsAlerts from "../PasswordRequirementsAlerts";
@@ -9,6 +9,10 @@ import MissingInitialPassword from "../MissingInitialPassword";
 import SendIcon from "@mui/icons-material/Send";
 import {useBackgroundFetch} from "../../../lib/hooks/useBackgroundFetch";
 import {useAuth} from "../../../lib/hooks/useAuth";
+import { useRouter } from "next/router";
+
+const vertical = 'bottom';
+const horizontal = 'right';
 
 export default function SettingsSecurity() {
     const [mounted, setMounted] = useState(false);
@@ -18,6 +22,9 @@ export default function SettingsSecurity() {
     const [birthday, setBirthday] = useState('');
     const [passwordMatchError, setPasswordMatchError] = useState(false);
     const [missingInitialPasswordError, setMissingInitialPasswordError] = useState(false);
+    const [emailErrorSnackbar, setEmailErrorSnackbar] = useState(false);
+    const [generalErrorSnackbar, setGeneralErrorSnackbar] = useState(false);
+    const [reAuthSnackbar, setReAuthSnackbar] = useState(false);
 
     const [minLengthError, setMinLengthError] = useState(true)
     const [maxLengthError, setMaxLengthError] = useState(true)
@@ -36,6 +43,7 @@ export default function SettingsSecurity() {
 
     const callApi = useBackgroundFetch();
     const auth = useAuth();
+    const router = useRouter();
 
     const fetchData = async () => {
         return await callApi.fetchSettingsInfo()
@@ -68,9 +76,43 @@ export default function SettingsSecurity() {
         }
     }, [password, confirmPassword])
 
-    function handleSubmit(e) {
+    useEffect(() => {
+        console.log('passwordMatchError', passwordMatchError);
+        console.log('missingInitialPasswordError', missingInitialPasswordError);
+    }, [passwordMatchError, missingInitialPasswordError])
+
+    async function handleSubmit(e) {
         e.preventDefault();
+        if (passwordMatchError && !missingInitialPasswordError) {
+            const response = await callApi.setSettingsInfo('security', { email, password, birthday });
+            if (response.status === 400) {
+                switch (response.data.error) {
+                    case 'Email already exists': {
+                        setEmailErrorSnackbar(true);
+                    }
+                    break;
+                    case 'error': {
+                        setGeneralErrorSnackbar(true);
+                    }
+                    break;
+                }
+            } else {
+                setReAuthSnackbar(true);
+                setTimeout(() => {
+                    auth.signout();
+                    router.push('/auth/signIn')
+                }, 3000)
+            }
+        }
         console.log('submit');
+    }
+
+    function handleClose(closeType) {
+        switch (closeType) {
+            case 'email': setEmailErrorSnackbar(false); break;
+            case 'error': setGeneralErrorSnackbar(false); break;
+            case 'reAuth': setReAuthSnackbar(false); break;
+        }
     }
 
     const securityOptions = [
@@ -139,9 +181,6 @@ export default function SettingsSecurity() {
         const symbolsSchema = new PasswordValidator().has().symbols(1)
         const blackListPasswordsSchema = new PasswordValidator().is().not().oneOf(['Passw0rd', 'Password123']);
 
-        console.log('minLengthSchema', minLengthSchema.validate(password));
-
-
         minLengthSchema.validate(password) ? setMinLengthError(false) : setMinLengthError(true)
         uppercaseSchema.validate(password) ? setCapitalError(false) : setCapitalError(true)
         lowercaseSchema.validate(password) ? setLowercaseError(false) : setLowercaseError(true)
@@ -156,12 +195,8 @@ export default function SettingsSecurity() {
         if (!checkForPasswordMatch.current) checkForPasswordMatch.current = true;
 
         if (password2 !== password) {
-            console.log('password2', password2);
-            console.log('password', password);
             setPasswordMatchError(false);
         } else {
-            console.log('password2', password2);
-            console.log('password', password);
             setPasswordMatchError(true);
         }
     }
@@ -224,6 +259,7 @@ export default function SettingsSecurity() {
                             </Grid>
                             <Slide direction="left" in={true} mountOnEnter unmountOnExit>
                             <Button
+                                onClick={(e) => handleSubmit(e)}
                                 variant="contained"
                                 endIcon={<SendIcon />}
                                 type="submit"
@@ -241,8 +277,39 @@ export default function SettingsSecurity() {
                         </FormControl>
                     </CardContent>
                 </Card>
+                <Snackbar
+                    autoHideDuration={6000}
+                    anchorOrigin={{ vertical, horizontal }}
+                    open={emailErrorSnackbar}
+                    onClose={() => handleClose('email')}
+                    key={'emailError'}
+                >
+                    <Alert onClose={() => handleClose('email')} severity="error" sx={{ width: '100%' }}>
+                        Account with email already exists, use different email
+                    </Alert>
+                </Snackbar>
+                <Snackbar
+                    autoHideDuration={6000}
+                    anchorOrigin={{ vertical, horizontal }}
+                    open={generalErrorSnackbar}
+                    onClose={() => handleClose('error')}
+                    key={'error'}
+                >
+                    <Alert onClose={() => handleClose('error')} severity="error" sx={{ width: '100%' }}>
+                        Something went wrong, please try again later.
+                    </Alert>
+                </Snackbar>
+                <Snackbar
+                    anchorOrigin={{ vertical, horizontal }}
+                    open={reAuthSnackbar}
+                    onClose={() => handleClose('reAuth')}
+                    key={'reAuth'}
+                >
+                    <Alert onClose={() => handleClose('reAuth')} severity="success" sx={{ width: '100%' }}>
+                        Profile updated. Please reauthenticate.
+                    </Alert>
+                </Snackbar>
             </Box>
         </>
     )
 }
-

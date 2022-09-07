@@ -2082,14 +2082,14 @@ const useProvideBackgroundFetch = () => {
                 params: {
                     user_id: auth.user.uid,
                     settingsType,
+                    data,
                 },
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                data,
             }
             const response = await axios(config);
-            return response.data;
+            return response;
         } catch (error) {
             console.error(error)
         }
@@ -2148,7 +2148,8 @@ const useProvideBackgroundFetch = () => {
         fetchInstitutions,
         fetchData,
         fetchAllTransactions,
-        fetchSettingsInfo
+        fetchSettingsInfo,
+        setSettingsInfo,
     };
     }
 interface IUseProvideBackgroundFetch {
@@ -2167,6 +2168,7 @@ interface IUseProvideBackgroundFetch {
     fetchData: () => Promise<any>;
     fetchAllTransactions: (forceRetry:boolean) => Promise<any>;
     fetchSettingsInfo: () => Promise<any>;
+    setSettingsInfo: (settingsType:string, data:any) => Promise<any>;
 }
 
 export const useBackgroundFetch = () => useContext(backgroundFetchContext) as IUseProvideBackgroundFetch;
