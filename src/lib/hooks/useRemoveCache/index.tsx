@@ -15,12 +15,10 @@ const useProvideRemoveCache = () => {
     const listOfAccountCacheKeys = ['accountsCacheExpTime', 'accountsCachedData', 'accountBalanceCachedData', 'accountBalanceCacheExpTime']
 
     const removeOldCache = () => {
-        console.log('running...')
         listOfAccountCacheKeys.forEach((accCacheName:string) => {
             for (let key in localStorage) {
                 if (key == accCacheName) {
                     localStorage.removeItem(key);
-                    console.log('removed')
                 }
             }
         });

@@ -68,13 +68,12 @@ const StackedBarChart = (props) => {
       localStorage.setItem(`barChartCachedData${dateName}`, JSON.stringify(axiosResponse.data.final));
       localStorage.setItem(`barChartCachedKeysArr${dateName}`, JSON.stringify(keysArray));
     } catch (error) {
-      console.error('bar chart error', error);
+        throw new Error('bar chart error', error);
     }
   };
 
   const cacheData = (dateName) => {
     if (typeof window == "undefined") return;
-    console.log('TOTAL SPENDING CHECK CACHE RUNNING');
     const currentTime = Date.now();
     const cacheExpTime = parseInt(localStorage.getItem(`barChartCacheExpTime${dateName}`));
     const cachedData = JSON.parse(localStorage.getItem(`barChartCachedData${dateName}`));
@@ -100,7 +99,6 @@ const StackedBarChart = (props) => {
 
   useEffect(() => {
     if (!auth.user) {
-      console.error('user NOT logged in, inside the useEffect hook')
         return undefined;
     };
     

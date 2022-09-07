@@ -232,7 +232,6 @@ export default function App() {
         setShowInfo(false)
       }
       if (createPassword.length < 6) {
-        console.error('bad pw')
         setShowAlert(true)
         setAllowNext(false)
       } else {

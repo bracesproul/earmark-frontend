@@ -55,7 +55,6 @@ export default function dynamicTransactions(props) {
 
     useEffect(() => {
         if (!auth.user) {
-            console.error('no user logged in');
             return undefined;
         }
         const fetchData = async () => {

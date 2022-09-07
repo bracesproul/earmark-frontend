@@ -24,23 +24,20 @@ export default function SettingsIntegrations() {
     function handleLinkGoogleAccount() {
         linkWithRedirect(firebaseAuth.currentUser, provider)
             .then(() => {
-                console.log('success')
             })
             .catch(error => {
-                console.log(error);
+                throw new Error(error);
             });
     }
 
     function handleVerifyEmail() {
-        console.log('verify email');
         sendEmailVerification(firebaseAuth.currentUser)
             .then(() => {
                 setShowEmailIcon(false);
                 setShowEmailSentIcon(true);
             })
             .catch((error) => {
-                console.error('Error sending email verification');
-                console.error(error)
+                throw new Error('Error sending email verification', error);
                 setEmailVerificationSentError(true);
             });
 
@@ -48,7 +45,6 @@ export default function SettingsIntegrations() {
 
     useEffect(() => {
         if (!auth.user) return undefined;
-        console.log(firebaseAuth.currentUser);
         setEmailVerified(firebaseAuth.currentUser.emailVerified);
         firebaseAuth.currentUser.providerData.forEach(provider => {
             if (provider.providerId === 'google.com') {

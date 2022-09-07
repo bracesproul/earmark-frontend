@@ -65,7 +65,6 @@ const RecurringTransactions = () => {
 
     const fetchData = async () => {
         try {
-            console.log('fetch data running')
             const currentTime = Date.now();
             const expTime = currentTime + 86400000;
             const config = {
@@ -82,7 +81,6 @@ const RecurringTransactions = () => {
                 },
             };
             const { data } = await axios(config);
-            console.log(data)
             if (!data) {
                 setFetchDataRan(fetchDataRan + 1);
                 setIsDataNull(true);
@@ -97,8 +95,7 @@ const RecurringTransactions = () => {
             localStorage.setItem(`recurringTransactionsCacheExpTime`, expTime.toString());
             localStorage.setItem(`recurringTransactionsCacheRows`, JSON.stringify(data.recurring_transactions));
         } catch (error) {
-            console.error('error - recurring fetch call')
-            console.error(error)
+            throw new Error('error - recurring fetch call', error)
         }
     };
     const cacheData = () => {
@@ -115,18 +112,15 @@ const RecurringTransactions = () => {
                 setRowData(cachedData);
             }
         } catch (error) {
-            console.error('error - recurring cache method')
-            console.error(error)
+            throw new Error('error - recurring cache method', error)
         }
     };
 
 
     useEffect(() => {
         if (isDataNull) {
-            console.log('false');
             return undefined;
         };
-        console.log('before loop run');
         allSummaryData.forEach((element) => {
             if (element[0].acc_id == selectedSummaryAccount) {
                 setSummaryData(element);

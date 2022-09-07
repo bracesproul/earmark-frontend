@@ -77,16 +77,12 @@ export default function SettingsProfile() {
             username
         })
             .then((res) => {
-                console.log('res', res)
                 if (res.status === 200) {
                     setOpenSuccessSnackbar(true);
-                    console.log('success updating profile')
                 } else if (res.status === 400) {
                     setOpenErrorSnackbar(true);
-                    console.log('error updating profile')
                 }
             })
-        console.log('form submitted');
     }
 
     function handleCloseSnackbar(closeType) {

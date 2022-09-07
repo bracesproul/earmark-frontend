@@ -111,11 +111,11 @@ function SignIn() {
     if (response == 'success') {
       Router.push('/dashboard');
     } else if (response == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
-      console.error(response)
+      throw new Error(response)
       setLoginError(true);
       setPasswordError(false);
     } else if (response == 'FirebaseError: Firebase: Error (auth/wrong-password).') {
-      console.error(response);
+      throw new Error(response);
       setLoginError(false);
       setPasswordError(true);
     }

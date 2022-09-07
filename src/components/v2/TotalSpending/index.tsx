@@ -73,8 +73,6 @@ function TotalSpending() {
         if (!auth.user) return undefined;
         fetchData().then((res) => {
             totalSpending.current = res.totalSpending;
-            console.log('done');
-            console.log(totalSpending.current);
             setLoading(false);
         })
     }, [mounted, auth.user]);

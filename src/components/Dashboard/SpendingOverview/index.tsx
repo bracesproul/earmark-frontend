@@ -45,30 +45,25 @@ const SpendingOverview = (props) => {
     if (apiCall.fatalError) {
       setFatalError(apiCall.fatalError);
       setLoading(false);
-      console.error('fatal error, inside spendingOverview component')
+      throw new Error('fatal error, inside spendingOverview component')
       return;
     }
     if (apiCall.spendingOverview24hrs[0].account_id) {
-      console.log('24 hrs')
       setSpendingOverview(apiCall.spendingOverview24hrs);
       setDateSelection('24 Hours');
     }
     if (apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
-      console.log('7 days')
       setSpendingOverview(apiCall.spendingOverview7days);
       setDateSelection('7 Days');
     }
     if (apiCall.spendingOverview2weeks[0].account_id && !apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
-      console.log('2 weeks')
       setSpendingOverview(apiCall.spendingOverview2weeks);
       setDateSelection('2 Weeks');
     }
     if (apiCall.spendingOverview1mo[0].account_id && !apiCall.spendingOverview2weeks[0].account_id && !apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
-      console.log('1 mo')
       setSpendingOverview(apiCall.spendingOverview1mo);
       setDateSelection('1 Month');
     } else if (!apiCall.spendingOverview1mo[0].account_id && !apiCall.spendingOverview2weeks[0].account_id && !apiCall.spendingOverview7days[0].account_id && !apiCall.spendingOverview24hrs[0].account_id) {
-      console.log('else?')
       setLoading(false);
       setSpendingOverview([]);
     }

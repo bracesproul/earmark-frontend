@@ -158,15 +158,13 @@ function useProvideFirestore() {
   };
 
   const logTest = (test) => {
-    console.log('clicked test button', test)
-    logEvent(analytics, 'test', { 
+    logEvent(analytics, 'test', {
       test: test,
     });
   };
 
   useEffect(() => {
     setSuccess(false);
-    console.log('set success false')
   }, [success])
 
   return {

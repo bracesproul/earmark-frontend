@@ -34,7 +34,8 @@ const Dashboard = ({ cookie }) => {
     return (
         <>
             <CssBaseline />
-            <Box sx={{
+            <Box
+                sx={{
                 width: '100%',
             }}>
                 <Typography sx={{

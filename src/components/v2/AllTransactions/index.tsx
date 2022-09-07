@@ -17,7 +17,6 @@ const TransactionsComponent = (props) => {
     const [pageSize, setPageSize] = useState<IPageSizeState[]>([]);
 
     const handleSetNewPageSize = (index, newPageSize) => {
-        console.log('handle new page size running', index, newPageSize);
         setPageSize([...pageSize, { index, pageSize: newPageSize}]);
     }
 

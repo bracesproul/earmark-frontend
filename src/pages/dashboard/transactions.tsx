@@ -39,7 +39,6 @@ function AllTransactions() {
         if (!mounted)  return undefined;
         fetchData(false).then((res) => {
             transactions.current = res.transactions;
-            console.log(res.transactions)
             setLoading(false);
         })
     }, [auth.user]);

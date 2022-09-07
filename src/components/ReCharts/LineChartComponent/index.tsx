@@ -61,12 +61,10 @@ const LineChartComponent = (props) => {
 
   useEffect(() => {
     if (!auth.user) {
-      console.error('user NOT logged in, inside the useEffect hook')
         return undefined;
     }
     fetchData(false)
         .then((res) => {
-            console.log('res', res)
           if (res.sevenDaysKeysArray) {
             setLineChartData(res.chartSevenDaysRes);
             setKey(res.sevenDaysKeysArray);
@@ -109,22 +107,16 @@ const LineChartComponent = (props) => {
           chart2yrRes.current = res.chart2yrRes
           twoYrKeysArray.current = res.twoYrKeysArray
         })
-        .catch((error) => {
-          console.error(error);
-          // setFatalError(true)
-        })
   }, [])
 
   // on date change, reset state to new data
   useEffect(() => {
     if (!auth.user) {
-      console.error('user NOT logged in, inside the useEffect hook')
         return undefined;
     }
     if (first) return undefined;
     fetchData(false)
         .then((res) => {
-            console.log('res', res)
             if (res.sevenDaysKeysArray) {
             setLineChartData(res.chartSevenDaysRes);
             setKey(res.sevenDaysKeysArray);
@@ -150,14 +142,8 @@ const LineChartComponent = (props) => {
             setKey(res.twoYrKeysArray);
           }
         })
-        .catch((error) => {
-          console.error(error);
-          // setFatalError(true)
-        })
   }, [props.date])
 
-    console.log('lineChartData', lineChartData)
-    console.log(key)
 
   useEffect(() => {
     if (first) return undefined;

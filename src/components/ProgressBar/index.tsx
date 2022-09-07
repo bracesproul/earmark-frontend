@@ -27,7 +27,6 @@ function LinearWithValueLabel(props) {
   const stopProgress = useRef(props.stop);
 
   useEffect(() => {
-    console.log('stop inside component', props.stop)
     stopProgress.current = props.stop;
     if (change == 93) setChange(100);
   }, [props.stop])
@@ -61,10 +60,6 @@ function LinearWithValueLabel(props) {
       setChange(increasePercent(stopProgress.current));
       if (stopProgress.current || progress >= 93) {
         const endSec = Date.now() * 0.001;
-        console.log('clearing interval...', progress);
-        console.log('startSec', startDate);
-        console.log('endSec', endSec);
-        console.log('duration in seconds', (endSec - startDate))
         clearInterval(timer);
         return undefined;
       }

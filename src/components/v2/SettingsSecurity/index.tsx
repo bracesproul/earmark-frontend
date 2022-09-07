@@ -77,8 +77,6 @@ export default function SettingsSecurity() {
     }, [password, confirmPassword])
 
     useEffect(() => {
-        console.log('passwordMatchError', passwordMatchError);
-        console.log('missingInitialPasswordError', missingInitialPasswordError);
     }, [passwordMatchError, missingInitialPasswordError])
 
     async function handleSubmit(e) {
@@ -104,7 +102,6 @@ export default function SettingsSecurity() {
                 }, 3000)
             }
         }
-        console.log('submit');
     }
 
     function handleClose(closeType) {
@@ -200,10 +197,6 @@ export default function SettingsSecurity() {
             setPasswordMatchError(true);
         }
     }
-
-    useEffect(() => {
-        console.log('password', password)
-    }, [password])
 
     return (
         <>

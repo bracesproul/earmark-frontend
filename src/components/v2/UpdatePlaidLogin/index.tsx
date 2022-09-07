@@ -12,7 +12,6 @@ export const UpdatePlaidLogin = (newLinkToken) => {
     const removeCache = useRemoveCache();
 
     const onSuccess = useCallback(async (publicToken, metadata) => {
-        console.log('PLAID LINK TOKEN METADATA:', metadata);
         const config = {
             method: "post",
             headers: {
@@ -26,11 +25,10 @@ export const UpdatePlaidLogin = (newLinkToken) => {
         };
         try {
             const response = await axios(config);
-            console.log('PLAID LINK TOKEN SUCCESS RESPONSE:', response.data)
             removeCache.removeOldCache();
 
         } catch (error) {
-            console.error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            throw new Error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 

@@ -39,7 +39,6 @@ export default async function handler(req, res) {
                 },
             };
             const { data } = await axios(config);
-            console.log('prod data', data)
             finalResponse = data;
             finalStatus = 200;
         } catch (error) {

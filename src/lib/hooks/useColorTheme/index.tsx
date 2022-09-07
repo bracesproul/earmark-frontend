@@ -31,7 +31,6 @@ const useProvideColorTheme = () => {
     }, [mode])
 
     const setThemeCookie = (newTheme: PaletteMode) => {
-        console.log('theme cookie running')
         setCookie('earmark-theme', newTheme, { path: '/' });
         setMode(newTheme);
     }

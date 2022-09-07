@@ -67,7 +67,6 @@ const useProvideAuth = () => {
           maxAge: 604800,
           sameSite: true,
         });
-        console.log('cookie set');
         return 'success';
       });
     } catch(error) {
@@ -75,7 +74,7 @@ const useProvideAuth = () => {
         console.error(error);
         return 'FirebaseError: Firebase: Error (auth/wrong-password).'
       } else if (error == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
-        console.error(error)
+        console.error(error);
         return 'FirebaseError: Firebase: Error (auth/user-not-found).'
       }
     }
@@ -157,7 +156,6 @@ const useProvideAuth = () => {
     return signOut(firebaseAuth)
       .then(() => {
         setUser(false);
-        console.log('removed cookie');
         removeCookie("user_id")
       });
   };

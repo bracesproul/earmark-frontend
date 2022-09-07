@@ -11,7 +11,6 @@ export function ProvideBase({ children }) {
 const useProvideBase = () => {
 
     const baseMethod = async (prop) => {
-        console.log(prop);
         return prop;
     }
 

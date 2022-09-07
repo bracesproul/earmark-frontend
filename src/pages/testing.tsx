@@ -32,10 +32,6 @@ function App() {
         return await callApi.fetchSettingsInfo()
     }
 
-    fetchData()
-        .then((data) => {
-            console.log('settings info', data);
-        })
     return (
         <SettingsAppBar />
     )

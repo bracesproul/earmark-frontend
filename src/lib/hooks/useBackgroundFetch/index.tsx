@@ -459,7 +459,6 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
                 twoYrKeysArray: twoYrKeysArray
             }
         }
-        console.log('all are present, mapping all')
         for (let i = 0; i < CHART_ELEMENTS.length; i++) {
             const objectToPush = { dataKey: CHART_ELEMENTS[i].dataKey,
                 stackId: CHART_ELEMENTS[i].stackId,
@@ -719,7 +718,6 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
 
 /*done*/const setLocalStorageDynamicTransactions = (expTime, data, ins_id) => {
     const accounts = data.map((data) => {
-        console.log(data)
         return {
             ins_name: data.account.subtype,
             ins_id: data.account.account_id,
@@ -828,7 +826,6 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
 
         localStorage.setItem(`allTransactionsCacheExpTime`, expTime.toString());
         localStorage.setItem(`allTransactionsDataCache`, JSON.stringify(data.transactions));
-        console.log(data.transactions)
         // localStorage.setItem(`allTransactionsCacheCategoryRows`, JSON.stringify(categoryResponse.data.transactions));
         return {
             transactions: data.transactions,
@@ -1107,10 +1104,9 @@ const useProvideBackgroundFetch = () => {
     /*done*/const fetchAccountBalance = async (forceRefresh:boolean) => {
         if (!forceRefresh) {
             if (checkForCache('accountBalanceCacheCheck').success === true && checkForCache('accountBalanceCacheCheck').refresh === false) {
-                console.log('reading and returning cache');
                 return getTotalOrAccountCachedData('accountBalance', 'accountDetails');
             }
-        } else console.log('forcing refresh')
+        }
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
         try {
@@ -1146,13 +1142,11 @@ const useProvideBackgroundFetch = () => {
     /*not*/const fetchTotalSpending = async (forceRefresh:boolean) => {
         if (!forceRefresh) {
             if (checkForCache('totalSpendingCacheCheck').success === true && checkForCache('totalSpendingCacheCheck').refresh === false) {
-                console.log('reading and returning cache');
                 return getTotalOrAccountCachedData('totalSpending', 'totalSpending');
             }
-        } else console.log('forcing refresh')
+        }
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
-        console.log('startDate', moment().subtract(1, 'years').format('YYYY-MM-DD'));
         try {
             const totalSpendingConfig = {
                 params: {
@@ -1186,10 +1180,9 @@ const useProvideBackgroundFetch = () => {
     /*done*/const fetchTopMerchants = async (forceRetry:boolean) => {
         if (!forceRetry) {
             if (checkForCache('dashTopMerchantsCacheCheck').success === true && checkForCache('dashTopMerchantsCacheCheck').refresh === false) {
-                console.log('reading and returning cache');
                 return getTopMerchantsCachedData();
             }
-        } else console.log('forcing retry');
+        }
 
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
@@ -1278,12 +1271,10 @@ const useProvideBackgroundFetch = () => {
     }
     /*done*/const fetchSpendingOverview = async (forceRetry:boolean) => {
         if (!forceRetry) {
-            console.log('force retry false, running cache check')
             if (checkForCache('dashSpendingOverviewCacheCheck').success === true && checkForCache('dashSpendingOverviewCacheCheck').refresh === false) {
-                console.log('reading and returning cache');
                 return getSpendingOverviewCachedData();
             }
-        } else console.log('forceRetry is true');
+        }
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
         try {
@@ -1398,7 +1389,6 @@ const useProvideBackgroundFetch = () => {
     // TODO: fetchLineChart && fetchStackedBarChart are basically the same, replace names to fetchBarOrLineChart to cut code in half
     /*not being used*//*const fetchLineChart = async () => {
         if (checkForCache('chartCacheCheck').success === true && checkForCache('chartCacheCheck').refresh === false) {
-            console.log('reading and returning cache');
             return getChartCachedData('chart');
         }
         const currentTime = Date.now();
@@ -1543,10 +1533,8 @@ const useProvideBackgroundFetch = () => {
     }*/
     /*done*/const fetchLineOrBarChart = async () => {
         if (checkForCache('chartCacheCheck').success === true && checkForCache('chartCacheCheck').refresh === false) {
-            console.log('reading and returning cache');
             return getChartCachedData('');
         }
-        console.log('aint find, fetching.')
         const currentTime = Date.now();
         const expTime = currentTime + 86400000;
         const today = moment().format("YYYY-MM-DD");
@@ -1683,7 +1671,6 @@ const useProvideBackgroundFetch = () => {
     // TODO: refactor this function (local storage etc)
     /*not*/const fetchPieChart = async () => {
         if (checkForCache('pieChartCacheCheck').success === true && checkForCache('pieChartCacheCheck').refresh === false) {
-            console.log('reading and returning cache');
             return getPieChartCachedData();
         }
         //getPieChartCachedData
@@ -1867,11 +1854,9 @@ const useProvideBackgroundFetch = () => {
 
     /*done*/const fetchInstitutions = async () => {
         if (checkForCache('accountsCacheCheck').success === true && checkForCache('accountsCacheCheck').refresh === false) {
-            console.log('reading and returning cache');
             return getInstitutionsCachedData();
         }
         try {
-            console.log('fetching fresh data');
             const currentTime = Date.now();
             const expTime = currentTime + 86400000;
             const config = {
@@ -1899,14 +1884,10 @@ const useProvideBackgroundFetch = () => {
 
 
     /*done*/const fetchDynamicTransactions = async (ins_id:string) => {
-        console.log(typeof ins_id);
-        console.log(ins_id)
         if (checkForCache(`dynamicTransactions${ins_id}CacheCheck`).success === true && checkForCache(`dynamicTransactions${ins_id}CacheCheck`).refresh === false) {
-            console.log('reading and returning cache');
             return getDynamicTransactionsCachedData(ins_id);
         }
         try {
-            console.log('fetching fresh data');
             const currentTime = Date.now();
             const expTime = currentTime + 86400000;
             const config = {

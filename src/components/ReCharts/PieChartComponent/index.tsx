@@ -39,13 +39,12 @@ const PieChartComponent = (props) => {
       localStorage.setItem(`pieChartCacheExpTime${dateName}`, expTime.toString());
       localStorage.setItem(`pieChartCachedData${dateName}`, JSON.stringify(axiosResponse.data.final));  
     } catch (error) {
-      console.error('error: ', error);
+        throw new Error('error: ', error);
     }
   };
 
   const cacheData = (dateName) => {
     if (typeof window == "undefined") return;
-    console.log('TOTAL SPENDING CHECK CACHE RUNNING');
     const currentTime = Date.now();
     const cacheExpTime = parseInt(localStorage.getItem(`pieChartCacheExpTime${dateName}`));
     const cachedData = JSON.parse(localStorage.getItem(`pieChartCachedData${dateName}`));
@@ -68,7 +67,6 @@ const PieChartComponent = (props) => {
 
   useEffect(() => {
     if (!auth.user) {
-      console.error('user is NOT logged in, inside the useEffect hook')
         return undefined;
     };
 

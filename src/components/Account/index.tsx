@@ -97,7 +97,7 @@ export default function Account() {
             setBirthday(docSnap.data().date_of_birth);
             setUsername(docSnap.data().userId);
         } else {
-            console.error("No such document!");
+            throw new Error("No such document!");
         }
     };
 
@@ -148,7 +148,6 @@ export default function Account() {
 
     const handleDeleteAccount = async (event) => {
         event.preventDefault();
-        console.log('delete account');
         try {
             const config = {
                 headers: {
@@ -176,7 +175,6 @@ export default function Account() {
 
     const handleRemoveAllInstitutions = async (event) => {
         event.preventDefault();
-        console.log('delete institutions');
         try {
             const config = {
                 headers: {
@@ -301,7 +299,7 @@ export default function Account() {
                 setPersonalButtonText("Success!");
             } 
         } catch (error) {
-            console.error(error)
+            throw new Error(error)
             if (error.response.data === 'error') {
                 setEditSuccessPersonal('error.light');
                 setPersonalButtonText("Changes failed to save");

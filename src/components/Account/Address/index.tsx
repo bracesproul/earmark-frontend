@@ -170,7 +170,7 @@ const Address = () => {
                 setUsername(username);
             } 
         } catch (error) {
-            console.error(error)
+            throw new Error(error)
             if (error.response.data === 'error') {
                 setEditSuccessPersonal('error.light');
                 setPersonalButtonText("Changes failed to save");
@@ -210,7 +210,7 @@ const Address = () => {
         localStorage.setItem(`personalCachedBirthday`, JSON.stringify(data.state));
         localStorage.setItem(`personalCachedUsername`, JSON.stringify(data.zip));
     } catch (error) {
-        console.error(error)
+        throw new Error(error)
         setFatalError(error)
     }
   }

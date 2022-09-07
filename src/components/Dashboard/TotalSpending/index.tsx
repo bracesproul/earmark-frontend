@@ -54,7 +54,6 @@ const TotalSpending = (props) => {
     setFatalError(false);
   }
 
-  console.log(totalSpending)
 
   const skeleton = (
     <>

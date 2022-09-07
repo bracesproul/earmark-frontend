@@ -72,7 +72,6 @@ export default function SettingsHelp() {
     ]
 
     function handleSubmit(e) {
-        console.log('help submit');
     }
 
     return (

@@ -59,7 +59,6 @@ function SettingsOptionsBar() {
     function handleClick(e) {
         e.preventDefault();
         router.push(`?s=${e.currentTarget.id}`);
-        console.log('button id:', e.target.id);
     }
     return (
         <Box sx={{

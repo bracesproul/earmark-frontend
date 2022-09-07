@@ -114,7 +114,6 @@ const DataGridTransactions = () => {
             },
         };
         const { data } = await axios(config);
-        console.log('running')
         setCategoriesToDisplay(data.dataGridTransactions);
         setCategoryRows(categoryResponse.data.transactions);
         localStorage.setItem(`allTransactionsCacheExpTime`, expTime.toString());
@@ -151,7 +150,7 @@ const DataGridTransactions = () => {
                 setLoading(false);
             })
             .catch((error) => {
-                console.error(error);
+                throw new Error(error);
                 setFatalError(true)
             })
     }, [auth.user])
@@ -202,7 +201,6 @@ const DataGridTransactions = () => {
     
     useEffect(() => {
         if (!selectionModel || selectionModel.length == 0) {
-            console.error("selectionModel is null");
             setNewDataGrid(<></>);
             return undefined;
         };

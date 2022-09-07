@@ -80,7 +80,6 @@ function Home() {
     }, [])
 
     useEffect(() => {
-        console.log(window.innerHeight)
         setWindowDimensions({ height: Math.round(window.innerHeight * .8), width: Math.round(window.innerWidth  * .8) });
     }, []);
 
@@ -257,7 +256,6 @@ export default function Visualize() {
     }, [])
 
     useEffect(() => {
-        console.log(window.innerHeight)
         setWindowDimensions({ height: Math.round(window.innerHeight * .8), width: Math.round(window.innerWidth  * .8) });
     }, [mounted]);
 

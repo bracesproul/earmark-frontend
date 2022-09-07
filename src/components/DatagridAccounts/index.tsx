@@ -43,7 +43,7 @@ const DatagridAccounts = () => {
           setLoading(false);
         })
         .catch(error => {
-            console.error(error);
+            throw new Error(error);
             setLoading(false);
             setFatalError(true);
         })
@@ -51,7 +51,6 @@ const DatagridAccounts = () => {
 
 
   const handleRemoveInstitution = (institutionId) => {
-    console.log('remove ins', institutionId);
   };
 
   const columns = [
