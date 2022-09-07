@@ -55,7 +55,7 @@ const TopMerchants = (props) => {
         const apiCall = await callApi.fetchTopMerchants(forceRetry);
         if (apiCall.fatalError) {
             setFatalError(apiCall.fatalError);
-            setLoading(false);
+            // setLoading(false);
             throw new Error('fatal error, inside spendingOverview component')
             return;
         }
@@ -79,8 +79,11 @@ const TopMerchants = (props) => {
         topMerchants2weeks.current = apiCall.topMerchants2weeksRes
         topMerchants30days.current = apiCall.topMerchants30daysRes
         topMerchants6mo.current = apiCall.topMerchants6moRes
+        if (apiCall.topMerchants6moRes) {
+            setLoading(false);
+        }
         setFatalError(apiCall.fatalError);
-        setLoading(false);
+        // setLoading(false);
     }
 
 

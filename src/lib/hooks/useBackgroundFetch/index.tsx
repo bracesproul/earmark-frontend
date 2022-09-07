@@ -1096,10 +1096,10 @@ const useProvideBackgroundFetch = () => {
 
     // runs on every first load, first checks to see if cache has already been set
     // if it hasn't, then it will run all api calls to pre-cache data.
-/*    useEffect(() => {
+    useEffect(() => {
         if (!auth.user) return undefined;
         fetchData();
-    }, [auth.user])*/
+    }, [auth.user])
 
     /*done*/const fetchAccountBalance = async (forceRefresh:boolean) => {
         if (!forceRefresh) {
@@ -1139,7 +1139,7 @@ const useProvideBackgroundFetch = () => {
             }
         }
     }
-    /*not*/const fetchTotalSpending = async (forceRefresh:boolean) => {
+    /*done*/const fetchTotalSpending = async (forceRefresh:boolean) => {
         if (!forceRefresh) {
             if (checkForCache('totalSpendingCacheCheck').success === true && checkForCache('totalSpendingCacheCheck').refresh === false) {
                 return getTotalOrAccountCachedData('totalSpending', 'totalSpending');
@@ -1386,151 +1386,7 @@ const useProvideBackgroundFetch = () => {
         }
     };
 
-    // TODO: fetchLineChart && fetchStackedBarChart are basically the same, replace names to fetchBarOrLineChart to cut code in half
-    /*not being used*//*const fetchLineChart = async () => {
-        if (checkForCache('chartCacheCheck').success === true && checkForCache('chartCacheCheck').refresh === false) {
-            return getChartCachedData('chart');
-        }
-        const currentTime = Date.now();
-        const expTime = currentTime + 86400000;
-        const today = moment().format("YYYY-MM-DD");
-        try {
-            const lineChart7DaysConfig = {
-                method: "GET",
-                url: '/api/visuals',
-                params: {
-                    user_id: auth.user.uid,
-                    queryType: 'lineChart',
-                    startDate: moment().subtract(1, 'weeks').format("YYYY-MM-DD"),
-                    endDate: today,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const lineChartSevenDaysRes = await axios(lineChart7DaysConfig);
 
-            const lineChart1MoConfig = {
-                method: "GET",
-                url: '/api/visuals',
-                params: {
-                    user_id: auth.user.uid,
-                    queryType: 'lineChart',
-                    startDate: moment().subtract(1, 'months').format("YYYY-MM-DD"),
-                    endDate: today,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const lineChartOneMonthRes = await axios(lineChart1MoConfig);
-
-            const lineChart3MoConfig = {
-                method: "GET",
-                url: '/api/visuals',
-                params: {
-                    user_id: auth.user.uid,
-                    queryType: 'lineChart',
-                    startDate: moment().subtract(3, 'months').format("YYYY-MM-DD"),
-                    endDate: today,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const lineChartThreeMonthsRes = await axios(lineChart3MoConfig);
-
-            const lineChart6MoConfig = {
-                method: "GET",
-                url: '/api/visuals',
-                params: {
-                    user_id: auth.user.uid,
-                    queryType: 'lineChart',
-                    startDate: moment().subtract(6, 'months').format("YYYY-MM-DD"),
-                    endDate: today,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const lineChartSixMonthsRes = await axios(lineChart6MoConfig);
-
-            const lineChart1yrConfig = {
-                method: "GET",
-                url: '/api/visuals',
-                params: {
-                    user_id: auth.user.uid,
-                    queryType: 'lineChart',
-                    startDate: moment().subtract(6, 'months').format("YYYY-MM-DD"),
-                    endDate: today,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const lineChart1yrRes = await axios(lineChart1yrConfig);
-
-            const lineChart2yrConfig = {
-                method: "GET",
-                url: '/api/visuals',
-                params: {
-                    user_id: auth.user.uid,
-                    queryType: 'lineChart',
-                    startDate: moment().subtract(6, 'months').format("YYYY-MM-DD"),
-                    endDate: today,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const lineChart2yrRes = await axios(lineChart2yrConfig);
-/!*
-            twoYrRes
-            oneYrRes
-            sixMonthsRes
-            threeMonthsRes
-            oneMonthRes
-            sevenDaysRes*!/
-
-            const noTransactions = {
-                sevenDaysRes: lineChartSevenDaysRes.data.final[0].no_transactions,
-                oneMonthRes: lineChartOneMonthRes.data.final[0].no_transactions,
-                threeMonthsRes: lineChartThreeMonthsRes.data.final[0].no_transactions,
-                sixMonthsRes: lineChartSixMonthsRes.data.final[0].no_transactions,
-                oneYrRes: lineChart1yrRes.data.final[0].no_transactions,
-                twoYrRes: lineChart2yrRes.data.final[0].no_transactions
-            }
-
-            const mapAndPopulateArrayChart = mapAndPopulateArrayCharts(lineChartSevenDaysRes, lineChartOneMonthRes, lineChartThreeMonthsRes, lineChartSixMonthsRes, lineChart1yrRes, lineChart2yrRes, noTransactions)
-
-            if (!(checkForPartialResponseCharts(mapAndPopulateArrayChart, '', lineChartSevenDaysRes, lineChartOneMonthRes, lineChartThreeMonthsRes, lineChartSixMonthsRes, lineChart1yrRes, lineChart2yrRes) == 'all_contain_data')) {
-                return checkForPartialResponseCharts(mapAndPopulateArrayChart, '', lineChartSevenDaysRes, lineChartOneMonthRes, lineChartThreeMonthsRes, lineChartSixMonthsRes, lineChart1yrRes, lineChart2yrRes)
-            }
-
-            return setLocalStorageCharts(expTime, mapAndPopulateArrayChart, '', lineChartSevenDaysRes, lineChartOneMonthRes, lineChartThreeMonthsRes, lineChartSixMonthsRes, lineChart1yrRes, lineChart2yrRes)
-
-        } catch (error) {
-            // Cache check for dashboard
-            localStorage.setItem(`lineChartCacheCheck`, `__${Date.now()}__false`);
-            console.error('fatal error occurred inside fetchLineChart()');
-            return {
-                lineChartSevenDaysRes: null,
-                sevenDaysKeysArray: null,
-                lineChartOneMonthRes: null,
-                oneMonthKeysArray: null,
-                lineChartThreeMonthsRes: null,
-                threeMonthsKeysArray: null,
-                lineChartSixMonthsRes: null,
-                sixMonthsKeysArray: null,
-                lineChart1yrRes: null,
-                oneYrKeysArray: null,
-                lineChart2yrRes: null,
-                twoYrKeysArray: null,
-                fatalError: true,
-                cacheSet: false,
-            }
-        }
-    }*/
     /*done*/const fetchLineOrBarChart = async () => {
         if (checkForCache('chartCacheCheck').success === true && checkForCache('chartCacheCheck').refresh === false) {
             return getChartCachedData('');
@@ -1669,7 +1525,7 @@ const useProvideBackgroundFetch = () => {
         }
     }
     // TODO: refactor this function (local storage etc)
-    /*not*/const fetchPieChart = async () => {
+    /*done*/const fetchPieChart = async () => {
         if (checkForCache('pieChartCacheCheck').success === true && checkForCache('pieChartCacheCheck').refresh === false) {
             return getPieChartCachedData();
         }
@@ -1922,8 +1778,7 @@ const useProvideBackgroundFetch = () => {
         }
     };
 
-    // TODO: Figure out why fetchAllTransactions() is broken
-    /*not*/const fetchAllTransactions = async (forceRetry:boolean) => {
+    /*done*/const fetchAllTransactions = async (forceRetry:boolean) => {
         if (!forceRetry) {
             if (checkForCache('allTransactionsCacheCheck').success === true && checkForCache('allTransactionsCacheCheck').refresh === false) {
                 console.log('reading and returning cache');
@@ -1982,7 +1837,7 @@ const useProvideBackgroundFetch = () => {
     };
 
 
-    /*not*/const fetchRecurring = async () => {
+    /*done*/const fetchRecurring = async () => {
         if (checkForCache(`recurringTransactionsCacheCheck`).success === true && checkForCache(`recurringTransactionsCacheCheck`).refresh === false) {
             console.log('reading and returning cache');
             return getRecurringTransactionsCachedData();
@@ -2089,10 +1944,10 @@ const useProvideBackgroundFetch = () => {
                 console.log('first daily load already happened');
                 return { firstLoad: false };
             }
+            console.log('first daily load');
             localStorage.setItem(`firstLoad`, `__${Date.now()}__true`);
             return {
                 fetchAllTransactions: await fetchAllTransactions(false),
-               /* fetchRecurring: await fetchRecurring(),*/
                 fetchInstitutions: await fetchInstitutions(),
                 fetchVisualize: await fetchVisualize(),
                 fetchDashboard: await fetchDashboard(),

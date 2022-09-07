@@ -218,6 +218,7 @@ export default function App() {
       } else if (response == 'unexpected error') {
         setUnexpectedError(true)
       } else if (response.uid) {
+          console.log('signUp method ran')
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext, createContext } from "react";
 import * as firebase from "firebase/app";
+import { useRouter } from "next/router";
 import { getAuth, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
@@ -51,6 +52,7 @@ const useAuth = () => {
 
 const useProvideAuth = () => {
   const firestore = useFirestore();
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user_id"]);
   const googleProvider = new GoogleAuthProvider();
@@ -156,7 +158,8 @@ const useProvideAuth = () => {
     return signOut(firebaseAuth)
       .then(() => {
         setUser(false);
-        removeCookie("user_id")
+        removeCookie("user_id");
+        router.push("/");
       });
   };
 

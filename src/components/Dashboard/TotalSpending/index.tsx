@@ -39,7 +39,11 @@ const TotalSpending = (props) => {
       return;
     }
     setTotalSpending(apiCall.totalSpending);
-    setLoading(false);
+    console.log('apiCall.totalSpending is: ', apiCall.totalSpending);
+    if (apiCall.totalSpending) {
+        setLoading(false);
+    }
+    // setLoading(false);
   }
 
   useEffect(() => {

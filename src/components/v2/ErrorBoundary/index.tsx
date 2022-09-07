@@ -3,6 +3,7 @@ import {Box, Button, Typography} from "@mui/material";
 interface ErrorBoundaryState {
     hasError: boolean
     errorMessage: string
+    fullError: any
 }
 interface ErrorboundaryProps {
     children: ReactElement
@@ -10,6 +11,7 @@ interface ErrorboundaryProps {
 export default class ErrorBoundaries extends React.Component<ErrorboundaryProps, ErrorBoundaryState>{
     constructor(props: ErrorboundaryProps){
         super(props)
+        // @ts-ignore
         this.state = {
             hasError : false,
             errorMessage: ""
@@ -18,6 +20,7 @@ export default class ErrorBoundaries extends React.Component<ErrorboundaryProps,
     componentDidCatch(error: Error, errorInfo: ErrorInfo){
         this.setState({hasError: true})
         this.setState({errorMessage: error.message})
+        this.setState({fullError: error})
         //Do something with err and errorInfo
     }
     render(): React.ReactNode {
@@ -35,7 +38,11 @@ export default class ErrorBoundaries extends React.Component<ErrorboundaryProps,
                     }}>
                         Developer: {this.state.errorMessage}
                     </Typography>
-                    {this.state.errorMessage}
+                    <Typography sx={{
+                        fontSize: '16px',
+                    }}>
+                        Developer: {this.state.fullError}
+                    </Typography>
                     <Button href={'/dashboard'}>
                         Go home
                     </Button>

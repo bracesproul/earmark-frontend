@@ -204,7 +204,7 @@ export default function SettingsProfile() {
                 anchorOrigin={{ vertical, horizontal }}
                 open={openSuccessSnackbar}
                 onClose={() => handleCloseSnackbar('success')}
-                key={'snackbar'}
+                key={'snackbarSuccess'}
             >
                 <Alert onClose={() => handleCloseSnackbar('success')} severity="success" sx={{ width: '100%' }}>
                     Profile updated.
@@ -214,7 +214,7 @@ export default function SettingsProfile() {
                 anchorOrigin={{ vertical, horizontal }}
                 open={openErrorSnackbar}
                 onClose={() => handleCloseSnackbar('error')}
-                key={'snackbar'}
+                key={'snackbarError'}
             >
                 <Alert onClose={() => handleCloseSnackbar('error')} severity="error" sx={{ width: '100%' }}>
                     Error updating profile. Try again later

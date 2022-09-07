@@ -42,38 +42,17 @@ function TotalSpending() {
         }
     }, [mounted]);
 
-/*    if (mounted) {
-        return (
-            <Box sx={{ padding: '30px', margin: 'auto' }}>
-                <Card
-                    sx={{
-                        width: {sm: '95%', md: 'none'},
-                        minWidth: {sm: 'none', md: 350},
-                        maxWidth: {sm: 'none', md: 550},
-                        minHeight: 'fitContent',
-                    }}
-                    variant="outlined"
-                >
-                    <CardContent>
-                        <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', paddingBottom: '15px'}}>
-                            Total Spending
-                        </Typography>
-                        <Divider />
-                        <Grid>
-                            {skeleton}
-                        </Grid>
-                    </CardContent>
-                </Card>
-            </Box>
-        )
-    }*/
 
     useEffect(() => {
         if (!mounted) return undefined;
         if (!auth.user) return undefined;
         fetchData().then((res) => {
             totalSpending.current = res.totalSpending;
-            setLoading(false);
+            if (res.totalSpending) {
+                setLoading(false);
+            }
+            console.log('totalSpending.current is: ', res.totalSpending);
+            // setLoading(false);
         })
     }, [mounted, auth.user]);
 

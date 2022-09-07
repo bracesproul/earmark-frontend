@@ -34,80 +34,47 @@ const AccountBalance = (props) => {
   const [accountDetails, setAccountDetails] = useState([]);
   const [fatalError, setFatalError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-  const fetchData = async (forceRefresh:boolean) => {
+  useEffect(() => {
+      if (!mounted) {
+          setMounted(true);
+      }
+  }, [mounted])
+
+    useEffect(() => {
+        if (typeof window == "undefined") return undefined;
+        if (!auth.user) return undefined;
+        fetchData(false);
+    }, [auth.user]);
+
+  useEffect(() => {
+      console.log('loading is: ', loading);
+      console.log('accountDetails is: ', accountDetails);
+  }, [loading])
+
+  if (!mounted) return null;
+
+  async function fetchData(forceRefresh:boolean) {
     const apiCall = await callApi.fetchAccountBalance(forceRefresh);
     if (apiCall.fatalError) {
       setFatalError(true);
-      setLoading(false);
+      // setLoading(false);
       return;
     }
     setAccountDetails(apiCall.accountDetails);
-    setLoading(false);
+    if (apiCall.accountDetails.length > 0) {
+        setLoading(false);
+    }
+    console.log('data', apiCall);
+    // setLoading(false);
   }
-
-  useEffect(() => {
-    if (typeof window == "undefined") return undefined;
-    if (!auth.user) return undefined;
-    fetchData(false);
-  }, [auth.user]);
 
   const handleForceRetry = () => {
     setFatalError(false);
-    setLoading(true);
+    // setLoading(true);
     fetchData(true);
   }
-
-  const ContentToDisplay = () => {
-    if (fatalError) {
-        return <FatalErrorComponent handleForceRetry={handleForceRetry} />
-    } else if (!fatalError && loading) {
-        return null;
-    } else if (!loading && !fatalError) {
-        return accountDetailsComponent;
-    }
-  }
-
-  const accountDetailsComponent = (
-    <>
-      {accountDetails.map((ins, index) => (
-        <Accordion key={index}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography sx={{ fontWeight: 'bold' }}>{ins.institution}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            {ins.accounts.map((account) => {
-              return (
-                <React.Fragment key={account.accountId}>
-                  <Grid item xs={12} md={12}>
-                    <List sx={{ display: 'flex', flexDirection: 'row' }}>
-                      <ListItem>
-                        <ListItemText
-                          primary={`${account.name} - ${account.accountNumber.slice(-4)}`}
-                          secondary={`$${account.balance}`}
-                        />
-                      </ListItem>
-                      <Tooltip title={`Transactions for ${account.name}`}>
-                        <ListItemButton onClick={() => Router.push(`/dashboard/${account.ins_id}?account_id=${account.accountId}`)}>
-                          <ListItemIcon>
-                            <PaidIcon />
-                          </ListItemIcon>
-                        </ListItemButton>
-                      </Tooltip>
-                    </List>
-                  </Grid>
-                </React.Fragment>
-              )
-            })}
-          </AccordionDetails>
-        </Accordion>
-      ))}
-    </>
-  )
 
 
   // TODO: make sure account details show when api call works
@@ -156,7 +123,50 @@ const AccountBalance = (props) => {
             </ListItem>
           </List>
         </Box>
-        <ContentToDisplay />
+          {/*<ContentToDisplay/>*/}
+          { fatalError && <FatalErrorComponent handleForceRetry={handleForceRetry} />}
+          {
+              !loading && (
+                  <>
+                      {accountDetails.map((ins, index) => (
+                          <Accordion key={index}>
+                              <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                  aria-controls="panel1a-content"
+                                  id="panel1a-header"
+                              >
+                                  <Typography sx={{ fontWeight: 'bold' }}>{ins.institution}</Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                  {ins.accounts.map((account) => {
+                                      return (
+                                          <React.Fragment key={account.accountId}>
+                                              <Grid item xs={12} md={12}>
+                                                  <List sx={{ display: 'flex', flexDirection: 'row' }}>
+                                                      <ListItem>
+                                                          <ListItemText
+                                                              primary={`${account.name} - ${account.accountNumber.slice(-4)}`}
+                                                              secondary={`$${account.balance}`}
+                                                          />
+                                                      </ListItem>
+                                                      <Tooltip title={`Transactions for ${account.name}`}>
+                                                          <ListItemButton onClick={() => Router.push(`/dashboard/${account.ins_id}?account_id=${account.accountId}`)}>
+                                                              <ListItemIcon>
+                                                                  <PaidIcon />
+                                                              </ListItemIcon>
+                                                          </ListItemButton>
+                                                      </Tooltip>
+                                                  </List>
+                                              </Grid>
+                                          </React.Fragment>
+                                      )
+                                  })}
+                              </AccordionDetails>
+                          </Accordion>
+                      ))}
+                  </>
+              )
+          }
       </CardContent>
     )
     
