@@ -141,9 +141,7 @@ const AppProviders = ({ Component, pageProps }) => {
               <ProvideRemoveCache>
                 <ProvideBackgroundFetch>
                   <ProvideColorTheme>
-                      <ErrorBoundaries>
-                          <MyApp Component={Component} pageProps={pageProps} />
-                      </ErrorBoundaries>
+                      <MyApp Component={Component} pageProps={pageProps} />
                   </ProvideColorTheme>
                 </ProvideBackgroundFetch>
               </ProvideRemoveCache>
