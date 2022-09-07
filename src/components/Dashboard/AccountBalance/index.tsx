@@ -64,6 +64,7 @@ const AccountBalance = (props) => {
     } else if (!fatalError && loading) {
         return null;
     } else if (!loading && !fatalError) {
+        console.log('accountDetails', accountDetails)
         return accountDetailsComponent;
     }
   }

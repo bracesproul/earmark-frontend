@@ -24,8 +24,18 @@ import SettingsIntegrations from "../components/v2/SettingsIntegrations";
 import SettingsHelp from "../components/v2/SettingsHelp";
 import SettingsFaq from "../components/v2/SettingsFaq";
 import SettingsDemo from "../components/v2/SettingsDemo";
+import { useBackgroundFetch } from "../lib/hooks/useBackgroundFetch";
 
 function App() {
+    const callApi = useBackgroundFetch();
+    const fetchData = async () => {
+        return await callApi.fetchSettingsInfo()
+    }
+
+    fetchData()
+        .then((data) => {
+            console.log('settings info', data);
+        })
     return (
         <SettingsAppBar />
     )

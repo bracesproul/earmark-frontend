@@ -146,7 +146,7 @@ const RecurringTransactions = () => {
             if (isDataNull) {
                 setEmptyDatGridMessage('No transactions found. Please link another bank')
             } else {
-                setEmptyDatGridMessage('Transactions found.')
+                setEmptyDatGridMessage('No recurring transactions found.')
             }
         }
     }, [fetchDataRan])

@@ -16,6 +16,8 @@ import ProfileTextFields from "../ProfileTextFields";
 import ProfileStateSelection from "../ProfileStateSelection";
 import SendIcon from "@mui/icons-material/Send";
 import TextField from "@mui/material/TextField";
+import {useBackgroundFetch} from "../../../lib/hooks/useBackgroundFetch";
+import {useAuth} from "../../../lib/hooks/useAuth";
 
 const STATE_ARRAY = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
 
@@ -29,6 +31,31 @@ export default function SettingsProfile() {
     const [state, setState] = useState('');
     const [zip, setZip] = useState('');
     const [username, setUsername] = useState('');
+
+    const callApi = useBackgroundFetch();
+    const auth = useAuth();
+
+    const fetchData = async () => {
+        return await callApi.fetchSettingsInfo()
+    }
+
+    useEffect(() => {
+        if (!auth.user) return undefined;
+        fetchData()
+            .then(({ profile }) => {
+                setFirstName(profile.firstName);
+                setLastName(profile.lastName);
+                setPhone(profile.phone);
+                setStreet1(profile.address1);
+                setStreet2(profile.address2);
+                setCity(profile.city);
+                setState(profile.state);
+                setZip(profile.zip);
+                setUsername(profile.username);
+            })
+    }, [auth.user])
+
+
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -101,9 +128,6 @@ export default function SettingsProfile() {
             onChange: (e) => setZip(e.target.value),
         },
     ];
-
-    useEffect(() => {
-    }, [state, street1])
 
     return (
         <Box>

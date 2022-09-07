@@ -2037,6 +2037,64 @@ const useProvideBackgroundFetch = () => {
         }
     };
 
+    const fetchSettingsInfo = async () => {
+        try {
+            const profileConfig = {
+                method: "GET",
+                url: '/api/getSettingsInfo',
+                params: {
+                    user_id: auth.user.uid,
+                    settingsType: 'profile'
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            const profileData = await axios(profileConfig);
+
+            const securityConfig = {
+                method: "GET",
+                url: '/api/getSettingsInfo',
+                params: {
+                    user_id: auth.user.uid,
+                    settingsType: 'security'
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            const securityData = await axios(securityConfig);
+
+            return {
+                profile: profileData.data,
+                security: securityData.data,
+            };
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const setSettingsInfo = async (settingsType:string, data:any) => {
+        try {
+            const config = {
+                method: "POST",
+                url: '/api/setSettingsInfo',
+                params: {
+                    user_id: auth.user.uid,
+                    settingsType,
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data,
+            }
+            const response = await axios(config);
+            return response.data;
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 
     /*
     * Call this function to run all api calls
@@ -2090,6 +2148,7 @@ const useProvideBackgroundFetch = () => {
         fetchInstitutions,
         fetchData,
         fetchAllTransactions,
+        fetchSettingsInfo
     };
     }
 interface IUseProvideBackgroundFetch {
@@ -2107,6 +2166,7 @@ interface IUseProvideBackgroundFetch {
     fetchInstitutions: () => Promise<any>;
     fetchData: () => Promise<any>;
     fetchAllTransactions: (forceRetry:boolean) => Promise<any>;
+    fetchSettingsInfo: () => Promise<any>;
 }
 
 export const useBackgroundFetch = () => useContext(backgroundFetchContext) as IUseProvideBackgroundFetch;
