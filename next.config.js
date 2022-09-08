@@ -18,13 +18,4 @@ module.exports = {
     'plugin:@next/next/recommended',
   ],
   concurrentFeatures: true,
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/dashboard',
-        permanent: true,
-      },
-    ]
-  },
 };

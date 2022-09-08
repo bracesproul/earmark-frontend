@@ -7,6 +7,12 @@ const NO_AUTH_UNLESS_ADMIN = ['/testing', '/admin', '/dashboard/transfers', '/da
 export function middleware(req, res) {
     const cookie = req.cookies['user_id'];
 
+    if (req.page.name === '/' && cookie) {
+        return NextResponse.redirect(new URL(`/dashboard/`, req.url))
+    } else if (req.page.name === '/' && !cookie) {
+        return NextResponse.redirect(new URL(`/auth/signIn`, req.url))
+    }
+
     if (cookie && (cookie != process.env.ADMIN_TOKEN && NO_AUTH_UNLESS_ADMIN.includes(req.page.name))) {
         return NextResponse.redirect(new URL(`/dashboard/`, req.url))
     } else if (!cookie && NO_ACCESS_ON_UNAUTH.includes(req.page.name)) {
