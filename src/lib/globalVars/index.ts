@@ -4,8 +4,8 @@ export const globalVars = () => {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === ('production' || 'preview')) {
         api_url = 'http://184.169.199.251:8080';
     } else {
-        // api_url = 'http://localhost:8080';
-        api_url = 'http://184.169.199.251:8080';
+        api_url = 'http://localhost:8080';
+        // api_url = 'http://184.169.199.251:8080';
     };
     let frontend_url;
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === ('production' || 'preview')) {

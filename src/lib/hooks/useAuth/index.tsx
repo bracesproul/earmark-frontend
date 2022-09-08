@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import * as firebase from "firebase/app";
 import { useRouter } from "next/router";
+import axios from "axios";
 import { getAuth, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
@@ -69,6 +70,18 @@ const useProvideAuth = () => {
           maxAge: 604800,
           sameSite: true,
         });
+        axios({
+          method: "get",
+          url: "/api/login",
+          params: {
+            user_id: response.user.uid,
+            user_email: response.user.email,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+            .then((response) => console.log(response))
         return 'success';
       });
     } catch(error) {

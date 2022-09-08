@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext, createContext } from "react";
 import { useAuth } from "../useAuth";
 import moment from "moment";
 import axios from "axios";
-import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 
 // TODO: refactor all methods
 // TODO: fetch institutions
@@ -1093,6 +1093,7 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
 
 const useProvideBackgroundFetch = () => {
     const auth = useAuth();
+    const router = useRouter();
 
     // runs on every first load, first checks to see if cache has already been set
     // if it hasn't, then it will run all api calls to pre-cache data.
@@ -1690,6 +1691,7 @@ const useProvideBackgroundFetch = () => {
     }
     /*done*/const fetchVisualize = async () => {
         try {
+            console.log('running fetchVisualize()');
             return {
                 lineChart: await fetchLineOrBarChart(),
                 stackedBarChart: await fetchLineOrBarChart(),
@@ -1946,6 +1948,51 @@ const useProvideBackgroundFetch = () => {
             }
             console.log('first daily load');
             localStorage.setItem(`firstLoad`, `__${Date.now()}__true`);
+
+            switch (router.pathname) {
+                case '/dashboard': {
+                    console.log('page is dashboard')
+                    return {
+                        fetchAllTransactions: await fetchAllTransactions(false),
+                        fetchInstitutions: await fetchInstitutions(),
+                        fetchVisualize: await fetchVisualize(),
+                        fatalError: false,
+                        firstLoad: true
+                    }
+                } break;
+                case '/dashboard/transactions': {
+                    console.log('page is txns')
+                    return {
+                        fetchInstitutions: await fetchInstitutions(),
+                        fetchVisualize: await fetchVisualize(),
+                        fetchDashboard: await fetchDashboard(),
+                        fatalError: false,
+                        firstLoad: true
+                    }
+                } break;
+                case '/dashboard/visualize': {
+                    console.log('page is visualize')
+                    return {
+                        fetchAllTransactions: await fetchAllTransactions(false),
+                        fetchInstitutions: await fetchInstitutions(),
+                        fetchDashboard: await fetchDashboard(),
+                        fatalError: false,
+                        firstLoad: true
+                    }
+                } break;
+                default: {
+                    console.log('page is default')
+                    return {
+                        fetchAllTransactions: await fetchAllTransactions(false),
+                        fetchInstitutions: await fetchInstitutions(),
+                        fetchVisualize: await fetchVisualize(),
+                        fetchDashboard: await fetchDashboard(),
+                        fatalError: false,
+                        firstLoad: true
+                    }
+                }
+            }
+
             return {
                 fetchAllTransactions: await fetchAllTransactions(false),
                 fetchInstitutions: await fetchInstitutions(),
