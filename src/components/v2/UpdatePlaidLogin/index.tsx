@@ -28,7 +28,7 @@ export const UpdatePlaidLogin = (newLinkToken) => {
             removeCache.removeOldCache();
 
         } catch (error) {
-            throw new Error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 

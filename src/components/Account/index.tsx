@@ -97,7 +97,7 @@ export default function Account() {
             setBirthday(docSnap.data().date_of_birth);
             setUsername(docSnap.data().userId);
         } else {
-            throw new Error("No such document!");
+            console.error("No such document!");
         }
     };
 
@@ -299,7 +299,7 @@ export default function Account() {
                 setPersonalButtonText("Success!");
             } 
         } catch (error) {
-            throw new Error(error)
+            console.error(error)
             if (error.response.data === 'error') {
                 setEditSuccessPersonal('error.light');
                 setPersonalButtonText("Changes failed to save");

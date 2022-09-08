@@ -39,7 +39,7 @@ const PieChartComponent = (props) => {
       localStorage.setItem(`pieChartCacheExpTime${dateName}`, expTime.toString());
       localStorage.setItem(`pieChartCachedData${dateName}`, JSON.stringify(axiosResponse.data.final));  
     } catch (error) {
-        throw new Error('error: ', error);
+        console.log('error: ', error);
     }
   };
 

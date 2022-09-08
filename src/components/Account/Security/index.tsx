@@ -147,7 +147,7 @@ const Security = () => {
         localStorage.setItem(`securityCachedEmail`, JSON.stringify(data.email));
         localStorage.setItem(`securityCachedPhone`, JSON.stringify(data.phone));
     } catch (error) {
-        throw new Error(error)
+        console.error(error)
         setFatalError(error)
     }
   }

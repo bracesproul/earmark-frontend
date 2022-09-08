@@ -68,7 +68,7 @@ const StackedBarChart = (props) => {
       localStorage.setItem(`barChartCachedData${dateName}`, JSON.stringify(axiosResponse.data.final));
       localStorage.setItem(`barChartCachedKeysArr${dateName}`, JSON.stringify(keysArray));
     } catch (error) {
-        throw new Error('bar chart error', error);
+        console.log('bar chart error', error);
     }
   };
 

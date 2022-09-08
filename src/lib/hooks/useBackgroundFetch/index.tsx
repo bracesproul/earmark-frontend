@@ -115,7 +115,7 @@ const checkForPartialResponsesSpendingOverview = (spendingOverview24hrsRes, spen
     } else if (!oneMoIsTrue && !twoWeeksIsTrue && !oneWeekIsTrue && oneDayIsTrue) {
         // Cache check for dashboard
         localStorage.setItem(`dashSpendingOverviewCacheCheck`, `__${Date.now()}__true`);
-        console.error('successful spending overview res, no inside 24 hrs');
+        console.log('successful spending overview res, no inside 24 hrs');
         return {
             spendingOverview24hrs: null,
             spendingOverview7days: spendingOverview7daysRes.data.spendingOverview,

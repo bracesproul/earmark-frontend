@@ -150,7 +150,7 @@ const DataGridTransactions = () => {
                 setLoading(false);
             })
             .catch((error) => {
-                throw new Error(error);
+                console.log(error);
                 setFatalError(true)
             })
     }, [auth.user])

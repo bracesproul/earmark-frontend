@@ -36,7 +36,7 @@ const PlaidLink = ({ user_id }) => {
             const response = await axios(config);
             setLinkToken(response.data.linkToken);
         } catch (error) {
-            throw new Error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -59,7 +59,7 @@ const PlaidLink = ({ user_id }) => {
         try {
             const response = await axios(config);
         } catch (error) {
-            throw new Error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -103,7 +103,7 @@ export const PlaidLinkInstitution = () => {
             const response = await axios(config);
             setLinkToken(response.data.linkToken);
         } catch (error) {
-            throw new Error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 
@@ -128,7 +128,7 @@ export const PlaidLinkInstitution = () => {
             removeCache.removeOldCache();
             
         } catch (error) {
-            throw new Error("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
+            console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
     }, []);
 

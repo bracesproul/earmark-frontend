@@ -95,7 +95,7 @@ const RecurringTransactions = () => {
             localStorage.setItem(`recurringTransactionsCacheExpTime`, expTime.toString());
             localStorage.setItem(`recurringTransactionsCacheRows`, JSON.stringify(data.recurring_transactions));
         } catch (error) {
-            throw new Error('error - recurring fetch call', error)
+            console.log('error - recurring fetch call', error)
         }
     };
     const cacheData = () => {
@@ -112,7 +112,7 @@ const RecurringTransactions = () => {
                 setRowData(cachedData);
             }
         } catch (error) {
-            throw new Error('error - recurring cache method', error)
+            console.log('error - recurring cache method', error)
         }
     };
 

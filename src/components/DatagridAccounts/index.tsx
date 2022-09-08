@@ -43,7 +43,7 @@ const DatagridAccounts = () => {
           setLoading(false);
         })
         .catch(error => {
-            throw new Error(error);
+            console.error(error);
             setLoading(false);
             setFatalError(true);
         })

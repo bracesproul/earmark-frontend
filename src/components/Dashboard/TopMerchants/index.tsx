@@ -56,7 +56,7 @@ const TopMerchants = (props) => {
         if (apiCall.fatalError) {
             setFatalError(apiCall.fatalError);
             // setLoading(false);
-            throw new Error('fatal error, inside spendingOverview component')
+            console.log('fatal error, inside spendingOverview component')
             return;
         }
         if (apiCall.topMerchants7daysRes[0].startDate) {

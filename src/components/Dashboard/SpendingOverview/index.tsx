@@ -45,7 +45,7 @@ const SpendingOverview = (props) => {
     if (apiCall.fatalError) {
       setFatalError(apiCall.fatalError);
       setLoading(false);
-      throw new Error('fatal error, inside spendingOverview component')
+      console.log('fatal error, inside spendingOverview component')
       return;
     }
     if (apiCall.spendingOverview24hrs[0].account_id) {

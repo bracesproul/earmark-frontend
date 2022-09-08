@@ -26,7 +26,7 @@ export default function SettingsIntegrations() {
             .then(() => {
             })
             .catch(error => {
-                throw new Error(error);
+                console.log(error);
             });
     }
 
@@ -37,7 +37,7 @@ export default function SettingsIntegrations() {
                 setShowEmailSentIcon(true);
             })
             .catch((error) => {
-                throw new Error('Error sending email verification', error);
+                console.log('Error sending email verification', error);
                 setEmailVerificationSentError(true);
             });
 
