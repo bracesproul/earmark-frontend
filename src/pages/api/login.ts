@@ -21,6 +21,19 @@ export default async function handler(req, res) {
     // Rest of the API logic
     return new Promise( async (resolve, reject)=> {
         try {
+            if (req.method !== 'POST') {
+                const error_message = {
+                    message: "post request required",
+                    status: 400,
+                    error: "invalid request method"
+                }
+
+                res.status(400);
+                res.send(error_message);
+                res.end();
+                reject(error_message);
+                return;
+            }
             const user_id = req.query.user_id;
             const user_email = req.query.user_email;
 
@@ -37,12 +50,18 @@ export default async function handler(req, res) {
                 }
             };
 
-            await axios(config);
-
-            await res.status(200);
-            await res.send('success')
-            await res.end();
-            await resolve('success')
+            axios(config)
+                .then((response) => {
+                    res.status(200);
+                    res.send(response.data);
+                    res.end();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400);
+                    res.send(error);
+                    res.end();
+                })
         } catch (error) {
             const error_message = {
                 message: "error on login (send webhook) route",

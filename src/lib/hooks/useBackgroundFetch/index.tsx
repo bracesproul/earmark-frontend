@@ -1718,7 +1718,7 @@ const useProvideBackgroundFetch = () => {
             const currentTime = Date.now();
             const expTime = currentTime + 86400000;
             const config = {
-                method: "GET",
+                method: "POST",
                 url: '/api/allAccountInfo',
                 params: {
                     user_id: auth.user.uid,

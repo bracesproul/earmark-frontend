@@ -71,7 +71,7 @@ const useProvideAuth = () => {
           sameSite: true,
         });
         axios({
-          method: "get",
+          method: "POST",
           url: "/api/login",
           params: {
             user_id: response.user.uid,
@@ -82,6 +82,7 @@ const useProvideAuth = () => {
           },
         })
             .then((response) => console.log(response))
+            .catch((error) => console.log(error));
         return 'success';
       });
     } catch(error) {
