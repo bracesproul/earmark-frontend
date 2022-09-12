@@ -1933,6 +1933,27 @@ const useProvideBackgroundFetch = () => {
         }
     }
 
+    function sendWebhook(route) {
+        const url = 'https://discord.com/api/webhooks/1018015242317480008/2cwFk7WMPJkjXpOEloytHPNv-PsBDPhRzelsuBHtVGzF16Tzk6Bwas73W5QZkRumzeQ-'
+        const jsonPayload = {
+            embeds: [
+                {
+                    title: "Banking data request ran /" + route,
+                    description: `Request made by user: ***${auth.user.uid}***`,
+                    color: 255,
+                    footer: {
+                        text: 'Earmark Bot'
+                    },
+                    timestamp: new Date().toISOString()
+                }
+            ]
+        }
+        axios.post(url, jsonPayload, {
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    }
 
     /*
     * Call this function to run all api calls
@@ -1952,6 +1973,7 @@ const useProvideBackgroundFetch = () => {
             switch (router.pathname) {
                 case '/dashboard': {
                     console.log('page is dashboard')
+                    sendWebhook('dashboard');
                     return {
                         fetchAllTransactions: await fetchAllTransactions(false),
                         fetchInstitutions: await fetchInstitutions(),
@@ -1962,6 +1984,7 @@ const useProvideBackgroundFetch = () => {
                 } break;
                 case '/dashboard/transactions': {
                     console.log('page is txns')
+                    sendWebhook('dashboard/transactions');
                     return {
                         fetchInstitutions: await fetchInstitutions(),
                         fetchVisualize: await fetchVisualize(),
@@ -1972,6 +1995,7 @@ const useProvideBackgroundFetch = () => {
                 } break;
                 case '/dashboard/visualize': {
                     console.log('page is visualize')
+                    sendWebhook('dashboard/visualize');
                     return {
                         fetchAllTransactions: await fetchAllTransactions(false),
                         fetchInstitutions: await fetchInstitutions(),
@@ -1982,6 +2006,7 @@ const useProvideBackgroundFetch = () => {
                 } break;
                 default: {
                     console.log('page is default')
+                    sendWebhook('default');
                     return {
                         fetchAllTransactions: await fetchAllTransactions(false),
                         fetchInstitutions: await fetchInstitutions(),

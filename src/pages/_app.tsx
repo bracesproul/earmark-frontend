@@ -10,15 +10,18 @@ import { ProvideAuth } from '../lib/hooks/useAuth';
 import { ProvideFirestore } from '../lib/hooks/useFirestore';
 import { ProvideRemoveCache } from '../lib/hooks/useRemoveCache';
 import { ProvideBackgroundFetch } from "../lib/hooks/useBackgroundFetch";
+import { ProvideWebhook } from "../lib/hooks/useDiscordWebhook";
 import { CookiesProvider } from "react-cookie"
 import { ProvideColorTheme, useColorTheme } from '../lib/hooks/useColorTheme';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import ErrorBoundaries from '../components/v2/ErrorBoundary';
+import { useAuth } from '../lib/hooks/useAuth';
 import SideNavCopy from "../components/Nav/SideNavCopy";
 import ColorThemeSwitch from "../components/v2/ColorThemeSwitch";
 import { Box } from '@mui/material';
 import { useCookies } from "react-cookie";
 import CssBaseline from "@mui/material/CssBaseline";
+import axios from "axios";
+import moment from "moment";
 
 const getDesignTokens = (mode: any) => ({
   palette: {
@@ -104,9 +107,43 @@ function AppWithoutSideNav({ Component, pageProps }) {
 
 function MyApp({ Component, pageProps }) {
     const appTheme = useColorTheme();
+    const auth = useAuth();
     const router = useRouter();
     const [ cookies ] = useCookies();
     const theme = React.useMemo(() => createTheme(getDesignTokens(appTheme.mode)), [appTheme.mode]);
+
+    useEffect(() => {
+        if (!auth.user) return undefined;
+        if (typeof window === 'undefined') {
+            console.log('Server side rendering');
+            return undefined;
+        }
+        if (localStorage.getItem('isNewVisitor') !== null && (moment().diff(localStorage.getItem('isNewVisitor'), 'hours') <= 24) ) {
+            console.log('visited within 24 hours');
+            return undefined;
+        }
+        console.log('new visitor');
+        localStorage.setItem('isNewVisitor', `${moment()}`);
+        const url = 'https://discord.com/api/webhooks/1018015242317480008/2cwFk7WMPJkjXpOEloytHPNv-PsBDPhRzelsuBHtVGzF16Tzk6Bwas73W5QZkRumzeQ-'
+        const jsonPayload = {
+            embeds: [
+                {
+                    title: "New Visit",
+                    description: `User ID: ***${auth.user.uid}***`,
+                    color: 16761035,
+                    footer: {
+                        text: 'Earmark Bot'
+                    },
+                    timestamp: new Date().toISOString()
+                }
+            ]
+        }
+        axios.post(url, jsonPayload, {
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    }, [auth.user])
 
     return (
         <>

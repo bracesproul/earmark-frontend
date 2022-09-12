@@ -618,7 +618,7 @@ export default function App() {
             </CardHeader>
             <CardContent>
                 <PlaidLinkInstitution />
-              <Button onClick={() => Router.push('/dashboard')}>Finish</Button>
+              <Button onClick={() => Router.push('/account')}>Finish</Button>
             </CardContent>
           </Card>
         </Grid>

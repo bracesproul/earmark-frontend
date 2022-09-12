@@ -11,6 +11,30 @@ import SettingsIntegrations from "../../components/v2/SettingsIntegrations";
 import SettingsHelp from "../../components/v2/SettingsHelp";
 import SettingsFaq from "../../components/v2/SettingsFaq";
 import SettingsDemo from "../../components/v2/SettingsDemo";
+import {parseCookies} from "../../lib/parseCookies";
+
+export async function getServerSideProps({ req, res }) {
+    const cookie = parseCookies(req).user_id
+    console.log('cookie', cookie)
+    if (res) {
+        if (!cookie) {
+            return {
+                props: {
+                    cookie: null,
+                },
+            }
+        }
+        if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
+            res.writeHead(301, { Location: "/" })
+            res.end()
+        }
+    }
+    return {
+        props: {
+            cookie: cookie,
+        },
+    }
+}
 
 const AccountPage = () => {
     return (
@@ -41,12 +65,18 @@ const getDesignTokens = (mode: any) => ({
     },
 });
 
-export default function SettingsAppBar() {
+export default function SettingsAppBar({ cookie }) {
     const appTheme = useColorTheme();
     const router = useRouter();
     const theme = React.useMemo(() => createTheme(getDesignTokens(appTheme.mode)), [appTheme.mode]);
     const [selectedOption, setSelectedOption] = useState<any>('profile');
     const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        if (!cookie) {
+            router.push("/auth/signin")
+        }
+    }, [cookie])
 
     useEffect(() => {
         if (!mounted) return undefined;

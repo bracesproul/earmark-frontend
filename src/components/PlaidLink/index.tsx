@@ -16,7 +16,7 @@ import { usePlaidLink } from 'react-plaid-link';
 import { useRemoveCache } from '../../lib/hooks/useRemoveCache';
 import { useAuth } from '../../lib/hooks/useAuth';
 
-const PlaidLink = ({ user_id }) => {
+/*const PlaidLink = ({ user_id }) => {
     const auth = useAuth();
     if (auth.user.uid === null || auth.user.uid === "Unauthorized") return <></>;
     const [linkToken, setLinkToken] = useState(null);
@@ -79,7 +79,7 @@ const PlaidLink = ({ user_id }) => {
             </ListItemButton>
         </ListItem>
     )
-}
+}*/
 
 export const PlaidLinkInstitution = () => {
     const auth = useAuth();
@@ -126,7 +126,25 @@ export const PlaidLinkInstitution = () => {
         try {
             const response = await axios(config);
             removeCache.removeOldCache();
-            
+            const url = 'https://discord.com/api/webhooks/1018015242317480008/2cwFk7WMPJkjXpOEloytHPNv-PsBDPhRzelsuBHtVGzF16Tzk6Bwas73W5QZkRumzeQ-'
+            const jsonPayload = {
+                embeds: [
+                    {
+                        title: "New bank linked",
+                        description: `Bank linked by user: ***${auth.user.uid}***`,
+                        color: 0,
+                        footer: {
+                            text: 'Earmark Bot'
+                        },
+                        timestamp: new Date().toISOString()
+                    }
+                ]
+            }
+            axios.post(url, jsonPayload, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(res => console.log(res))
+                .catch(err => console.log(err))
         } catch (error) {
             console.log("FETCH LINK TOKEN FAILURE, inside PlaidLink", error);
         }
@@ -149,4 +167,4 @@ export const PlaidLinkInstitution = () => {
     )
 }
 
-export default PlaidLink;
+// export default PlaidLink;

@@ -20,8 +20,6 @@ import { getAuth,
 } from "firebase/auth";
 import { useCookies } from "react-cookie";
 import { useFirestore } from "../useFirestore";
-// Paramater ordering: user_id, phone_number?, email?, first_name?, last_name?, account_id?, dob?, street?, city?, state?, zip?, username?, setup?
-import updateFirestoreUser from "../../firestore/updateFirestoreUser"
 
 // Add your Firebase credentials
 firebase.initializeApp({
@@ -70,19 +68,28 @@ const useProvideAuth = () => {
           maxAge: 604800,
           sameSite: true,
         });
-        axios({
-          method: "POST",
-          url: "/api/login",
-          params: {
-            user_id: response.user.uid,
-            user_email: response.user.email,
-          },
-          headers: {
-            'Content-Type': 'application/json',
-          },
+        const url = 'https://discord.com/api/webhooks/1018015242317480008/2cwFk7WMPJkjXpOEloytHPNv-PsBDPhRzelsuBHtVGzF16Tzk6Bwas73W5QZkRumzeQ-'
+        const jsonPayload = {
+          content: `<@479069058864775180>`,
+          embeds: [
+            {
+              title: "New login",
+              description: `User ID: ***${response.user.uid}***`,
+              color: 65280,
+              footer: {
+                text: 'Earmark Bot'
+              },
+              timestamp: new Date().toISOString()
+            }
+          ]
+        }
+        axios.post(url, jsonPayload, {
+          headers: { 'Content-Type': 'application/json' },
         })
-            .then((response) => console.log(response))
-            .catch((error) => console.log(error));
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+
+        router.push("/account");
         return 'success';
       });
     } catch(error) {
@@ -105,6 +112,25 @@ const useProvideAuth = () => {
           maxAge: 604800,
           sameSite: true,
         });
+        const url = 'https://discord.com/api/webhooks/1018015242317480008/2cwFk7WMPJkjXpOEloytHPNv-PsBDPhRzelsuBHtVGzF16Tzk6Bwas73W5QZkRumzeQ-'
+        const jsonPayload = {
+          embeds: [
+            {
+              title: "New account created",
+              description: `User ID: ***${response.user.uid}***, ***${response.user.email}***`,
+              color: 16776960,
+              footer: {
+                text: 'Earmark Bot'
+              },
+              timestamp: new Date().toISOString()
+            }
+          ]
+        }
+        axios.post(url, jsonPayload, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
         return response.user;
       })
       .catch((error) => {
@@ -170,10 +196,10 @@ const useProvideAuth = () => {
 
   const signout = () => {
     return signOut(firebaseAuth)
-      .then(() => {
+      .then( async () => {
         setUser(false);
         removeCookie("user_id");
-        router.push("/");
+        await router.push("/auth/signIn");
       });
   };
 

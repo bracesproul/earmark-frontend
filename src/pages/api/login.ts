@@ -21,36 +21,20 @@ export default async function handler(req, res) {
     // Rest of the API logic
     return new Promise( async (resolve, reject)=> {
         try {
-            if (req.method !== 'POST') {
-                const error_message = {
-                    message: "post request required",
-                    status: 400,
-                    error: "invalid request method"
-                }
-
-                res.status(400);
-                res.send(error_message);
-                res.end();
-                reject(error_message);
-                return;
-            }
             const user_id = req.query.user_id;
             const user_email = req.query.user_email;
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'earmark-api-key': process.env.EARMARK_API_KEY,
-                },
-                method: 'POST',
-                url: API_URL + '/api/earmark/login',
-                params: {
-                    user_id: user_id,
-                    user_email: user_email,
-                }
+            let data = {
+                user_id: user_id,
+                user_email: user_email,
             };
+            let url = API_URL + '/api/earmark/login';
+            let headers = {
+                'Content-Type': 'application/json',
+                'earmark-api-key': process.env.EARMARK_API_KEY,
+            }
 
-            axios(config)
+            axios.post(url, data, {headers})
                 .then((response) => {
                     res.status(200);
                     res.send(response.data);
@@ -62,6 +46,7 @@ export default async function handler(req, res) {
                     res.send(error);
                     res.end();
                 })
+
         } catch (error) {
             const error_message = {
                 message: "error on login (send webhook) route",

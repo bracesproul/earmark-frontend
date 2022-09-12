@@ -48,8 +48,8 @@ const SIDENAV_PAGES = [
     {pageName: "Transactions", pageLink: "/dashboard/transactions", isPlaidLink: false, disabled: false},
     {pageName: "Visualize", pageLink: "/dashboard/visualize", isPlaidLink: false, disabled: false},
     {pageName: "Recurring", pageLink: "/dashboard/recurring", isPlaidLink: false, disabled: false},
-    {pageName: "Investments", pageLink: "/dashboard/investments", isPlaidLink: false, disabled: true},
-    {pageName: "Transfers", pageLink: "/dashboard/transfers", isPlaidLink: false, disabled: true},
+/*    {pageName: "Investments", pageLink: "/dashboard/investments", isPlaidLink: false, disabled: true},
+    {pageName: "Transfers", pageLink: "/dashboard/transfers", isPlaidLink: false, disabled: true},*/
     {pageName: "Institutions", pageLink: "/dashboard/institutions", isPlaidLink: false, disabled: false},
 ];
 
@@ -112,9 +112,9 @@ const SideNav = () => {
                     { index === 1 ? <PaidIcon /> : null }
                     { index === 2 ? <BarChartIcon /> : null }
                     { index === 3 ? <CachedIcon /> : null }
-                    { index === 4 ? <ShowChartIcon /> : null }
-                    { index === 5 ? <AttachMoneyIcon /> : null }
-                    { index === 6 ? <AccountBalanceIcon /> : null }
+                    {/* index === 4 ? <ShowChartIcon /> : null */}
+                    {/* index === 5 ? <AttachMoneyIcon /> : null */}
+                    { index === 4 ? <AccountBalanceIcon /> : null }
                 </ListItemIcon>
                 <ListItemText primary={text.pageName} />
                 </ListItemButton>
@@ -228,9 +228,9 @@ const SideNav = () => {
                             { index === 1 ? <PaidIcon /> : null }
                             { index === 2 ? <BarChartIcon /> : null }
                             { index === 3 ? <CachedIcon /> : null }
-                            { index === 4 ? <ShowChartIcon /> : null }
-                            { index === 5 ? <AttachMoneyIcon /> : null }
-                            { index === 6 ? <AccountBalanceIcon /> : null }
+                            {/* index === 4 ? <ShowChartIcon /> : null */}
+                            {/* index === 5 ? <AttachMoneyIcon /> : null */}
+                            { index === 4 ? <AccountBalanceIcon /> : null }
                         </ListItemIcon>
                         <ListItemText primary={text.pageName} />
                         </ListItemButton>
@@ -326,9 +326,9 @@ const SideNav = () => {
                             { index === 1 ? <PaidIcon /> : null }
                             { index === 2 ? <BarChartIcon /> : null }
                             { index === 3 ? <CachedIcon /> : null }
-                            { index === 4 ? <ShowChartIcon /> : null }
-                            { index === 5 ? <AttachMoneyIcon /> : null }
-                            { index === 6 ? <AccountBalanceIcon /> : null }
+                            {/* index === 4 ? <ShowChartIcon /> : null */}
+                            {/* index === 5 ? <AttachMoneyIcon /> : null */}
+                            { index === 4 ? <AccountBalanceIcon /> : null }
                         </ListItemIcon>
                         <ListItemText primary={text.pageName} />
                         </ListItemButton>

@@ -10,9 +10,43 @@ import styles from '../../styles/Dashboard/Investments.module.css';
 import { useAuth } from '../../lib/hooks/useAuth';
 import HeadTemplate from '../../components/Head';
 import { useFirestore } from '../../lib/hooks/useFirestore';
-export default function Home() {
+import {parseCookies} from "../../lib/parseCookies";
+import {useRouter} from "next/router";
+
+export async function getServerSideProps({ req, res }) {
+    const cookie = parseCookies(req).user_id
+    console.log('cookie', cookie)
+    if (res) {
+        if (!cookie) {
+            return {
+                props: {
+                    cookie: null,
+                },
+            }
+        }
+        if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
+            res.writeHead(301, { Location: "/" })
+            res.end()
+        }
+    }
+    return {
+        props: {
+            cookie: cookie,
+        },
+    }
+}
+
+
+export default function Home({ cookie }) {
     const auth = useAuth();
     const firestore = useFirestore();
+    const router = useRouter();
+    useEffect(() => {
+        if (!cookie) {
+            router.push("/auth/signIn")
+        }
+    }, [cookie])
+
     return (
         <div className={styles.page}>
         <HeadTemplate title="Investments" description="Data on investments for Earmark" iconPath="/favicon.ico" />

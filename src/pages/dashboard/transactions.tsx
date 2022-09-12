@@ -7,14 +7,47 @@ import { useBackgroundFetch } from "../../lib/hooks/useBackgroundFetch";
 import { useAuth } from "../../lib/hooks/useAuth";
 import TransactionsComponent from "../../components/v2/AllTransactions";
 import {Box, Divider, Typography} from "@mui/material";
+import {parseCookies} from "../../lib/parseCookies";
+import {useRouter} from "next/router";
 
-function AllTransactions() {
+export async function getServerSideProps({ req, res }) {
+    const cookie = parseCookies(req).user_id
+    console.log('cookie', cookie)
+    if (res) {
+        if (!cookie) {
+            return {
+                props: {
+                    cookie: null,
+                },
+            }
+        }
+        if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
+            res.writeHead(301, { Location: "/" })
+            res.end()
+        }
+    }
+    return {
+        props: {
+            cookie: cookie,
+        },
+    }
+}
+
+function AllTransactions({ cookie }) {
     const callApi = useBackgroundFetch();
     const auth = useAuth();
+    const router = useRouter();
+
     const transactions = useRef(null);
     const [loading, setLoading] = useState(true);
     const [mounted, setMounted] = useState(false);
     const [windowDimensions, setWindowDimensions] = useState({ height: 492, width: 874 });
+
+    useEffect(() => {
+        if (!cookie) {
+            router.push("/auth/signin")
+        }
+    }, [cookie])
 
     useEffect(() => {
         if (!mounted) {

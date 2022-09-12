@@ -14,6 +14,30 @@ import CssBaseline from "@mui/material/CssBaseline";
 import PieChartComponent from "../../components/v2/PieChartComponent";
 import TreeMapComponent from "../../components/v2/TreeMapComponent";
 import BarChartComponent from '../../components/v2/BarChartComponent';
+import {parseCookies} from "../../lib/parseCookies";
+
+export async function getServerSideProps({ req, res }) {
+    const cookie = parseCookies(req).user_id
+    console.log('cookie', cookie)
+    if (res) {
+        if (!cookie) {
+            return {
+                props: {
+                    cookie: null,
+                },
+            }
+        }
+        if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
+            res.writeHead(301, { Location: "/" })
+            res.end()
+        }
+    }
+    return {
+        props: {
+            cookie: cookie,
+        },
+    }
+}
 
 const timeframeObj = [
     {
@@ -243,7 +267,7 @@ function Home() {
     )
 }
 
-export default function Visualize() {
+export default function Visualize({ cookie }) {
     const router = useRouter();
     const callApi = useBackgroundFetch();
     const auth = useAuth();
@@ -258,6 +282,12 @@ export default function Visualize() {
     const pieChartData = useRef(null);
     const isFirstRender = useRef(true);
     router.query.chart = router.query.chart || 'lineChart';
+
+    useEffect(() => {
+        if (!cookie) {
+            router.push("/auth/signin")
+        }
+    }, [cookie])
 
     useEffect(() => {
         if (!router) return undefined;

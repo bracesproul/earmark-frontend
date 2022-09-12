@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useCallback, useEffect } from 'react';
 import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -40,6 +41,7 @@ function Copyright(props) {
 function SignIn() {
   const firestore = useFirestore();
   const auth = useAuth();
+  const router = useRouter();
   const firebaseAuth = getAuth();
   const [userEmail, setUserEmail] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
@@ -109,7 +111,7 @@ function SignIn() {
     // @ts-ignore
     const response = await auth.signin(email, password);
     if (response == 'success') {
-      Router.push('/dashboard');
+      Router.push('/account');
     } else if (response == 'FirebaseError: Firebase: Error (auth/user-not-found).') {
       console.log(response)
       setLoginError(true);
@@ -135,7 +137,8 @@ function SignIn() {
   };
 
   const handleProviderSignin = async (provider) => {
-    auth.signInWithProvider(provider)
+      await auth.signInWithProvider(provider)
+      await router.push('/account');
   };
 
   const warningAlert = (
@@ -244,24 +247,6 @@ function SignIn() {
             onClick={() => handleProviderSignin('google')}
             >
               Sign in with Google
-            </Button>
-            <Button
-            sx={{ mt: 1, mb: 1 }}
-            fullWidth
-            variant="outlined"
-            startIcon={<FacebookIcon />}
-            onClick={() => handleProviderSignin('facebook')}
-            >
-              Sign in with Facebook
-            </Button>
-            <Button
-            sx={{ mt: 1, mb: 1 }}
-            fullWidth
-            variant="outlined"
-            startIcon={<TwitterIcon />}
-            onClick={() => handleProviderSignin('twitter')}
-            >
-              Sign in with Twitter
             </Button>
             { providerError && errorAlert }
             { providerWarning && warningAlert }

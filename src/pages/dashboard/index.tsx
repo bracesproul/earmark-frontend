@@ -13,9 +13,12 @@ import AccountBalance from '../../components/Dashboard/AccountBalance';
 import Goals from '../../components/Dashboard/Goals';
 import Budgets from '../../components/Dashboard/Budgets';
 import TotalSpending from '../../components/v2/TotalSpending';
+import axios from "axios";
+import {useRouter} from "next/router";
 
 export async function getServerSideProps({ req, res }) {
     const cookie = parseCookies(req).user_id
+
     if (res) {
         if (Object.keys(cookie).length === 0 && cookie.constructor === Object) {
           res.writeHead(301, { Location: "/" })
@@ -31,6 +34,12 @@ export async function getServerSideProps({ req, res }) {
 
 
 const Dashboard = ({ cookie }) => {
+    const router = useRouter();
+    useEffect(() => {
+        if (!cookie) {
+            router.push("/auth/signIn")
+        }
+    }, [cookie])
     return (
         <>
             <CssBaseline />
