@@ -30,7 +30,6 @@ import CachedIcon from '@mui/icons-material/Cached';
 import CableIcon from '@mui/icons-material/Cable';
 import axios from 'axios';
 import { usePlaidLink } from 'react-plaid-link';
-import PlaidLink from '../../PlaidLink'
 import MenuIcon from '@mui/icons-material/Menu';
 import Button from '@mui/material/Button';
 const drawerWidth = 240;
