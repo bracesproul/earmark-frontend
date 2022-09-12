@@ -35,6 +35,7 @@ import { GlobalStyles,
 } from '@mui/material';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { PlaidLinkInstitution } from '../../PlaidLink';
+import axios from "axios";
 
 const steps = [
   'Sign up', 
@@ -604,6 +605,23 @@ export default function App() {
 
   const ConnectFirstBank = () => {
     const auth = useAuth();
+
+    async function handleClick() {
+        const config = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: '/api/checkAccountSetup',
+            params: {
+                user_id: auth.user.uid,
+                checkType: 'set'
+            }
+        }
+        await axios(config);
+        await Router.push('/account')
+    }
+
     return (
       <>
       <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
@@ -618,7 +636,7 @@ export default function App() {
             </CardHeader>
             <CardContent>
                 <PlaidLinkInstitution />
-              <Button onClick={() => Router.push('/account')}>Finish</Button>
+              <Button onClick={() => handleClick()}>Finish</Button>
             </CardContent>
           </Card>
         </Grid>

@@ -1097,9 +1097,30 @@ const useProvideBackgroundFetch = () => {
 
     // runs on every first load, first checks to see if cache has already been set
     // if it hasn't, then it will run all api calls to pre-cache data.
+
+    async function fetchAccountCheck() {
+        const config = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: '/api/checkAccountSetup',
+            params: {
+                user_id: auth.user.uid,
+                checkType: 'check'
+            }
+        }
+        return axios(config);
+    }
+
     useEffect(() => {
         if (!auth.user) return undefined;
-        fetchData();
+
+        fetchAccountCheck().then((res) => {
+            if (res.data === 'success') {
+                fetchData();
+            }
+        })
     }, [auth.user])
 
     /*done*/const fetchAccountBalance = async (forceRefresh:boolean) => {
