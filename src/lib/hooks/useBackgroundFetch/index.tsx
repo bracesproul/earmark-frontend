@@ -1791,19 +1791,6 @@ const useProvideBackgroundFetch = () => {
         try {
             const currentTime = Date.now();
             const expTime = currentTime + 86400000;
-            /*const byCategoryConfig = {
-                method: "GET",
-                url: '/api/allTransactionsByCategory',
-                params: {
-                    user_id: auth.user.uid,
-                    startDate: moment().subtract(2, 'years').format('YYYY-MM-DD'),
-                    endDate: moment().format('YYYY-MM-DD'),
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const categoryResponse = await axios(byCategoryConfig);*/
 
             const config = {
                 method: "GET",

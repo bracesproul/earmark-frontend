@@ -42,6 +42,7 @@ export default function dynamicTransactions(props) {
     };
 
     useEffect(() => {
+        if (!rawData) return undefined;
         rawData.forEach((transaction) => {
             if (transaction.account.account_id === currentAccountType) {
                 setTransactions(transaction.account.transactions);
@@ -49,31 +50,48 @@ export default function dynamicTransactions(props) {
                 setSelectedAccountName(transaction.account.account_name)
             }
         })
-    }, [currentAccountType]);
+    }, [currentAccountType, rawData]);
 
-
+    const fetchData = async () => {
+        return await callApi.fetchDynamicTransactions(props.query.ins_id)
+        const apiCall = await callApi.fetchDynamicTransactions(props.query.ins_id)
+        console.log(apiCall)
+        setAccountTypes(apiCall.accountTypes);
+        setRawData(apiCall.rawData);
+        if (props.query.account_id) {
+            setCurrentAccountType(props.query.account_id);
+        }
+        setTransactions(apiCall.transactions);
+        setSelected(apiCall.selectedData);
+        apiCall.accountTypes.forEach((account) => {
+            if (account.ins_id === props.query.account_id) {
+                setSelectedAccountName(account.account_name)
+            }
+        })
+        setLoading(false);
+    }
 
     useEffect(() => {
         if (!auth.user) {
             return undefined;
         }
-        const fetchData = async () => {
-            const apiCall = await callApi.fetchDynamicTransactions(props.query.ins_id)
-            setAccountTypes(apiCall.accountTypes);
-            setRawData(apiCall.rawData);
-            if (props.query.account_id) {
-                setCurrentAccountType(props.query.account_id);
-            }
-            setTransactions(apiCall.transactions);
-            setSelected(apiCall.selectedData);
-            apiCall.accountTypes.forEach((account) => {
-                if (account.ins_id === props.query.account_id) {
-                    setSelectedAccountName(account.account_name)
+        fetchData()
+            .then((res) => {
+                console.log(res)
+                setAccountTypes(res.accountTypes);
+                setRawData(res.rawData);
+                if (props.query.account_id) {
+                    setCurrentAccountType(props.query.account_id);
                 }
-            })
-            setLoading(false);
-        }
-        fetchData();
+                setTransactions(res.transactions);
+                setSelected(res.selectedData);
+                res.accountTypes.forEach((account) => {
+                    if (account.ins_id === props.query.account_id) {
+                        setSelectedAccountName(account.account_name)
+                    }
+                })
+                setLoading(false);
+        })
     }, [auth.user])
 
     const columns = [
@@ -119,13 +137,17 @@ export default function dynamicTransactions(props) {
                         <MenuItem key={10000000000}>
                             Loading...
                         </MenuItem>
-                    ) : mobileDropdownList }
+                    ) : accountTypes.map((account, index) => (
+                        <MenuItem key={index} onClick={() => handleClose(account)}>
+                            {account.account_name}
+                        </MenuItem>
+                    )) }
                 </Menu>
             </>
         )
     }
 
-    const mobileDropdownList = (
+/*    const mobileDropdownList = (
         <>
             {accountTypes.map((account, index) => (
                 <MenuItem key={index} onClick={() => handleClose(account)}>
@@ -133,7 +155,7 @@ export default function dynamicTransactions(props) {
                 </MenuItem>
             ))}
         </>
-    )
+    )*/
 
     const ButtonGroup = () => {
         let buttonStyle: string = "outlined";
