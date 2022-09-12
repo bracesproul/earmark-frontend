@@ -717,6 +717,7 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
 }
 
 /*done*/const setLocalStorageDynamicTransactions = (expTime, data, ins_id) => {
+    console.log("setLocalStorageDynamicTransactions",data)
     const accounts = data.map((data) => {
         return {
             ins_name: data.account.subtype,
@@ -1789,7 +1790,7 @@ const useProvideBackgroundFetch = () => {
                 }
             };
             const { data } = await axios(config);
-
+            console.log('data from fetchDynamicTransactions()', data);
             if (checkForPartialResponseDynamicTransactions(data).fatalError) return checkForPartialResponseDynamicTransactions(data);
             return setLocalStorageDynamicTransactions(expTime, data, ins_id);
         } catch (error) {

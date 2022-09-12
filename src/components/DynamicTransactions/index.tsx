@@ -53,8 +53,9 @@ export default function dynamicTransactions(props) {
     }, [currentAccountType, rawData]);
 
     const fetchData = async () => {
+        console.log('props.query.ins_id', props.query.ins_id);
         return await callApi.fetchDynamicTransactions(props.query.ins_id)
-        const apiCall = await callApi.fetchDynamicTransactions(props.query.ins_id)
+/*        const apiCall = await callApi.fetchDynamicTransactions(props.query.ins_id)
         console.log(apiCall)
         setAccountTypes(apiCall.accountTypes);
         setRawData(apiCall.rawData);
@@ -68,7 +69,7 @@ export default function dynamicTransactions(props) {
                 setSelectedAccountName(account.account_name)
             }
         })
-        setLoading(false);
+        setLoading(false);*/
     }
 
     useEffect(() => {
@@ -77,7 +78,7 @@ export default function dynamicTransactions(props) {
         }
         fetchData()
             .then((res) => {
-                console.log(res)
+                console.log('response:', res)
                 setAccountTypes(res.accountTypes);
                 setRawData(res.rawData);
                 if (props.query.account_id) {
@@ -106,6 +107,7 @@ export default function dynamicTransactions(props) {
     }
 
     const MobileDropDown = () => {
+        if (!accountTypes) return null;
         return (
             <>
                 <IconButton
@@ -146,16 +148,6 @@ export default function dynamicTransactions(props) {
             </>
         )
     }
-
-/*    const mobileDropdownList = (
-        <>
-            {accountTypes.map((account, index) => (
-                <MenuItem key={index} onClick={() => handleClose(account)}>
-                    {account.account_name}
-                </MenuItem>
-            ))}
-        </>
-    )*/
 
     const ButtonGroup = () => {
         let buttonStyle: string = "outlined";
