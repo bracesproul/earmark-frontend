@@ -1115,13 +1115,18 @@ const useProvideBackgroundFetch = () => {
 
     useEffect(() => {
         if (!auth.user) return undefined;
+        if (router.pathname.includes('dashboard') || router.pathname.includes('account')) {
+            console.log('it includes dashboard or account');
+            fetchData();
+            return undefined;
+        } else console.log('DOES NOT INCLUDE')
 
-        fetchAccountCheck().then((res) => {
+/*        fetchAccountCheck().then((res) => {
             if (res.data === 'success') {
                 console.log('success')
                 fetchData();
             } else return undefined;
-        })
+        })*/
     }, [auth.user])
 
     /*done*/const fetchAccountBalance = async (forceRefresh:boolean) => {
