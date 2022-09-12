@@ -3,7 +3,6 @@ import React, {
     useEffect,
     useState,
 } from 'react';
-import SideNav from '../../components/Nav/SideNav';
 import Head from 'next/head';
 import NotSignedIn from '../../components/Auth/NotSignedIn';
 import styles from '../../styles/Dashboard/Investments.module.css';
@@ -51,9 +50,6 @@ export default function Home({ cookie }) {
         <div className={styles.page}>
         <HeadTemplate title="Investments" description="Data on investments for Earmark" iconPath="/favicon.ico" />
         <main className={styles.main}>
-            <section className={styles.sidenavContainer}>
-                <SideNav />
-            </section>
             <section className={styles.body}>
                 {/* @ts-ignore */}
                 { !auth.user ? <NotSignedIn /> : (

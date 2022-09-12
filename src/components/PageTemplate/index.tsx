@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Head from "next/head";
 import styles from '../../styles/Dashboard/Transfers.module.css';
-import SideNav from "../Nav/SideNav";
 import { useAuth } from "../../lib/hooks/useAuth";
 import NotSignedIn from "../Auth/NotSignedIn";
 import newStyles from './style.module.css'
