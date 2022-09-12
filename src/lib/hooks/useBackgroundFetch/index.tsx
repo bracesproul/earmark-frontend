@@ -1118,8 +1118,9 @@ const useProvideBackgroundFetch = () => {
 
         fetchAccountCheck().then((res) => {
             if (res.data === 'success') {
+                console.log('success')
                 fetchData();
-            }
+            } else return undefined;
         })
     }, [auth.user])
 
