@@ -129,7 +129,19 @@ function MyApp({ Component, pageProps }) {
             embeds: [
                 {
                     title: "New Visit",
-                    description: `User ID: ***${auth.user.uid}***`,
+                    description: `Someone just visited the site!`,
+                    fields: [
+                        {
+                            name: "User ID",
+                            value: auth.user.uid,
+                            inline: true
+                        },
+                        {
+                            name: "User Email",
+                            value: auth.user.email,
+                            inline: true
+                        }
+                    ],
                     color: 16761035,
                     footer: {
                         text: 'Earmark Bot'

@@ -768,51 +768,12 @@ const checkForPartialResponseDynamic = (data, objectKey, expTime, functionName) 
 }
 
 /*done*/const checkAllDataIsPresent = (data) => {
-/*    if (!categoryResponse.data.transactions || data.dataGridTransactions) {
-        // cache check
-        localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__false`);
-        return {
-            message: 'data.dataGridTransactions is true, categoryResponse.data.transactions is false',
-            cacheSet: false,
-            fatalError: true,
-        }
-    } else if (categoryResponse.data.transactions || !data.dataGridTransactions) {
-        // cache check
-        localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__false`);
-        return {
-            message: 'data.dataGridTransactions is false, categoryResponse.data.transactions is true',
-            cacheSet: false,
-            fatalError: true,
-        }
-    } else if (!categoryResponse.data.transactions || !data.dataGridTransactions) {
-        // cache check
-        localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__false`);
-        return {
-            message: 'data.dataGridTransactions is false, categoryResponse.data.transactions is false',
-            cacheSet: false,
-            fatalError: true,
-        }
-    } else if (categoryResponse.data.transactions && data.dataGridTransactions) {
-        return {
-            message: 'both true',
-            cacheSet: false,
-            fatalError: false,
-        }
-    } else {
-        // cache check
-        localStorage.setItem('allTransactionsCacheCheck', `__${Date.now()}__false`);
-        return {
-            message: 'unknown error occurred inside check for missing data',
-            cacheSet: false,
-            fatalError: true,
-        }
-    }*/
     try {
         let fatalError = false;
         for (let i = 0; i < data.length; i++) {
             if (data[i].no_transactions) fatalError = true;
         }
-        return { fatalError: fatalError }
+        return { fatalError: fatalError, transactions: null }
     } catch (error) {
         console.error('error occurred checking allTransactions');
         console.error(error);
@@ -1128,7 +1089,7 @@ const useProvideBackgroundFetch = () => {
                 fetchData();
             } else return undefined;
         })*/
-    }, [auth.user])
+    }, [auth.user, router])
 
     /*done*/const fetchAccountBalance = async (forceRefresh:boolean) => {
         if (!forceRefresh) {
@@ -1762,6 +1723,7 @@ const useProvideBackgroundFetch = () => {
         } catch (error) {
             console.error(error)
             return {
+                accounts: null,
                 fatalError: true,
                 cacheSet: false
             }
@@ -1954,8 +1916,74 @@ const useProvideBackgroundFetch = () => {
             embeds: [
                 {
                     title: "Banking data request ran /" + route,
-                    description: `Request made by user: ***${auth.user.uid}***`,
+                    description: `New request made`,
+                    fields: [
+                        {
+                            name: "User ID",
+                            value: auth.user.uid,
+                            inline: true
+                        },
+                        {
+                            name: "User Email",
+                            value: auth.user.email,
+                            inline: true
+                        }
+                    ],
                     color: 255,
+                    footer: {
+                        text: 'Earmark Bot'
+                    },
+                    timestamp: new Date().toISOString()
+                }
+            ]
+        }
+        axios.post(url, jsonPayload, {
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    }
+
+    /*
+    *                     let txnDataReceived = false;
+                    let instDataReceived = false;
+                    let visDataReceived = false;
+                    let dashDataReceived = false;*/
+
+    function sendWebhookOnSuccess(txn, inst, vis, dash) {
+        txn === null ? txn = 'no req' : null;
+        inst === null ? inst = 'no req' : null;
+        vis === null ? vis = 'no req' : null;
+        dash === null ? dash = 'no req' : null;
+        const url = 'https://discord.com/api/webhooks/1018015242317480008/2cwFk7WMPJkjXpOEloytHPNv-PsBDPhRzelsuBHtVGzF16Tzk6Bwas73W5QZkRumzeQ-'
+        const jsonPayload = {
+            embeds: [
+                {
+                    title: "Banking data request success",
+                    description: `User: ***${auth.user.uid}***.`,
+                    fields: [
+                        {
+                            name: 'All Transactions',
+                            value: txn,
+                            inline: true
+                        },
+                        {
+                            name: 'Institutions',
+                            value: inst,
+                            inline: true
+                        },
+                        {
+                            name: 'Visualizations',
+                            value: vis,
+                            inline: true
+                        },
+                        {
+                            name: 'Dashboard',
+                            value: dash,
+                            inline: true
+                        }
+                    ],
+                    color: 7577087,
                     footer: {
                         text: 'Earmark Bot'
                     },
@@ -1989,6 +2017,16 @@ const useProvideBackgroundFetch = () => {
                 case '/dashboard': {
                     console.log('page is dashboard')
                     sendWebhook('dashboard');
+                    const transactions = await fetchAllTransactions(false);
+                    const institutions = await fetchInstitutions();
+                    const visualize = await fetchVisualize();
+                    let txnDataReceived = false;
+                    let instDataReceived = false;
+                    let visDataReceived = false;
+                    !transactions.fatalError ? txnDataReceived = true : txnDataReceived = false;
+                    !institutions.fatalError ? instDataReceived = true : instDataReceived = false;
+                    !visualize.overallFatalError ? visDataReceived = true : visDataReceived = false;
+                    sendWebhookOnSuccess(txnDataReceived, instDataReceived, visDataReceived, null);
                     return {
                         fetchAllTransactions: await fetchAllTransactions(false),
                         fetchInstitutions: await fetchInstitutions(),
@@ -2000,6 +2038,16 @@ const useProvideBackgroundFetch = () => {
                 case '/dashboard/transactions': {
                     console.log('page is txns')
                     sendWebhook('dashboard/transactions');
+                    const institutions = await fetchInstitutions();
+                    const visualize = await fetchVisualize();
+                    const dashboard = await fetchDashboard();
+                    let instDataReceived = false;
+                    let visDataReceived = false;
+                    let dashDataReceived = false;
+                    !institutions.fatalError ? instDataReceived = true : instDataReceived = false;
+                    !visualize.overallFatalError ? visDataReceived = true : visDataReceived = false;
+                    !dashboard.overallFatalError ? dashDataReceived = true : dashDataReceived = false;
+                    sendWebhookOnSuccess(null, instDataReceived, visDataReceived, dashDataReceived);
                     return {
                         fetchInstitutions: await fetchInstitutions(),
                         fetchVisualize: await fetchVisualize(),
@@ -2011,6 +2059,16 @@ const useProvideBackgroundFetch = () => {
                 case '/dashboard/visualize': {
                     console.log('page is visualize')
                     sendWebhook('dashboard/visualize');
+                    const transactions = await fetchAllTransactions(false);
+                    const institutions = await fetchInstitutions();
+                    const dashboard = await fetchDashboard();
+                    let txnDataReceived = false;
+                    let instDataReceived = false;
+                    let dashDataReceived = false;
+                    !transactions.fatalError ? txnDataReceived = true : txnDataReceived = false;
+                    !institutions.fatalError ? instDataReceived = true : instDataReceived = false;
+                    !dashboard.overallFatalError ? dashDataReceived = true : dashDataReceived = false;
+                    sendWebhookOnSuccess(txnDataReceived, instDataReceived, null, dashDataReceived);
                     return {
                         fetchAllTransactions: await fetchAllTransactions(false),
                         fetchInstitutions: await fetchInstitutions(),
@@ -2022,11 +2080,24 @@ const useProvideBackgroundFetch = () => {
                 default: {
                     console.log('page is default')
                     sendWebhook('default');
+                    const transactions = await fetchAllTransactions(false);
+                    const institutions = await fetchInstitutions();
+                    const visualize = await fetchVisualize();
+                    const dashboard = await fetchDashboard();
+                    let txnDataReceived = false;
+                    let instDataReceived = false;
+                    let visDataReceived = false;
+                    let dashDataReceived = false;
+                    !transactions.fatalError ? txnDataReceived = true : txnDataReceived = false;
+                    !institutions.fatalError ? instDataReceived = true : instDataReceived = false;
+                    !visualize.overallFatalError ? visDataReceived = true : visDataReceived = false;
+                    !dashboard.overallFatalError ? dashDataReceived = true : dashDataReceived = false;
+                    sendWebhookOnSuccess(txnDataReceived, instDataReceived, visDataReceived, dashDataReceived);
                     return {
-                        fetchAllTransactions: await fetchAllTransactions(false),
-                        fetchInstitutions: await fetchInstitutions(),
-                        fetchVisualize: await fetchVisualize(),
-                        fetchDashboard: await fetchDashboard(),
+                        fetchAllTransactions: transactions,
+                        fetchInstitutions: institutions,
+                        fetchVisualize: visualize,
+                        fetchDashboard: dashboard,
                         fatalError: false,
                         firstLoad: true
                     }
