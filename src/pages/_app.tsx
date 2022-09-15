@@ -157,6 +157,64 @@ function MyApp({ Component, pageProps }) {
             .catch(err => console.log(err))
     }, [auth.user])
 
+    useEffect(() => {
+        if (typeof window === 'undefined') return undefined;
+        window.addEventListener('beforeunload', alertUser)
+        window.addEventListener('unload', handleTabClosing)
+        return () => {
+            window.removeEventListener('beforeunload', alertUser)
+            window.removeEventListener('unload', handleTabClosing)
+        }
+    })
+
+    const handleTabClosing = () => {
+        console.log('done')
+    }
+
+    const alertUser = (event:any) => {
+        event.preventDefault()
+        if (window.performance) {
+            console.info("window.performance is supported");
+            console.info(performance.navigation.type);
+
+            if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+                const url = 'https://discord.com/api/webhooks/1018015242317480008/2cwFk7WMPJkjXpOEloytHPNv-PsBDPhRzelsuBHtVGzF16Tzk6Bwas73W5QZkRumzeQ-'
+                const jsonPayload = {
+                    embeds: [
+                        {
+                            title: "Tab closed",
+                            description: `Someone just left the site!`,
+                            fields: [
+                                {
+                                    name: "User ID",
+                                    value: auth.user.uid,
+                                    inline: true
+                                },
+                                {
+                                    name: "User Email",
+                                    value: auth.user.email,
+                                    inline: true
+                                }
+                            ],
+                            color: 16744576,
+                            footer: {
+                                text: 'Earmark Bot'
+                            },
+                            timestamp: new Date().toISOString()
+                        }
+                    ]
+                }
+                axios.post(url, jsonPayload, {
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(res => console.log(res))
+                    .catch(err => console.log(err))
+            } else {
+                console.info( "This page is not reloaded");
+            }
+        }
+    }
+
     return (
         <>
             <Head>

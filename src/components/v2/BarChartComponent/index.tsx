@@ -56,10 +56,6 @@ const chartObj = [
         value: 'pieChart',
         label: 'Pie Chart',
     },
-    {
-        value: 'treeMap',
-        label: 'Tree Map',
-    }
 ];
 
 
@@ -85,7 +81,7 @@ function BarChartComponent(props) {
                     flexDirection: 'row',
                     margin: 'auto',
                 }}>
-                    <TimeframeSelector defaultValue={'2years'} queryLabel={'timeframe'} label={'Select Timeframe'} timeframe={tfobj} />
+                    <TimeframeSelector defaultValue={'2years'} queryLabel={'timeframe'} label={'Select Timeframe'} timeframe={props.timeframeV} />
                     <TimeframeSelector defaultValue={'barChart'} queryLabel={'chart'} label={'Select Chart'} timeframe={chartObj} />
                 </Box>
 

@@ -88,7 +88,7 @@ const PieChartComponent = (props) => {
             flexDirection: 'row',
             margin: 'auto',
         }}>
-            <TimeframeSelector defaultValue={'2years'} queryLabel={'timeframe'} label={'Select Timeframe'} timeframe={props.timeframe} />
+            <TimeframeSelector defaultValue={'2years'} queryLabel={'timeframe'} label={'Select Timeframe'} timeframe={props.timeframeV} />
             <TimeframeSelector defaultValue={'pieChart'} queryLabel={'chart'} label={'Select Chart'} timeframe={props.chartOptions} />
         </Box>
 

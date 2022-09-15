@@ -48,6 +48,7 @@ function TimeframeSelector(props) {
             >
                 {props.timeframe.map((value, index) => (
                         <MenuItem
+                            disabled={value.disabled}
                             key={index}
                             value={value.value}
                         >
