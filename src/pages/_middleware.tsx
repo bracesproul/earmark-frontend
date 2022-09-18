@@ -6,10 +6,18 @@ const NO_AUTH_UNLESS_ADMIN = ['/testing', '/admin', '/dashboard/transfers', '/da
 
 export function middleware(req, res) {
     const cookie = req.cookies['user_id'];
-
+    if (req.url.includes('?newUser=true') && !cookie && !req.url.includes('/auth/signIn')) {
+        if (req.page.name === '/' && cookie) {
+            return NextResponse.redirect(new URL(`/dashboard/`, req.url)).cookie('newUser', 'true');
+        } else if (req.page.name === '/' && !cookie) {
+            console.log('no cookie')
+            return NextResponse.redirect(new URL(`/auth/signIn`, req.url)).cookie('newUser', 'true');
+        }
+    }
     if (req.page.name === '/' && cookie) {
         return NextResponse.redirect(new URL(`/dashboard/`, req.url))
     } else if (req.page.name === '/' && !cookie) {
+        console.log('no cookie')
         return NextResponse.redirect(new URL(`/auth/signIn`, req.url))
     }
 

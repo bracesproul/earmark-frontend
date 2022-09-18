@@ -22,6 +22,7 @@ import { useCookies } from "react-cookie";
 import CssBaseline from "@mui/material/CssBaseline";
 import axios from "axios";
 import moment from "moment";
+import NewUserPopup from "../components/v2/NewUserPopup";
 
 const getDesignTokens = (mode: any) => ({
   palette: {
@@ -109,7 +110,9 @@ function MyApp({ Component, pageProps }) {
     const appTheme = useColorTheme();
     const auth = useAuth();
     const router = useRouter();
-    const [ cookies ] = useCookies();
+    const [ cookies ] = useCookies(['newUser'])
+    const newUser = cookies['newUser'];
+    console.log('new user _app', newUser)
     const theme = React.useMemo(() => createTheme(getDesignTokens(appTheme.mode)), [appTheme.mode]);
 
     useEffect(() => {
@@ -227,6 +230,7 @@ function MyApp({ Component, pageProps }) {
                     minWidth: '100%',
                     minHeight: '100%',
                 }}>
+                    <NewUserPopup />
                     { router.pathname === '/' && <AppWithoutSideNav Component={Component} pageProps={pageProps} /> }
                     { router.pathname.includes('/testing') && <AppWithSideNav Component={Component} pageProps={pageProps} /> }
                     { router.pathname.includes('/dashboard') && <AppWithSideNav Component={Component} pageProps={pageProps} /> }
